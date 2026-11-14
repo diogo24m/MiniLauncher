@@ -5,11 +5,11 @@ body:
   - type: markdown
     attributes:
       value: |
-        ¡Gracias por ayudar a mejorar StradaOS! Cada pantalla es distinta, así que los detalles importan mucho.
+        ¡Gracias por ayudar a mejorar MiniLauncher! Cada pantalla es distinta, así que los detalles importan mucho.
   - type: input
     id: version
     attributes:
-      label: Versión de StradaOS
+      label: Versión de MiniLauncher
       description: Engranaje → Acerca de → Versión
       placeholder: "2.8.0"
     validations:
@@ -44,4 +44,4 @@ body:
     id: diag
     attributes:
       label: Diagnóstico (opcional)
-      description: Engranaje → Sistema → Exportar diagnóstico. Comprime la carpeta StradaDiag y arrástrala aquí.
+      description: Engranaje → Sistema → Exportar diagnóstico. Comprime la carpeta MiniLauncherDiag y arrástrala aquí.

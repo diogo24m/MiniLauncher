@@ -1,4 +1,4 @@
-# StradaOS · traducción ar (árabe). Formato: español<TAB>traducción. Ver I18n.java. Números con dígitos latinos (0-9).
+# MiniLauncher · traducción ar (árabe). Formato: español<TAB>traducción. Ver I18n.java. Números con dígitos latinos (0-9).
 Radio	الراديو
 Cámara	الكاميرا
 Archivos	الملفات
@@ -33,7 +33,7 @@ Restablecer ({})	استعادة الافتراضي ({})
 Botón restablecido	تمت استعادة الزر
 Cerrar	إغلاق
 Cerrar  ✕	إغلاق  ✕
-★  Funciones de StradaOS (Música, Navegación, Android Auto…)	★  وظائف StradaOS (الموسيقى، الملاحة، Android Auto…)
+★  Funciones de MiniLauncher (Música, Navegación, Android Auto…)	★  وظائف MiniLauncher (الموسيقى، الملاحة، Android Auto…)
 ¿Qué abre el botón {}?	ماذا يفتح الزر {}؟
 Función del botón {}	وظيفة الزر {}
 Nombre del botón {} (vacío = el de la app)	اسم الزر {} (فارغ = اسم التطبيق)
@@ -49,7 +49,7 @@ Buenas tardes	مساء الخير
 Buenas noches	مساء الخير
 Diagnóstico del reproductor	تشخيص المشغّل
 Accesibilidad	إمكانية الوصول
-Activa «Carátula de Android Auto» (StradaOS)	فعّل «غلاف ألبوم Android Auto» (StradaOS)
+Activa «Carátula de Android Auto» (MiniLauncher)	فعّل «غلاف ألبوم Android Auto» (MiniLauncher)
 No se pudo abrir Accesibilidad	تعذّر فتح إعدادات إمكانية الوصول
 Activa «Pista actual de AA» en Open Headunit	فعّل «المقطع الحالي لـ AA» في Open Headunit
 «Ninguna aplic. funciona con este accesorio USB»	«لا توجد تطبيقات مثبّتة تعمل مع ملحق USB هذا»
@@ -58,7 +58,7 @@ Abrir EasyConnection	فتح EasyConnection
 No hay apps de espejo instaladas	لا توجد تطبيقات نسخ شاشة مثبّتة
 Exportando… puede tardar un minuto	جارٍ التصدير… قد يستغرق دقيقة
 Diagnóstico listo	التشخيص جاهز
-Se guardó en:\n{}\n\nCopia la carpeta StradaDiag a una memoria USB y adjúntala en un «issue» del repositorio de StradaOS en GitHub.	تم الحفظ في:\n{}\n\nانسخ مجلد StradaDiag إلى ذاكرة USB وأرفقه في بلاغ (issue) في مستودع StradaOS على GitHub.
+Se guardó en:\n{}\n\nCopia la carpeta MiniLauncherDiag a una memoria USB y adjúntala en un «issue» del repositorio de MiniLauncher en GitHub.	تم الحفظ في:\n{}\n\nانسخ مجلد MiniLauncherDiag إلى ذاكرة USB وأرفقه في بلاغ (issue) في مستودع MiniLauncher على GitHub.
 12 horas	12 ساعة
 24 horas	24 ساعة
 Automático	تلقائي
@@ -66,7 +66,7 @@ Automática	تلقائية
 Auto	تلقائي
 12 horas (a.m./p.m.)	12 ساعة (ص/م)
 Formato de hora	تنسيق الوقت
-Se aplicará al reiniciar StradaOS	يُطبَّق عند إعادة تشغيل StradaOS
+Se aplicará al reiniciar MiniLauncher	يُطبَّق عند إعادة تشغيل MiniLauncher
 Rojo	أحمر
 Naranja	برتقالي
 Amarillo	أصفر
@@ -76,7 +76,7 @@ Azul	أزرق
 Morado	بنفسجي
 Rosa	وردي
 Plata	فضي
-Bienvenido a StradaOS	مرحباً بك في StradaOS
+Bienvenido a MiniLauncher	مرحباً بك في MiniLauncher
 Vamos a dejar el launcher a tu gusto: tu nombre, tu vehículo, el color y la foto. Toma menos de un minuto y lo puedes cambiar después en el engranaje ⚙.	لنضبط الواجهة على ذوقك: اسمك، مركبتك، اللون والصورة. يستغرق ذلك أقل من دقيقة ويمكنك تغييره لاحقاً من الترس ⚙.
 Empezar	ابدأ
 ¿Cómo te llamas?	ما اسمك؟
@@ -214,7 +214,7 @@ Audio Bluetooth	صوت البلوتوث
 Volver al Bluetooth al desconectar Android Auto	العودة إلى البلوتوث عند فصل Android Auto
 Al quitar el cable, abre un instante la app de música Bluetooth para que el sonido siga por Bluetooth	عند نزع الكابل، يفتح تطبيق موسيقى البلوتوث للحظة كي يستمر الصوت عبر البلوتوث
 Escuchar el Bluetooth	الاستماع إلى البلوتوث
-En esta pantalla, toca ▶ en el inicio: StradaOS pasa el sonido a Bluetooth (por ejemplo, si venías de la radio)	في هذه الشاشة، اضغط ▶ في الرئيسية: يحوّل StradaOS الصوت إلى البلوتوث (مثلاً إذا كنت تستمع إلى الراديو)
+En esta pantalla, toca ▶ en el inicio: MiniLauncher pasa el sonido a Bluetooth (por ejemplo, si venías de la radio)	في هذه الشاشة، اضغط ▶ في الرئيسية: يحوّل MiniLauncher الصوت إلى البلوتوث (مثلاً إذا كنت تستمع إلى الراديو)
 Pasar a Bluetooth al dar play en el celular (en prueba)	التحويل إلى البلوتوث عند التشغيل من الهاتف (تجريبي)
 Abre un instante «Audio Bluetooth» y vuelve. En algunas pantallas no detecta el play del celular	يفتح «صوت البلوتوث» للحظة ثم يعود. بعض الشاشات لا تكتشف التشغيل من الهاتف
 Probar ahora	جرّب الآن
@@ -271,7 +271,7 @@ Si la pantalla lo trae	إذا كانت الشاشة تتضمنه
 no detectado	لم يُكتشف
 Pantalla con CarPlay o adaptador USB	شاشة تدعم CarPlay أو محوّل USB
 Mapa con internet seguro (TLS 1.2)	خريطة عبر إنترنت آمن (TLS 1.2)
-Android 4.1+ (StradaOS lo activa)	Android 4.1+ (يفعّله StradaOS)
+Android 4.1+ (MiniLauncher lo activa)	Android 4.1+ (يفعّله MiniLauncher)
 en Android 4.x solo algunos servidores de mapas responden	على Android 4.x تستجيب بعض خوادم الخرائط فقط
 Instalar actualizaciones desde la app	تثبيت التحديثات من التطبيق
 pide permiso «Instalar apps desconocidas»	يطلب إذن «تثبيت تطبيقات غير معروفة»
@@ -283,7 +283,7 @@ Gratis y de código abierto. Una nueva vida para las pantallas Android del carro
 Versión	الإصدار
 Android de la pantalla	إصدار Android في الشاشة
 Real: {} · ver qué funciona aquí	الفعلي: {} · شاهد ما يعمل هنا
-Cierres inesperados o bloqueos de StradaOS en esta pantalla	الإغلاقات المفاجئة أو تجمّد StradaOS على هذه الشاشة
+Cierres inesperados o bloqueos de MiniLauncher en esta pantalla	الإغلاقات المفاجئة أو تجمّد MiniLauncher على هذه الشاشة
 Sin fallos	لا أعطال
 Ver	عرض
 Actualizaciones	التحديثات
@@ -292,9 +292,9 @@ Las actualizaciones llegan por esa app	تصل التحديثات عبر ذلك �
 Avisar también de versiones en GitHub	التنبيه أيضاً بالإصدارات على GitHub
 Comprobar actualizaciones automáticamente	التحقق من التحديثات تلقائياً
 Opcional: las descargas de GitHub no pasan por la revisión de la tienda	اختياري: تنزيلات GitHub لا تمر بمراجعة المتجر
-Al abrir StradaOS con internet, una vez al día	عند فتح StradaOS مع وجود إنترنت، مرة يومياً
+Al abrir MiniLauncher con internet, una vez al día	عند فتح MiniLauncher مع وجود إنترنت، مرة يومياً
 Actualizaciones desde GitHub	التحديثات من GitHub
-Instalaste StradaOS desde {}. Si activas esto, StradaOS revisará una vez al día las versiones publicadas en github.com/{} y te ofrecerá descargarlas desde ahí.\n\nEsas descargas no pasan por la revisión de la tienda. Puede que GitHub tenga una versión un poco antes que la tienda.	لقد ثبّت StradaOS من {}. إذا فعّلت هذا، سيتحقق StradaOS مرة يومياً من الإصدارات المنشورة على github.com/{} ويعرض عليك تنزيلها من هناك.\n\nهذه التنزيلات لا تمر بمراجعة المتجر. قد يتوفر الإصدار على GitHub قبل المتجر بقليل.
+Instalaste MiniLauncher desde {}. Si activas esto, MiniLauncher revisará una vez al día las versiones publicadas en github.com/{} y te ofrecerá descargarlas desde ahí.\n\nEsas descargas no pasan por la revisión de la tienda. Puede que GitHub tenga una versión un poco antes que la tienda.	لقد ثبّت MiniLauncher من {}. إذا فعّلت هذا، سيتحقق MiniLauncher مرة يومياً من الإصدارات المنشورة على github.com/{} ويعرض عليك تنزيلها من هناك.\n\nهذه التنزيلات لا تمر بمراجعة المتجر. قد يتوفر الإصدار على GitHub قبل المتجر بقليل.
 Activar	تفعيل
 Canal de actualizaciones	قناة التحديثات
 Buscar actualizaciones	البحث عن تحديثات
@@ -302,17 +302,17 @@ Aún no se ha comprobado	لم يتم التحقق بعد
 Última comprobación: {}	آخر تحقق: {}
 Comunidad	المجتمع
 Dar una estrella en GitHub	امنحه نجمة على GitHub
-Ayuda a que más personas encuentren StradaOS	يساعد المزيد من الناس على اكتشاف StradaOS
+Ayuda a que más personas encuentren MiniLauncher	يساعد المزيد من الناس على اكتشاف MiniLauncher
 Dar una estrella ⭐	امنحه نجمة ⭐
 Abre el repositorio y toca «Star». ¡Gracias!	افتح المستودع واضغط «Star». شكراً!
 Donar	تبرّع
-Si StradaOS revivió tu pantalla, invítame un café	إذا أعاد StradaOS الحياة إلى شاشتك، ادعُني على فنجان قهوة
+Si MiniLauncher revivió tu pantalla, invítame un café	إذا أعاد MiniLauncher الحياة إلى شاشتك، ادعُني على فنجان قهوة
 Apoya el proyecto ☕	ادعم المشروع ☕
-StradaOS es gratis. Las donaciones ayudan a mantenerlo y a probarlo en más pantallas.	StradaOS مجاني. التبرعات تساعد على صيانته وتجربته على المزيد من الشاشات.
+MiniLauncher es gratis. Las donaciones ayudan a mantenerlo y a probarlo en más pantallas.	MiniLauncher مجاني. التبرعات تساعد على صيانته وتجربته على المزيد من الشاشات.
 Reportar un problema o sugerir algo	الإبلاغ عن مشكلة أو اقتراح شيء
 Crea un «issue» en GitHub (adjunta el diagnóstico)	أنشئ بلاغاً (issue) على GitHub (أرفق التشخيص)
 Reportar un problema	الإبلاغ عن مشكلة
-Cuenta tu modelo de pantalla y su versión de Android. Puedes adjuntar la carpeta StradaDiag (Sistema → Exportar diagnóstico).	اذكر طراز شاشتك وإصدار Android فيها. يمكنك إرفاق مجلد StradaDiag (النظام ← تصدير التشخيص).
+Cuenta tu modelo de pantalla y su versión de Android. Puedes adjuntar la carpeta MiniLauncherDiag (Sistema → Exportar diagnóstico).	اذكر طراز شاشتك وإصدار Android فيها. يمكنك إرفاق مجلد MiniLauncherDiag (النظام ← تصدير التشخيص).
 Código fuente	الشيفرة المصدرية
 Licencia GPL-3.0	رخصة GPL-3.0
 Créditos y licencias	الشكر والتراخيص
@@ -336,7 +336,7 @@ error de red	خطأ في الشبكة
 tu tienda de apps	متجر التطبيقات لديك
 Tienes la {} · nueva: {}	لديك {} · الجديد: {}
 Mejoras y correcciones.	تحسينات وإصلاحات.
-Nueva versión de StradaOS	إصدار جديد من StradaOS
+Nueva versión de MiniLauncher	إصدار جديد من MiniLauncher
 Tienes la {} · en GitHub: {}\nActualiza desde {} cuando llegue. Descargar de GitHub omite la revisión de la tienda.	لديك {} · على GitHub: {}\nحدّث من {} عند وصوله. التنزيل من GitHub يتجاوز مراجعة المتجر.
 Ver en GitHub	عرض على GitHub
 Descarga desde GitHub:	التنزيل من GitHub:
@@ -344,13 +344,13 @@ Descargar e instalar	تنزيل وتثبيت
 Descarga la nueva versión desde:	نزّل الإصدار الجديد من:
 Omitir esta versión	تخطّي هذا الإصدار
 Más tarde	لاحقاً
-Descargando StradaOS {}…	جارٍ تنزيل StradaOS {}…
+Descargando MiniLauncher {}…	جارٍ تنزيل MiniLauncher {}…
 Descárgala desde tu celular	نزّله من هاتفك
 Esta pantalla no pudo descargar el archivo. Escanea el código, descarga el APK y pásalo por USB.	لم تتمكن هذه الشاشة من تنزيل الملف. امسح الرمز، ونزّل ملف APK، وانقله عبر USB.
-¿Disfrutando StradaOS?	هل يعجبك StradaOS؟
-Si te gusta usar StradaOS, dale una estrella en GitHub. Y si revivió tu pantalla, considera invitarme un café ☕	إذا أعجبك استخدام StradaOS، امنحه نجمة على GitHub. وإذا أعاد الحياة إلى شاشتك، فكّر في دعوتي على فنجان قهوة ☕
+¿Disfrutando MiniLauncher?	هل يعجبك MiniLauncher؟
+Si te gusta usar MiniLauncher, dale una estrella en GitHub. Y si revivió tu pantalla, considera invitarme un café ☕	إذا أعجبك استخدام MiniLauncher، امنحه نجمة على GitHub. وإذا أعاد الحياة إلى شاشتك، فكّر في دعوتي على فنجان قهوة ☕
 Dar una estrella	امنحه نجمة
-StradaOS es gratis. Las donaciones ayudan a mantenerlo.	StradaOS مجاني. التبرعات تساعد على صيانته.
+MiniLauncher es gratis. Las donaciones ayudan a mantenerlo.	MiniLauncher مجاني. التبرعات تساعد على صيانته.
 Escanéalo con la cámara de tu celular o entra a:	امسحه بكاميرا هاتفك أو ادخل إلى:
 Abrir aquí	افتح هنا
 No hay navegador disponible	لا يوجد متصفح متاح
@@ -373,7 +373,7 @@ Conexión: {}. Cámbiala dejando presionado el botón.	الاتصال: {}. غي�
 el navegador	المتصفح
 «{}» necesita un Android más nuevo que el de esta pantalla. Abro el navegador de fábrica.	«{}» يحتاج إصدار Android أحدث من الموجود في هذه الشاشة. سأفتح متصفح المصنع.
 No encontré un navegador. Déjalo presionado para elegir uno.	لم أجد متصفحاً. اضغط عليه مطولاً لاختيار واحد.
-Permite «Instalar apps desconocidas» para StradaOS y vuelve a tocar.	اسمح بـ«تثبيت تطبيقات غير معروفة» لـ StradaOS ثم اضغط مجدداً.
+Permite «Instalar apps desconocidas» para MiniLauncher y vuelve a tocar.	اسمح بـ«تثبيت تطبيقات غير معروفة» لـ MiniLauncher ثم اضغط مجدداً.
 Activa «Orígenes desconocidos» y vuelve a tocar.	فعّل «مصادر غير معروفة» ثم اضغط مجدداً.
 No se pudo preparar {}	تعذّر تجهيز {}
 No se pudo abrir el instalador para {}	تعذّر فتح المثبّت لـ {}
@@ -389,30 +389,30 @@ Tormenta	عاصفة
 Mapa en vivo apagado	الخريطة المباشرة متوقفة
 Rendimiento	الأداء
 Apágalo si la pantalla va lenta: queda un mapa de adorno y el velocímetro sigue funcionando	أوقفها إذا كانت الشاشة بطيئة: تبقى خريطة للزينة ويستمر عدّاد السرعة في العمل
-StradaOS aún no es tu pantalla de inicio	StradaOS ليس شاشتك الرئيسية بعد
-Por eso al encender el carro o al tocar Inicio aparece el menú de fábrica.\n\nToca «Fijar ahora», elige StradaOS y luego «Siempre».	لهذا تظهر قائمة المصنع عند تشغيل السيارة أو الضغط على زر الرئيسية.\n\nاضغط «تعيين الآن»، واختر StradaOS ثم «دائماً».
+MiniLauncher aún no es tu pantalla de inicio	MiniLauncher ليس شاشتك الرئيسية بعد
+Por eso al encender el carro o al tocar Inicio aparece el menú de fábrica.\n\nToca «Fijar ahora», elige MiniLauncher y luego «Siempre».	لهذا تظهر قائمة المصنع عند تشغيل السيارة أو الضغط على زر الرئيسية.\n\nاضغط «تعيين الآن»، واختر MiniLauncher ثم «دائماً».
 Fijar ahora	تعيين الآن
 Ahora no	ليس الآن
 No volver a preguntar	لا تسألني مرة أخرى
-Elige StradaOS y toca «Siempre»	اختر StradaOS واضغط «دائماً»
-Listo: StradaOS es tu pantalla de inicio	تم: StradaOS هو شاشتك الرئيسية
-Fijar StradaOS a mano	تعيين StradaOS يدوياً
-Algunas pantallas no muestran la lista para elegir. Prueba así:\n\n1. Toca el botón Inicio (la casita) de la pantalla. Si pregunta qué app usar, elige StradaOS → Siempre.\n2. Si no pregunta: en los ajustes de la pantalla busca Aplicaciones → Aplicaciones predeterminadas → Pantalla de inicio (o «App de inicio») y elige StradaOS.\n3. Con Android 10 o más nuevo, no lo elijas desde el modo fábrica de la pantalla («Launcher», «Interfaz» o «UI»): en algunas marcas eso deja las demás apps sin poder abrirse. En Android 4 a 9 sí puedes usar esa opción.\n\nSi tu pantalla siempre vuelve a su menú de fábrica al encender, activa «Abrir StradaOS al encender» en Ajustes → Sistema.	بعض الشاشات لا تعرض قائمة الاختيار. جرّب ما يلي:\n\n1. اضغط زر الرئيسية (البيت) في الشاشة. إذا سألك أي تطبيق تستخدم، اختر StradaOS ← دائماً.\n2. إذا لم يسأل: في إعدادات الشاشة ابحث عن التطبيقات ← التطبيقات الافتراضية ← الشاشة الرئيسية (أو «تطبيق الرئيسية») واختر StradaOS.\n3. على Android 10 أو أحدث، لا تختره من وضع المصنع في الشاشة («Launcher» أو «Interface» أو «UI»): في بعض الشركات يمنع ذلك باقي التطبيقات من الفتح. على Android 4 إلى 9 يمكنك استخدام هذا الخيار.\n\nإذا كانت شاشتك تعود دائماً إلى قائمة المصنع عند التشغيل، فعّل «فتح StradaOS عند التشغيل» في الإعدادات ← النظام.
+Elige MiniLauncher y toca «Siempre»	اختر MiniLauncher واضغط «دائماً»
+Listo: MiniLauncher es tu pantalla de inicio	تم: MiniLauncher هو شاشتك الرئيسية
+Fijar MiniLauncher a mano	تعيين MiniLauncher يدوياً
+Algunas pantallas no muestran la lista para elegir. Prueba así:\n\n1. Toca el botón Inicio (la casita) de la pantalla. Si pregunta qué app usar, elige MiniLauncher → Siempre.\n2. Si no pregunta: en los ajustes de la pantalla busca Aplicaciones → Aplicaciones predeterminadas → Pantalla de inicio (o «App de inicio») y elige MiniLauncher.\n3. Con Android 10 o más nuevo, no lo elijas desde el modo fábrica de la pantalla («Launcher», «Interfaz» o «UI»): en algunas marcas eso deja las demás apps sin poder abrirse. En Android 4 a 9 sí puedes usar esa opción.\n\nSi tu pantalla siempre vuelve a su menú de fábrica al encender, activa «Abrir MiniLauncher al encender» en Ajustes → Sistema.	بعض الشاشات لا تعرض قائمة الاختيار. جرّب ما يلي:\n\n1. اضغط زر الرئيسية (البيت) في الشاشة. إذا سألك أي تطبيق تستخدم، اختر MiniLauncher ← دائماً.\n2. إذا لم يسأل: في إعدادات الشاشة ابحث عن التطبيقات ← التطبيقات الافتراضية ← الشاشة الرئيسية (أو «تطبيق الرئيسية») واختر MiniLauncher.\n3. على Android 10 أو أحدث، لا تختره من وضع المصنع في الشاشة («Launcher» أو «Interface» أو «UI»): في بعض الشركات يمنع ذلك باقي التطبيقات من الفتح. على Android 4 إلى 9 يمكنك استخدام هذا الخيار.\n\nإذا كانت شاشتك تعود دائماً إلى قائمة المصنع عند التشغيل، فعّل «فتح MiniLauncher عند التشغيل» في الإعدادات ← النظام.
 Pantalla de inicio	الشاشة الرئيسية
 La que aparece al encender y al tocar Inicio	التي تظهر عند التشغيل وعند الضغط على زر الرئيسية
-StradaOS ✓	StradaOS ✓
+MiniLauncher ✓	MiniLauncher ✓
 Otra · toca para cambiar	أخرى · اضغط للتغيير
-Abrir StradaOS al encender	فتح StradaOS عند التشغيل
+Abrir MiniLauncher al encender	فتح MiniLauncher عند التشغيل
 Para pantallas que siempre arrancan en su menú de fábrica (Android 4 a 9)	للشاشات التي تبدأ دائماً بقائمة المصنع (Android 4 إلى 9)
 ¿La música Bluetooth se corta o no aparece?	هل تنقطع موسيقى البلوتوث أو لا تظهر؟
 Qué hacer en cada caso	ماذا تفعل في كل حالة
-• Se corta al salir de la app Bluetooth: sal con el botón Inicio (la casita), no con Atrás. Atrás cierra la app de fábrica y con ella la música.\n\n• No suena hasta abrir la app Bluetooth: activa «Abrir la app de música Bluetooth al conectar el celular» (aquí mismo). Abre la app un instante y vuelve al inicio.\n\n• La canción no aparece en el inicio (Android 5 o más nuevo): activa «Música de cualquier app» arriba y dale acceso a notificaciones a StradaOS.\n\n• Revisa en Ajustes → Accesos y apps que «Música Bluetooth» sea la app Bluetooth de tu pantalla.	• تنقطع عند الخروج من تطبيق البلوتوث: اخرج بزر الرئيسية (البيت)، لا بزر الرجوع. زر الرجوع يغلق تطبيق المصنع ومعه الموسيقى.\n\n• لا يعمل الصوت حتى تفتح تطبيق البلوتوث: فعّل «فتح تطبيق موسيقى البلوتوث عند توصيل الهاتف» (هنا مباشرة). يفتح التطبيق للحظة ثم يعود إلى الرئيسية.\n\n• الأغنية لا تظهر في الرئيسية (Android 5 أو أحدث): فعّل «موسيقى من أي تطبيق» في الأعلى وامنح StradaOS الوصول إلى الإشعارات.\n\n• تحقق في الإعدادات ← الاختصارات والتطبيقات أن «موسيقى البلوتوث» هو تطبيق البلوتوث الخاص بشاشتك.
+• Se corta al salir de la app Bluetooth: sal con el botón Inicio (la casita), no con Atrás. Atrás cierra la app de fábrica y con ella la música.\n\n• No suena hasta abrir la app Bluetooth: activa «Abrir la app de música Bluetooth al conectar el celular» (aquí mismo). Abre la app un instante y vuelve al inicio.\n\n• La canción no aparece en el inicio (Android 5 o más nuevo): activa «Música de cualquier app» arriba y dale acceso a notificaciones a MiniLauncher.\n\n• Revisa en Ajustes → Accesos y apps que «Música Bluetooth» sea la app Bluetooth de tu pantalla.	• تنقطع عند الخروج من تطبيق البلوتوث: اخرج بزر الرئيسية (البيت)، لا بزر الرجوع. زر الرجوع يغلق تطبيق المصنع ومعه الموسيقى.\n\n• لا يعمل الصوت حتى تفتح تطبيق البلوتوث: فعّل «فتح تطبيق موسيقى البلوتوث عند توصيل الهاتف» (هنا مباشرة). يفتح التطبيق للحظة ثم يعود إلى الرئيسية.\n\n• الأغنية لا تظهر في الرئيسية (Android 5 أو أحدث): فعّل «موسيقى من أي تطبيق» في الأعلى وامنح MiniLauncher الوصول إلى الإشعارات.\n\n• تحقق في الإعدادات ← الاختصارات والتطبيقات أن «موسيقى البلوتوث» هو تطبيق البلوتوث الخاص بشاشتك.
 Sin permiso	بلا إذن
 GPS apagado	GPS متوقف
 Unidades	الوحدات
 Automático: mph en EE. UU. y Reino Unido	تلقائي: mph في الولايات المتحدة والمملكة المتحدة
 Permisos → Ubicación → Permitir	الأذونات ← الموقع ← السماح
-Activa la ubicación para StradaOS en los ajustes de la pantalla	فعّل الموقع لـ StradaOS في إعدادات الشاشة
+Activa la ubicación para MiniLauncher en los ajustes de la pantalla	فعّل الموقع لـ MiniLauncher في إعدادات الشاشة
 Activa la ubicación (GPS)	فعّل الموقع (GPS)
 Activa la ubicación (GPS) en los ajustes de la pantalla	فعّل الموقع (GPS) في إعدادات الشاشة
 Sin permiso de ubicación · toca aquí	لا يوجد إذن الموقع · اضغط هنا
@@ -435,7 +435,7 @@ Corregir el kilometraje actual	تصحيح عدّاد المسافة الحالي
 Cambiar cada cuánto se hace	تغيير عدد مرات التغيير
 Desactivar el recordatorio	إيقاف التذكير
 Recordatorio de cambio de aceite	تذكير تغيير الزيت
-StradaOS no puede leer el kilometraje del tablero del carro. Escríbelo una vez y StradaOS le irá sumando lo que recorras con el GPS, para avisarte cuando toque el cambio.\n\nDe vez en cuando puedes corregirlo con el valor real del tablero.	لا يستطيع StradaOS قراءة عدّاد المسافة في لوحة عدادات السيارة. أدخله مرة واحدة وسيضيف StradaOS إليه المسافة التي تقطعها عبر GPS، لينبّهك عندما يحين موعد التغيير.\n\nيمكنك تصحيحه من حين لآخر بالقراءة الفعلية من لوحة العدادات.
+MiniLauncher no puede leer el kilometraje del tablero del carro. Escríbelo una vez y MiniLauncher le irá sumando lo que recorras con el GPS, para avisarte cuando toque el cambio.\n\nDe vez en cuando puedes corregirlo con el valor real del tablero.	لا يستطيع MiniLauncher قراءة عدّاد المسافة في لوحة عدادات السيارة. أدخله مرة واحدة وسيضيف MiniLauncher إليه المسافة التي تقطعها عبر GPS، لينبّهك عندما يحين موعد التغيير.\n\nيمكنك تصحيحه من حين لآخر بالقراءة الفعلية من لوحة العدادات.
 ¿A cuántos {} fue el último cambio de aceite?	عدّاد المسافة عند آخر تغيير زيت ({})
 Kilometraje actual del tablero	عدّاد المسافة الحالي في لوحة العدادات
 ¿Cada cuántos {} cambias el aceite?	كل كم {} تغيّر الزيت؟
@@ -455,7 +455,7 @@ El mapa apunta	اتجاه الخريطة
 Según tu dirección: gira con el carro mientras te mueves	حسب اتجاهك: تدور مع السيارة أثناء القيادة
 Norte arriba	الشمال للأعلى
 Según tu dirección	حسب اتجاهك
-# 2.13: aceite (último cambio, unidad) y apps ocultas del cajón
+# aceite (último cambio, unidad) y apps ocultas del cajón
 Último cambio	آخر تغيير
 Corregir el último cambio	تصحيح آخر تغيير
 ¿Tu tablero marca kilómetros o millas?	هل تعرض لوحة عداداتك الكيلومترات أم الأميال؟
@@ -477,24 +477,24 @@ Buscar app	البحث عن تطبيق
 Apps ocultas en el cajón	التطبيقات المخفية من الدرج
 Se muestran todas las apps	تظهر كل التطبيقات
 Apps ocultas: {}	التطبيقات المخفية: {}
-# 2.14: desinstalar desde el cajón
+# desinstalar desde el cajón
 Desinstalar	إلغاء التثبيت
-# 2.14: salir de StradaOS (issue #9)
-Salir de StradaOS	الخروج من StradaOS
+# salir de MiniLauncher (issue #9)
+Salir de MiniLauncher	الخروج من MiniLauncher
 Abrir el launcher de fábrica	فتح واجهة المصنع
-Sale de StradaOS sin desinstalarlo	يخرج من StradaOS دون إلغاء تثبيته
-Desactivar StradaOS	تعطيل StradaOS
-Si la pantalla quedó atrapada en StradaOS: se apaga solo, sin ventanas de Android	إذا علقت الشاشة في StradaOS: يتعطل تلقائياً دون نوافذ Android
-Desinstalar StradaOS	إلغاء تثبيت StradaOS
+Sale de MiniLauncher sin desinstalarlo	يخرج من MiniLauncher دون إلغاء تثبيته
+Desactivar MiniLauncher	تعطيل MiniLauncher
+Si la pantalla quedó atrapada en MiniLauncher: se apaga solo, sin ventanas de Android	إذا علقت الشاشة في MiniLauncher: يتعطل تلقائياً دون نوافذ Android
+Desinstalar MiniLauncher	إلغاء تثبيت MiniLauncher
 Android pide confirmar	سيطلب Android التأكيد
 No encontré otra pantalla de inicio en este equipo	لم أجد شاشة رئيسية أخرى على هذا الجهاز
 ¿Cuál es el launcher de fábrica?	ما هي واجهة المصنع؟
 No se pudo abrir	تعذّر الفتح
-No encontré otra pantalla de inicio: StradaOS no se puede desactivar en este equipo	لم أجد شاشة رئيسية أخرى: لا يمكن تعطيل StradaOS على هذا الجهاز
-¿Desactivar StradaOS?	تعطيل StradaOS؟
-StradaOS deja de ser la pantalla de inicio, ya no se abre al encender y vuelve el launcher de fábrica. No pide confirmaciones de Android, así que sirve aunque la pantalla haya quedado atrapada.\n\nPara volver a usarlo después: desinstálalo desde los ajustes de la pantalla e instálalo de nuevo.	يتوقف StradaOS عن كونه الشاشة الرئيسية، ولا يُفتح عند التشغيل، وتعود واجهة المصنع. لا يحتاج إلى تأكيدات Android، لذلك يعمل حتى لو علقت الشاشة.\n\nلاستخدامه مجدداً لاحقاً: ألغِ تثبيته من إعدادات الشاشة ثم ثبّته من جديد.
+No encontré otra pantalla de inicio: MiniLauncher no se puede desactivar en este equipo	لم أجد شاشة رئيسية أخرى: لا يمكن تعطيل MiniLauncher على هذا الجهاز
+¿Desactivar MiniLauncher?	تعطيل MiniLauncher؟
+MiniLauncher deja de ser la pantalla de inicio, ya no se abre al encender y vuelve el launcher de fábrica. No pide confirmaciones de Android, así que sirve aunque la pantalla haya quedado atrapada.\n\nPara volver a usarlo después: desinstálalo desde los ajustes de la pantalla e instálalo de nuevo.	يتوقف MiniLauncher عن كونه الشاشة الرئيسية، ولا يُفتح عند التشغيل، وتعود واجهة المصنع. لا يحتاج إلى تأكيدات Android، لذلك يعمل حتى لو علقت الشاشة.\n\nلاستخدامه مجدداً لاحقاً: ألغِ تثبيته من إعدادات الشاشة ثم ثبّته من جديد.
 Desactivar	تعطيل
-# 2.15: diseño del inicio
+# diseño del inicio
 Diseño del inicio	تخطيط الرئيسية
 Reproductor de música	مشغّل الموسيقى
 Ponlo del lado del conductor para tenerlo a la mano	ضعه في جهة السائق ليكون في متناول يدك
@@ -556,7 +556,7 @@ Pausar	إيقاف مؤقت
 Continuar	استئناف
 Cancelar descarga	إلغاء التنزيل
 Descarga cancelada	تم إلغاء التنزيل
-Este mapa lo descargó StradaOS. Puedes dejar de usarlo o borrarlo para liberar espacio.	نزّل StradaOS هذه الخريطة. يمكنك إيقاف استخدامها أو حذفها لتحرير المساحة.
+Este mapa lo descargó MiniLauncher. Puedes dejar de usarlo o borrarlo para liberar espacio.	نزّل MiniLauncher هذه الخريطة. يمكنك إيقاف استخدامها أو حذفها لتحرير المساحة.
 Puedes dejar de usar este mapa (el archivo no se borra).	يمكنك إيقاف استخدام هذه الخريطة (لن يُحذف الملف).
 Dejar de usarlo	إيقاف استخدامها
 Borrar el archivo	حذف الملف
@@ -578,7 +578,7 @@ se cortó la descarga	انقطع التنزيل
 Sin señal GPS · mapa sin conexión	لا توجد إشارة GPS · خريطة بلا اتصال
 Sin señal GPS ni internet	لا توجد إشارة GPS ولا إنترنت
 Sin señal GPS · última posición	لا توجد إشارة GPS · آخر موقع
-# 2.17: tema por horario o del sistema, íconos de Wi-Fi y Bluetooth, barra, diagnóstico del mapa
+# tema por horario o del sistema, íconos de Wi-Fi y Bluetooth, barra, diagnóstico del mapa
 Auto: por horario. Sistema: sigue el modo oscuro de la pantalla (algunas lo cambian al encender las luces)	تلقائي: حسب الجدول. النظام: يتبع الوضع الداكن للشاشة (بعض الشاشات تغيّره عند تشغيل الأضواء)
 Oscuro desde	داكن من
 Claro desde	فاتح من
@@ -609,7 +609,7 @@ apagado	معطّل
 encendida	مفعّلة
 apagada	معطّلة
 Última señal: {}	آخر إشارة: {}
-ninguna desde que abrió StradaOS	لا شيء منذ فتح StradaOS
+ninguna desde que abrió MiniLauncher	لا شيء منذ فتح MiniLauncher
 hace {} s	منذ {} ث
 hace {} min	منذ {} د
 Buscando desde hace {} min	جارٍ البحث منذ {} د
@@ -645,7 +645,7 @@ Tema según el modo oscuro del sistema	سمة تتبع الوضع الداكن �
 Pantallas que lo cambian (p. ej. con las luces)	الشاشات التي تغيّره (مثلًا مع الأضواء)
 el sistema está en modo oscuro	النظام في الوضع الداكن
 el sistema está en modo claro	النظام في الوضع الفاتح
-# 2.18: botones de conexión, clima detallado, ocultar velocidad/aceite/reproductor, botón del navegador, foto tal cual
+# botones de conexión, clima detallado, ocultar velocidad/aceite/reproductor, botón del navegador, foto tal cual
 Cargando…	جارٍ التحميل…
 Esperando la ubicación…	في انتظار الموقع…
 Máx {} · Mín {}	العظمى {} · الصغرى {}
@@ -688,7 +688,7 @@ Usar la foto original, con fondo	استخدم الصورة الأصلية مع �
 Quitar el fondo	إزالة الخلفية
 No se detectó un fondo liso: se usa la foto tal cual	لم يتم العثور على خلفية سادة: ستُستخدم الصورة كما هي
 Se usa tal cual; si quieres, le puedes quitar el fondo	تُستخدم كما هي؛ ويمكنك إزالة الخلفية إن أردت
-# 2.19: cantidad y tamaño de los botones, íconos de apps, packs de íconos, barra oculta, tamaño de la letra
+# cantidad y tamaño de los botones, íconos de apps, packs de íconos, barra oculta, tamaño de la letra
 Cantidad de botones	عدد الأزرار
 «Apps» siempre queda al final	يبقى «التطبيقات» دائمًا في النهاية
 Tamaño de los íconos	حجم الأيقونات
@@ -707,7 +707,7 @@ Lateral: los botones van al costado y todo se ve más grande en pantallas bajas 
 Oculta	مخفي
 Tamaño de la letra	حجم الخط
 Para leer mejor de lejos o que quepa más	للقراءة بشكل أفضل من بعيد أو لاحتواء المزيد
-# 2.20: velocímetro analógico, velocímetro sobre el mapa, mantenimientos a medida
+# velocímetro analógico, velocímetro sobre el mapa, mantenimientos a medida
 Velocímetro	عداد السرعة
 En la tarjeta del vehículo. Toma el color de acento	في بطاقة المركبة. يستخدم لون التمييز
 Digital	رقمي
@@ -740,7 +740,7 @@ Lo que llegue primero	أيهما أقرب
 ¿A cuántos {} fue la última vez?	عند كم {} كانت آخر مرة؟
 ¿Cuándo fue la última vez?	متى كانت آخر مرة؟
 Kilometraje del tablero	عداد المسافة في لوحة القيادة
-StradaOS no puede leer el kilometraje del carro. Escríbelo una vez y StradaOS le suma lo que recorras con el GPS.	لا يستطيع StradaOS قراءة عداد السيارة. اكتبه مرة واحدة وسيضيف StradaOS ما تقطعه عبر GPS.
+MiniLauncher no puede leer el kilometraje del carro. Escríbelo una vez y MiniLauncher le suma lo que recorras con el GPS.	لا يستطيع MiniLauncher قراءة عداد السيارة. اكتبه مرة واحدة وسيضيف MiniLauncher ما تقطعه عبر GPS.
 Escribirlo	اكتبه
 Última vez	آخر مرة
 Cambiar cada cuánto	تغيير المدة
@@ -765,7 +765,7 @@ cada {} semanas	كل {} أسابيع
 {} meses	{} أشهر
 {} día	{} يوم
 {} días	{} أيام
-# 2.20: Ajustes reordenados, sección Mantenimientos, íconos, velocímetro del mapa
+# Ajustes reordenados, sección Mantenimientos, íconos, velocímetro del mapa
 Mantenimientos	الصيانة
 Barra de apps	شريط التطبيقات
 Tarjetas	البطاقات
@@ -774,7 +774,7 @@ Diseño de la barra	تصميم الشريط
 Botones (déjalos presionados en el inicio para cambiarlos)	الأزرار (اضغط عليها مطولًا في الشاشة الرئيسية لتغييرها)
 Texto	النص
 Kilometraje	عداد المسافة
-Escríbelo una vez y StradaOS le suma lo que recorras con el GPS	اكتبه مرة واحدة وسيضيف StradaOS ما تقطعه عبر GPS
+Escríbelo una vez y MiniLauncher le suma lo que recorras con el GPS	اكتبه مرة واحدة وسيضيف MiniLauncher ما تقطعه عبر GPS
 Avisa cuando toca el cambio	ينبهك عندما يحين وقت التغيير
 En el inicio	في الشاشة الرئيسية
 Mantenimiento en el inicio	الصيانة في الشاشة الرئيسية

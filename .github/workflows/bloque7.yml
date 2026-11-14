@@ -1,6 +1,6 @@
 name: Bloque 7 (capturas)
 
-# Manual: capturas de las opciones nuevas de la 2.19 en emuladores. Quedan en la rama «bloque7-capturas».
+# Manual: capturas de las opciones del launcher en emuladores. Quedan en la rama «bloque7-capturas».
 on:
   workflow_dispatch:
 
@@ -20,8 +20,8 @@ jobs:
           - { api: 34, arch: x86_64 }
     steps:
       - uses: actions/checkout@v4
-      - name: Descargar StradaOS Prueba
-        run: curl -fsSL --retry 5 -o prueba.apk "https://github.com/${GITHUB_REPOSITORY}/releases/download/prueba/StradaOS-prueba.apk"
+      - name: Descargar MiniLauncher Prueba
+        run: curl -fsSL --retry 5 -o prueba.apk "https://github.com/${GITHUB_REPOSITORY}/releases/download/prueba/MiniLauncher-prueba.apk"
       - name: Descargar un pack de íconos (Arcticons, F-Droid)
         run: |
           VC=$(curl -fsSL --retry 3 https://f-droid.org/api/v1/packages/com.donnnno.arcticons | python3 -c "import sys,json; print(json.load(sys.stdin)['suggestedVersionCode'])") || true

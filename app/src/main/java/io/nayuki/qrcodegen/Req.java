@@ -1,4 +1,4 @@
-/* Ayudante añadido por StradaOS: reemplaza java.util.Objects (API 19+) para funcionar en Android 4.1+. */
+/* Ayudante añadido por MiniLauncher: reemplaza java.util.Objects (API 19+) para funcionar en Android 4.1+. */
 package io.nayuki.qrcodegen;
 
 final class Req {

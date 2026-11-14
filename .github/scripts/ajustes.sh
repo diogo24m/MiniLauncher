@@ -1,8 +1,8 @@
 #!/bin/bash
 # Ajustes: al cambiar un ajuste la página debe quedarse donde estaba, sin parpadeo. Graba la pantalla mientras se
 # tocan interruptores y opciones en varias secciones (ya desplazadas) y deja los videos en salida/.
-PKG=com.stradaos.launcher.debug
-ACT=$PKG/com.stradaos.launcher.Main
+PKG=com.mini.launcher.debug
+ACT=$PKG/com.mini.launcher.Main
 OUT=salida; mkdir -p $OUT
 adb wait-for-device
 for i in $(seq 1 100); do [ "$(adb shell getprop sys.boot_completed | tr -d '\r')" = "1" ] && break; sleep 3; done
@@ -44,5 +44,5 @@ go ajustes:4 6; down; down
 adb shell screencap -p /data/local/tmp/s.png && adb pull /data/local/tmp/s.png $OUT/accesos.png >/dev/null
 go ajustes:3 6; down; down
 adb shell screencap -p /data/local/tmp/s.png && adb pull /data/local/tmp/s.png $OUT/conexion.png >/dev/null
-adb logcat -d | grep -E "FATAL EXCEPTION|AndroidRuntime: (java|Caused|\tat com.stradaos)" | tail -30 > $OUT/logcat.txt
+adb logcat -d | grep -E "FATAL EXCEPTION|AndroidRuntime: (java|Caused|\tat com.mini.launcher)" | tail -30 > $OUT/logcat.txt
 ls -l $OUT

@@ -1,14 +1,17 @@
 # Cómo contribuir
 
-¡Gracias por querer mejorar StradaOS! 🚗
+¡Gracias por querer mejorar MiniLauncher! 🚗
+
+MiniLauncher empieza en la versión **0.1.0** (`versionCode 1`) y es un fork de **StradaOS 2.20.1**,
+de lordnordic-debug, bajo GPL-3.0. Los cambios respecto a esa base forman parte de esta primera versión.
 
 ## Reportar problemas
 Usa la plantilla de [issues](../../issues/new/choose). Lo más útil:
-- La versión de StradaOS y el **Android real** de la pantalla (en *Ajustes → Acerca de*).
+- La versión de MiniLauncher y el **Android real** de la pantalla (en *Ajustes → Acerca de*).
 - Fotos de la pantalla.
 - El diagnóstico (*Ajustes → Sistema → Exportar diagnóstico*).
 
-## Traducir StradaOS · Translating StradaOS
+## Traducir MiniLauncher · Translating MiniLauncher
 
 **Español.** No hace falta saber programar para traducir la app:
 
@@ -43,10 +46,20 @@ Requisitos: JDK 17 y el SDK de Android.
 - Sin dependencias de Google Play Services, para poder estar en F-Droid.
 - La interfaz se dibuja por código en una «mesa» de 1024×600 que se escala (ver `Main.place()`).
 
+## Verificar MiniLauncher
+
+Con un emulador Android 11 sin el servicio SPD conectado, ejecutar `./gradlew connectedDebugAndroidTest`.
+Los tests de `app/src/androidTest/java/com/mini/launcher/` comprueban lecturas Binder, unidades, valores ausentes,
+selección de música, kilometraje CAN y simulado, categorías de ajustes y el espacio de la telemetría con los velocímetros.
+Usan las bibliotecas de pruebas del SDK; no añaden dependencias al APK del launcher.
+
+`CarInfo.java` y `Vehicle.java` implementan el contrato de [docs/carro/README.md](docs/carro/README.md).
+Los campos aún sin validar se mantienen como valores brutos. `Debugging.java` encapsula los controles de ADB.
+
 ## Estructura
 
 ```
-app/src/main/java/com/stradaos/launcher/
+app/src/main/java/com/mini/launcher/
   Main.java          pantalla de inicio, ajustes, diálogos
   LiveMapView.java   mapa en vivo (teselas OSM, caché, modo oscuro)
   NowPlaying.java    pista en reproducción (Android 4.x + avisos de reproductores y Bluetooth)

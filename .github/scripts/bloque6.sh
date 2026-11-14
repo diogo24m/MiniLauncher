@@ -1,9 +1,9 @@
 #!/bin/bash
-# Bloque 6 (2.18): botones de conexión, clima en el panel y su detalle, ocultar velocidad/aceite/reproductor,
+# Bloque 6: botones de conexión, clima en el panel y su detalle, ocultar velocidad/aceite/reproductor,
 # botón del navegador (tamaño y lado) y Apariencia.
 API=$1; OUT=$2; mkdir -p $OUT
-PKG=com.stradaos.launcher.debug
-ACT=$PKG/com.stradaos.launcher.Main
+PKG=com.mini.launcher.debug
+ACT=$PKG/com.mini.launcher.Main
 adb wait-for-device
 for i in $(seq 1 100); do [ "$(adb shell getprop sys.boot_completed | tr -d '\r')" = "1" ] && break; sleep 3; done
 sleep 15
@@ -46,6 +46,6 @@ go ajustes:2 6; adb shell input swipe 640 480 640 200 500; sleep 2; shot 16-apar
 adb shell input swipe 640 480 640 200 500; sleep 2; shot 17-apariencia-abajo
 go inicio 4; go idioma:en 6; go diseno:conexion-none 5; shot 18-ingles-clima; go clima 4; shot 19-ingles-detalle
 adb shell input keyevent 4; sleep 2; go idioma:es 6; go diseno:base 4
-adb logcat -d | grep -E "FATAL EXCEPTION|AndroidRuntime: (java|Caused|\tat com.stradaos)" | tail -40 > $OUT/logcat.txt
-if grep -q "AndroidRuntime: \tat com.stradaos\|com.stradaos" $OUT/logcat.txt; then echo "CIERRE" > $OUT/CIERRES.txt; fi
+adb logcat -d | grep -E "FATAL EXCEPTION|AndroidRuntime: (java|Caused|\tat com.mini.launcher)" | tail -40 > $OUT/logcat.txt
+if grep -q "AndroidRuntime: \tat com.mini.launcher\|com.mini.launcher" $OUT/logcat.txt; then echo "CIERRE" > $OUT/CIERRES.txt; fi
 ls -l $OUT

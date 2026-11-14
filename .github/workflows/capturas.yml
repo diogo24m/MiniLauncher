@@ -1,6 +1,6 @@
 name: Capturas para redes
 
-# Manual: saca capturas de StradaOS Prueba a 2048x1200 (español/inglés, claro/oscuro, diseños del inicio) y las sube
+# Manual: saca capturas de MiniLauncher Prueba a 2048x1200 (español/inglés, claro/oscuro, diseños del inicio) y las sube
 # a la rama «capturas-<modo>» para armar las imágenes de Facebook, Reddit, X y la página.
 on:
   workflow_dispatch:
@@ -17,8 +17,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Descargar StradaOS Prueba
-        run: curl -fsSL --retry 5 -o prueba.apk "https://github.com/${GITHUB_REPOSITORY}/releases/download/prueba/StradaOS-prueba.apk"
+      - name: Descargar MiniLauncher Prueba
+        run: curl -fsSL --retry 5 -o prueba.apk "https://github.com/${GITHUB_REPOSITORY}/releases/download/prueba/MiniLauncher-prueba.apk"
       - name: Mapa de Colombia (con caché)
         if: inputs.modo == 'proyecto'
         uses: actions/cache@v4

@@ -42,8 +42,8 @@ jobs:
           set -e
           T=.github/tools/mapa
           mkdir -p cls salida
-          javac -encoding UTF-8 -d cls $T/android/graphics/*.java $T/stub/com/stradaos/launcher/*.java app/src/main/java/com/stradaos/launcher/OfflineMap.java
-          run() { java -Djava.awt.headless=true -cp cls com.stradaos.launcher.Probar colombia.map "$@" | tee -a salida/tiempos.txt; }
+          javac -encoding UTF-8 -d cls $T/android/graphics/*.java $T/stub/com/mini/launcher/*.java app/src/main/java/com/mini/launcher/OfflineMap.java
+          run() { java -Djava.awt.headless=true -cp cls com.mini.launcher.Probar colombia.map "$@" | tee -a salida/tiempos.txt; }
           run
           # Medellín (centro), Bogotá (centro), Cartagena (costa)
           for z in 14 15 16 17; do

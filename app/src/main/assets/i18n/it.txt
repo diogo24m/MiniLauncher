@@ -1,4 +1,4 @@
-# StradaOS · traducción it. Formato: español<TAB>traducción. Ver I18n.java.
+# MiniLauncher · traducción it. Formato: español<TAB>traducción. Ver I18n.java.
 Radio	Radio
 Cámara	Fotocamera
 Archivos	File
@@ -33,7 +33,7 @@ Restablecer ({})	Ripristina ({})
 Botón restablecido	Pulsante ripristinato
 Cerrar	Chiudi
 Cerrar  ✕	Chiudi  ✕
-★  Funciones de StradaOS (Música, Navegación, Android Auto…)	★  Funzioni di StradaOS (Musica, Navigazione, Android Auto…)
+★  Funciones de MiniLauncher (Música, Navegación, Android Auto…)	★  Funzioni di MiniLauncher (Musica, Navigazione, Android Auto…)
 ¿Qué abre el botón {}?	Cosa apre il pulsante {}?
 Función del botón {}	Funzione del pulsante {}
 Nombre del botón {} (vacío = el de la app)	Nome del pulsante {} (vuoto = quello dell'app)
@@ -49,7 +49,7 @@ Buenas tardes	Buon pomeriggio
 Buenas noches	Buonasera
 Diagnóstico del reproductor	Diagnostica del lettore
 Accesibilidad	Accessibilità
-Activa «Carátula de Android Auto» (StradaOS)	Attiva «Copertina di Android Auto» (StradaOS)
+Activa «Carátula de Android Auto» (MiniLauncher)	Attiva «Copertina di Android Auto» (MiniLauncher)
 No se pudo abrir Accesibilidad	Impossibile aprire Accessibilità
 Activa «Pista actual de AA» en Open Headunit	Attiva «Brano attuale AA» in Open Headunit
 «Ninguna aplic. funciona con este accesorio USB»	«Nessuna app installata funziona con questo accessorio USB»
@@ -58,7 +58,6 @@ Abrir EasyConnection	Apri EasyConnection
 No hay apps de espejo instaladas	Nessuna app di mirroring installata
 Exportando… puede tardar un minuto	Esportazione… può richiedere un minuto
 Diagnóstico listo	Diagnostica pronta
-Se guardó en:\n{}\n\nCopia la carpeta StradaDiag a una memoria USB y adjúntala en un «issue» del repositorio de StradaOS en GitHub.	Salvato in:\n{}\n\nCopia la cartella StradaDiag su una chiavetta USB e allegala a una «issue» del repository di StradaOS su GitHub.
 12 horas	12 ore
 24 horas	24 ore
 Automático	Automatico
@@ -66,7 +65,7 @@ Automática	Automatica
 Auto	Auto
 12 horas (a.m./p.m.)	12 ore (a.m./p.m.)
 Formato de hora	Formato dell'ora
-Se aplicará al reiniciar StradaOS	Si applica al riavvio di StradaOS
+Se aplicará al reiniciar MiniLauncher	Si applica al riavvio di MiniLauncher
 Rojo	Rosso
 Naranja	Arancione
 Amarillo	Giallo
@@ -76,7 +75,7 @@ Azul	Blu
 Morado	Viola
 Rosa	Rosa
 Plata	Argento
-Bienvenido a StradaOS	Benvenuto in StradaOS
+Bienvenido a MiniLauncher	Benvenuto in MiniLauncher
 Vamos a dejar el launcher a tu gusto: tu nombre, tu vehículo, el color y la foto. Toma menos de un minuto y lo puedes cambiar después en el engranaje ⚙.	Configuriamo il launcher come preferisci: il tuo nome, il tuo veicolo, il colore e la foto. Richiede meno di un minuto e puoi cambiarlo dopo con l'ingranaggio ⚙.
 Empezar	Inizia
 ¿Cómo te llamas?	Come ti chiami?
@@ -214,7 +213,7 @@ Audio Bluetooth	Audio Bluetooth
 Volver al Bluetooth al desconectar Android Auto	Torna al Bluetooth quando Android Auto si scollega
 Al quitar el cable, abre un instante la app de música Bluetooth para que el sonido siga por Bluetooth	Quando togli il cavo, apre per un istante l'app di musica Bluetooth così l'audio continua via Bluetooth
 Escuchar el Bluetooth	Ascolta il Bluetooth
-En esta pantalla, toca ▶ en el inicio: StradaOS pasa el sonido a Bluetooth (por ejemplo, si venías de la radio)	Su questo schermo, tocca ▶ nella home: StradaOS passa l'audio al Bluetooth (per esempio, se venivi dalla radio)
+En esta pantalla, toca ▶ en el inicio: MiniLauncher pasa el sonido a Bluetooth (por ejemplo, si venías de la radio)	Su questo schermo, tocca ▶ nella home: MiniLauncher passa l'audio al Bluetooth (per esempio, se venivi dalla radio)
 Pasar a Bluetooth al dar play en el celular (en prueba)	Passa al Bluetooth quando premi play sul telefono (in prova)
 Abre un instante «Audio Bluetooth» y vuelve. En algunas pantallas no detecta el play del celular	Apre per un istante «Audio Bluetooth» e torna. Su alcuni schermi non rileva il play del telefono
 Probar ahora	Prova ora
@@ -271,7 +270,7 @@ Si la pantalla lo trae	Se lo schermo lo ha
 no detectado	non rilevato
 Pantalla con CarPlay o adaptador USB	Schermo con CarPlay o adattatore USB
 Mapa con internet seguro (TLS 1.2)	Mappa con internet sicuro (TLS 1.2)
-Android 4.1+ (StradaOS lo activa)	Android 4.1+ (StradaOS lo attiva)
+Android 4.1+ (MiniLauncher lo activa)	Android 4.1+ (MiniLauncher lo attiva)
 en Android 4.x solo algunos servidores de mapas responden	su Android 4.x solo alcuni server di mappe rispondono
 Instalar actualizaciones desde la app	Installa aggiornamenti dall'app
 pide permiso «Instalar apps desconocidas»	richiede il permesso «Installa app sconosciute»
@@ -283,7 +282,7 @@ Gratis y de código abierto. Una nueva vida para las pantallas Android del carro
 Versión	Versione
 Android de la pantalla	Android dello schermo
 Real: {} · ver qué funciona aquí	Reale: {} · vedi cosa funziona qui
-Cierres inesperados o bloqueos de StradaOS en esta pantalla	Chiusure inattese o blocchi di StradaOS su questo schermo
+Cierres inesperados o bloqueos de MiniLauncher en esta pantalla	Chiusure inattese o blocchi di MiniLauncher su questo schermo
 Sin fallos	Nessun errore
 Ver	Vedi
 Actualizaciones	Aggiornamenti
@@ -292,9 +291,9 @@ Las actualizaciones llegan por esa app	Gli aggiornamenti arrivano tramite quell'
 Avisar también de versiones en GitHub	Avvisa anche delle versioni su GitHub
 Comprobar actualizaciones automáticamente	Controlla gli aggiornamenti automaticamente
 Opcional: las descargas de GitHub no pasan por la revisión de la tienda	Facoltativo: i download da GitHub non passano dalla revisione dello store
-Al abrir StradaOS con internet, una vez al día	All'apertura di StradaOS con internet, una volta al giorno
+Al abrir MiniLauncher con internet, una vez al día	All'apertura di MiniLauncher con internet, una volta al giorno
 Actualizaciones desde GitHub	Aggiornamenti da GitHub
-Instalaste StradaOS desde {}. Si activas esto, StradaOS revisará una vez al día las versiones publicadas en github.com/{} y te ofrecerá descargarlas desde ahí.\n\nEsas descargas no pasan por la revisión de la tienda. Puede que GitHub tenga una versión un poco antes que la tienda.	Hai installato StradaOS da {}. Se attivi questa opzione, StradaOS controllerà una volta al giorno le versioni pubblicate su github.com/{} e ti offrirà di scaricarle da lì.\n\nQuesti download non passano dalla revisione dello store. GitHub potrebbe avere una versione un po' prima dello store.
+Instalaste MiniLauncher desde {}. Si activas esto, MiniLauncher revisará una vez al día las versiones publicadas en github.com/{} y te ofrecerá descargarlas desde ahí.\n\nEsas descargas no pasan por la revisión de la tienda. Puede que GitHub tenga una versión un poco antes que la tienda.	Hai installato MiniLauncher da {}. Se attivi questa opzione, MiniLauncher controllerà una volta al giorno le versioni pubblicate su github.com/{} e ti offrirà di scaricarle da lì.\n\nQuesti download non passano dalla revisione dello store. GitHub potrebbe avere una versione un po' prima dello store.
 Activar	Attiva
 Canal de actualizaciones	Canale di aggiornamento
 Buscar actualizaciones	Cerca aggiornamenti
@@ -302,17 +301,16 @@ Aún no se ha comprobado	Non ancora controllato
 Última comprobación: {}	Ultimo controllo: {}
 Comunidad	Comunità
 Dar una estrella en GitHub	Metti una stella su GitHub
-Ayuda a que más personas encuentren StradaOS	Aiuta più persone a trovare StradaOS
+Ayuda a que más personas encuentren MiniLauncher	Aiuta più persone a trovare MiniLauncher
 Dar una estrella ⭐	Metti una stella ⭐
 Abre el repositorio y toca «Star». ¡Gracias!	Apri il repository e tocca «Star». Grazie!
 Donar	Dona
-Si StradaOS revivió tu pantalla, invítame un café	Se StradaOS ha ridato vita al tuo schermo, offrimi un caffè
+Si MiniLauncher revivió tu pantalla, invítame un café	Se MiniLauncher ha ridato vita al tuo schermo, offrimi un caffè
 Apoya el proyecto ☕	Sostieni il progetto ☕
-StradaOS es gratis. Las donaciones ayudan a mantenerlo y a probarlo en más pantallas.	StradaOS è gratuito. Le donazioni aiutano a mantenerlo e a provarlo su più schermi.
+MiniLauncher es gratis. Las donaciones ayudan a mantenerlo y a probarlo en más pantallas.	MiniLauncher è gratuito. Le donazioni aiutano a mantenerlo e a provarlo su più schermi.
 Reportar un problema o sugerir algo	Segnala un problema o suggerisci qualcosa
 Crea un «issue» en GitHub (adjunta el diagnóstico)	Crea una «issue» su GitHub (allega la diagnostica)
 Reportar un problema	Segnala un problema
-Cuenta tu modelo de pantalla y su versión de Android. Puedes adjuntar la carpeta StradaDiag (Sistema → Exportar diagnóstico).	Indica il modello del tuo schermo e la sua versione di Android. Puoi allegare la cartella StradaDiag (Sistema → Esporta diagnostica).
 Código fuente	Codice sorgente
 Licencia GPL-3.0	Licenza GPL-3.0
 Créditos y licencias	Crediti e licenze
@@ -336,7 +334,7 @@ error de red	errore di rete
 tu tienda de apps	il tuo store di app
 Tienes la {} · nueva: {}	Hai la {} · nuova: {}
 Mejoras y correcciones.	Miglioramenti e correzioni.
-Nueva versión de StradaOS	Nuova versione di StradaOS
+Nueva versión de MiniLauncher	Nuova versione di MiniLauncher
 Tienes la {} · en GitHub: {}\nActualiza desde {} cuando llegue. Descargar de GitHub omite la revisión de la tienda.	Hai la {} · su GitHub: {}\nAggiorna da {} quando arriva. Scaricare da GitHub salta la revisione dello store.
 Ver en GitHub	Vedi su GitHub
 Descarga desde GitHub:	Scarica da GitHub:
@@ -344,13 +342,13 @@ Descargar e instalar	Scarica e installa
 Descarga la nueva versión desde:	Scarica la nuova versione da:
 Omitir esta versión	Salta questa versione
 Más tarde	Più tardi
-Descargando StradaOS {}…	Download di StradaOS {}…
+Descargando MiniLauncher {}…	Download di MiniLauncher {}…
 Descárgala desde tu celular	Scaricala dal telefono
 Esta pantalla no pudo descargar el archivo. Escanea el código, descarga el APK y pásalo por USB.	Questo schermo non è riuscito a scaricare il file. Scansiona il codice, scarica l'APK e copialo via USB.
-¿Disfrutando StradaOS?	Ti piace StradaOS?
-Si te gusta usar StradaOS, dale una estrella en GitHub. Y si revivió tu pantalla, considera invitarme un café ☕	Se ti piace usare StradaOS, mettigli una stella su GitHub. E se ha ridato vita al tuo schermo, offrimi un caffè ☕
+¿Disfrutando MiniLauncher?	Ti piace MiniLauncher?
+Si te gusta usar MiniLauncher, dale una estrella en GitHub. Y si revivió tu pantalla, considera invitarme un café ☕	Se ti piace usare MiniLauncher, mettigli una stella su GitHub. E se ha ridato vita al tuo schermo, offrimi un caffè ☕
 Dar una estrella	Metti una stella
-StradaOS es gratis. Las donaciones ayudan a mantenerlo.	StradaOS è gratuito. Le donazioni aiutano a mantenerlo.
+MiniLauncher es gratis. Las donaciones ayudan a mantenerlo.	MiniLauncher è gratuito. Le donazioni aiutano a mantenerlo.
 Escanéalo con la cámara de tu celular o entra a:	Scansionalo con la fotocamera del telefono o vai su:
 Abrir aquí	Apri qui
 No hay navegador disponible	Nessun browser disponibile
@@ -373,7 +371,7 @@ Conexión: {}. Cámbiala dejando presionado el botón.	Connessione: {}. Cambiala
 el navegador	il browser
 «{}» necesita un Android más nuevo que el de esta pantalla. Abro el navegador de fábrica.	«{}» richiede un Android più recente di quello di questo schermo. Apro il browser di fabbrica.
 No encontré un navegador. Déjalo presionado para elegir uno.	Non ho trovato un browser. Tienilo premuto per sceglierne uno.
-Permite «Instalar apps desconocidas» para StradaOS y vuelve a tocar.	Consenti «Installa app sconosciute» per StradaOS e tocca di nuovo.
+Permite «Instalar apps desconocidas» para MiniLauncher y vuelve a tocar.	Consenti «Installa app sconosciute» per MiniLauncher e tocca di nuovo.
 Activa «Orígenes desconocidos» y vuelve a tocar.	Attiva «Origini sconosciute» e tocca di nuovo.
 No se pudo preparar {}	Impossibile preparare {}
 No se pudo abrir el instalador para {}	Impossibile aprire il programma di installazione per {}
@@ -389,30 +387,30 @@ Tormenta	Temporale
 Mapa en vivo apagado	Mappa in diretta spenta
 Rendimiento	Prestazioni
 Apágalo si la pantalla va lenta: queda un mapa de adorno y el velocímetro sigue funcionando	Spegnila se lo schermo è lento: resta una mappa decorativa e il tachimetro continua a funzionare
-StradaOS aún no es tu pantalla de inicio	StradaOS non è ancora la tua schermata home
-Por eso al encender el carro o al tocar Inicio aparece el menú de fábrica.\n\nToca «Fijar ahora», elige StradaOS y luego «Siempre».	Per questo all'accensione dell'auto o toccando Home appare il menu di fabbrica.\n\nTocca «Imposta ora», scegli StradaOS e poi «Sempre».
+MiniLauncher aún no es tu pantalla de inicio	MiniLauncher non è ancora la tua schermata home
+Por eso al encender el carro o al tocar Inicio aparece el menú de fábrica.\n\nToca «Fijar ahora», elige MiniLauncher y luego «Siempre».	Per questo all'accensione dell'auto o toccando Home appare il menu di fabbrica.\n\nTocca «Imposta ora», scegli MiniLauncher e poi «Sempre».
 Fijar ahora	Imposta ora
 Ahora no	Non ora
 No volver a preguntar	Non chiedere più
-Elige StradaOS y toca «Siempre»	Scegli StradaOS e tocca «Sempre»
-Listo: StradaOS es tu pantalla de inicio	Fatto: StradaOS è la tua schermata home
-Fijar StradaOS a mano	Imposta StradaOS a mano
-Algunas pantallas no muestran la lista para elegir. Prueba así:\n\n1. Toca el botón Inicio (la casita) de la pantalla. Si pregunta qué app usar, elige StradaOS → Siempre.\n2. Si no pregunta: en los ajustes de la pantalla busca Aplicaciones → Aplicaciones predeterminadas → Pantalla de inicio (o «App de inicio») y elige StradaOS.\n3. Con Android 10 o más nuevo, no lo elijas desde el modo fábrica de la pantalla («Launcher», «Interfaz» o «UI»): en algunas marcas eso deja las demás apps sin poder abrirse. En Android 4 a 9 sí puedes usar esa opción.\n\nSi tu pantalla siempre vuelve a su menú de fábrica al encender, activa «Abrir StradaOS al encender» en Ajustes → Sistema.	Alcuni schermi non mostrano l'elenco da cui scegliere. Prova così:\n\n1. Tocca il pulsante Home (la casetta) dello schermo. Se chiede quale app usare, scegli StradaOS → Sempre.\n2. Se non chiede: nelle impostazioni dello schermo cerca App → App predefinite → App Home e scegli StradaOS.\n3. Con Android 10 o più recente, non sceglierlo dalla modalità di fabbrica dello schermo («Launcher», «Interfaccia» o «UI»): su alcune marche le altre app non si aprono più. Con Android da 4 a 9 puoi usare quell'opzione.\n\nSe il tuo schermo torna sempre al menu di fabbrica all'accensione, attiva «Apri StradaOS all'accensione» in Impostazioni → Sistema.
+Elige MiniLauncher y toca «Siempre»	Scegli MiniLauncher e tocca «Sempre»
+Listo: MiniLauncher es tu pantalla de inicio	Fatto: MiniLauncher è la tua schermata home
+Fijar MiniLauncher a mano	Imposta MiniLauncher a mano
+Algunas pantallas no muestran la lista para elegir. Prueba así:\n\n1. Toca el botón Inicio (la casita) de la pantalla. Si pregunta qué app usar, elige MiniLauncher → Siempre.\n2. Si no pregunta: en los ajustes de la pantalla busca Aplicaciones → Aplicaciones predeterminadas → Pantalla de inicio (o «App de inicio») y elige MiniLauncher.\n3. Con Android 10 o más nuevo, no lo elijas desde el modo fábrica de la pantalla («Launcher», «Interfaz» o «UI»): en algunas marcas eso deja las demás apps sin poder abrirse. En Android 4 a 9 sí puedes usar esa opción.\n\nSi tu pantalla siempre vuelve a su menú de fábrica al encender, activa «Abrir MiniLauncher al encender» en Ajustes → Sistema.	Alcuni schermi non mostrano l'elenco da cui scegliere. Prova così:\n\n1. Tocca il pulsante Home (la casetta) dello schermo. Se chiede quale app usare, scegli MiniLauncher → Sempre.\n2. Se non chiede: nelle impostazioni dello schermo cerca App → App predefinite → App Home e scegli MiniLauncher.\n3. Con Android 10 o più recente, non sceglierlo dalla modalità di fabbrica dello schermo («Launcher», «Interfaccia» o «UI»): su alcune marche le altre app non si aprono più. Con Android da 4 a 9 puoi usare quell'opzione.\n\nSe il tuo schermo torna sempre al menu di fabbrica all'accensione, attiva «Apri MiniLauncher all'accensione» in Impostazioni → Sistema.
 Pantalla de inicio	Schermata home
 La que aparece al encender y al tocar Inicio	Quella che appare all'accensione e toccando Home
-StradaOS ✓	StradaOS ✓
+MiniLauncher ✓	MiniLauncher ✓
 Otra · toca para cambiar	Un'altra · tocca per cambiare
-Abrir StradaOS al encender	Apri StradaOS all'accensione
+Abrir MiniLauncher al encender	Apri MiniLauncher all'accensione
 Para pantallas que siempre arrancan en su menú de fábrica (Android 4 a 9)	Per schermi che si avviano sempre nel loro menu di fabbrica (da Android 4 a 9)
 ¿La música Bluetooth se corta o no aparece?	La musica Bluetooth si interrompe o non appare?
 Qué hacer en cada caso	Cosa fare in ogni caso
-• Se corta al salir de la app Bluetooth: sal con el botón Inicio (la casita), no con Atrás. Atrás cierra la app de fábrica y con ella la música.\n\n• No suena hasta abrir la app Bluetooth: activa «Abrir la app de música Bluetooth al conectar el celular» (aquí mismo). Abre la app un instante y vuelve al inicio.\n\n• La canción no aparece en el inicio (Android 5 o más nuevo): activa «Música de cualquier app» arriba y dale acceso a notificaciones a StradaOS.\n\n• Revisa en Ajustes → Accesos y apps que «Música Bluetooth» sea la app Bluetooth de tu pantalla.	• Si interrompe quando esci dall'app Bluetooth: esci con il pulsante Home (la casetta), non con Indietro. Indietro chiude l'app di fabbrica e con lei la musica.\n\n• Non suona finché non apri l'app Bluetooth: attiva «Apri l'app di musica Bluetooth quando si collega il telefono» (proprio qui). Apre l'app per un istante e torna alla home.\n\n• Il brano non appare nella home (Android 5 o più recente): attiva «Musica da qualsiasi app» qui sopra e concedi a StradaOS l'accesso alle notifiche.\n\n• Controlla in Impostazioni → Collegamenti e app che «Musica Bluetooth» sia l'app Bluetooth del tuo schermo.
+• Se corta al salir de la app Bluetooth: sal con el botón Inicio (la casita), no con Atrás. Atrás cierra la app de fábrica y con ella la música.\n\n• No suena hasta abrir la app Bluetooth: activa «Abrir la app de música Bluetooth al conectar el celular» (aquí mismo). Abre la app un instante y vuelve al inicio.\n\n• La canción no aparece en el inicio (Android 5 o más nuevo): activa «Música de cualquier app» arriba y dale acceso a notificaciones a MiniLauncher.\n\n• Revisa en Ajustes → Accesos y apps que «Música Bluetooth» sea la app Bluetooth de tu pantalla.	• Si interrompe quando esci dall'app Bluetooth: esci con il pulsante Home (la casetta), non con Indietro. Indietro chiude l'app di fabbrica e con lei la musica.\n\n• Non suona finché non apri l'app Bluetooth: attiva «Apri l'app di musica Bluetooth quando si collega il telefono» (proprio qui). Apre l'app per un istante e torna alla home.\n\n• Il brano non appare nella home (Android 5 o più recente): attiva «Musica da qualsiasi app» qui sopra e concedi a MiniLauncher l'accesso alle notifiche.\n\n• Controlla in Impostazioni → Collegamenti e app che «Musica Bluetooth» sia l'app Bluetooth del tuo schermo.
 Sin permiso	Senza permesso
 GPS apagado	GPS spento
 Unidades	Unità
 Automático: mph en EE. UU. y Reino Unido	Automatico: mph negli USA e nel Regno Unito
 Permisos → Ubicación → Permitir	Permessi → Posizione → Consenti
-Activa la ubicación para StradaOS en los ajustes de la pantalla	Attiva la posizione per StradaOS nelle impostazioni dello schermo
+Activa la ubicación para MiniLauncher en los ajustes de la pantalla	Attiva la posizione per MiniLauncher nelle impostazioni dello schermo
 Activa la ubicación (GPS)	Attiva la posizione (GPS)
 Activa la ubicación (GPS) en los ajustes de la pantalla	Attiva la posizione (GPS) nelle impostazioni dello schermo
 Sin permiso de ubicación · toca aquí	Nessun permesso di posizione · tocca qui
@@ -435,7 +433,7 @@ Corregir el kilometraje actual	Correggi il chilometraggio attuale
 Cambiar cada cuánto se hace	Cambia ogni quanto si fa
 Desactivar el recordatorio	Disattiva il promemoria
 Recordatorio de cambio de aceite	Promemoria cambio olio
-StradaOS no puede leer el kilometraje del tablero del carro. Escríbelo una vez y StradaOS le irá sumando lo que recorras con el GPS, para avisarte cuando toque el cambio.\n\nDe vez en cuando puedes corregirlo con el valor real del tablero.	StradaOS non può leggere il contachilometri del cruscotto. Inseriscilo una volta e StradaOS aggiungerà la distanza percorsa misurata dal GPS, per avvisarti quando è ora del cambio.\n\nOgni tanto puoi correggerlo con il valore reale del cruscotto.
+MiniLauncher no puede leer el kilometraje del tablero del carro. Escríbelo una vez y MiniLauncher le irá sumando lo que recorras con el GPS, para avisarte cuando toque el cambio.\n\nDe vez en cuando puedes corregirlo con el valor real del tablero.	MiniLauncher non può leggere il contachilometri del cruscotto. Inseriscilo una volta e MiniLauncher aggiungerà la distanza percorsa misurata dal GPS, per avvisarti quando è ora del cambio.\n\nOgni tanto puoi correggerlo con il valore reale del cruscotto.
 ¿A cuántos {} fue el último cambio de aceite?	A quanti {} è stato l'ultimo cambio dell'olio?
 Kilometraje actual del tablero	Chilometraggio attuale del cruscotto
 ¿Cada cuántos {} cambias el aceite?	Ogni quanti {} cambi l'olio?
@@ -455,7 +453,7 @@ El mapa apunta	La mappa punta
 Según tu dirección: gira con el carro mientras te mueves	Direzione di marcia: ruota con l'auto mentre ti muovi
 Norte arriba	Nord in alto
 Según tu dirección	Direzione di marcia
-# 2.13: aceite (último cambio, unidad) y apps ocultas del cajón
+# aceite (último cambio, unidad) y apps ocultas del cajón
 Último cambio	Ultimo cambio
 Corregir el último cambio	Correggi l'ultimo cambio
 ¿Tu tablero marca kilómetros o millas?	Il tuo cruscotto segna chilometri o miglia?
@@ -477,24 +475,24 @@ Buscar app	Cerca app
 Apps ocultas en el cajón	App nascoste nel cassetto
 Se muestran todas las apps	Tutte le app sono visibili
 Apps ocultas: {}	App nascoste: {}
-# 2.14: desinstalar desde el cajón
+# desinstalar desde el cajón
 Desinstalar	Disinstalla
-# 2.14: salir de StradaOS (issue #9)
-Salir de StradaOS	Esci da StradaOS
+# salir de MiniLauncher (issue #9)
+Salir de MiniLauncher	Esci da MiniLauncher
 Abrir el launcher de fábrica	Apri il launcher di fabbrica
-Sale de StradaOS sin desinstalarlo	Esce da StradaOS senza disinstallarla
-Desactivar StradaOS	Disattiva StradaOS
-Si la pantalla quedó atrapada en StradaOS: se apaga solo, sin ventanas de Android	Se lo schermo è rimasto bloccato su StradaOS: si spegne da sola, senza finestre di Android
-Desinstalar StradaOS	Disinstalla StradaOS
+Sale de MiniLauncher sin desinstalarlo	Esce da MiniLauncher senza disinstallarla
+Desactivar MiniLauncher	Disattiva MiniLauncher
+Si la pantalla quedó atrapada en MiniLauncher: se apaga solo, sin ventanas de Android	Se lo schermo è rimasto bloccato su MiniLauncher: si spegne da sola, senza finestre di Android
+Desinstalar MiniLauncher	Disinstalla MiniLauncher
 Android pide confirmar	Android chiede conferma
 No encontré otra pantalla de inicio en este equipo	Non ho trovato un'altra schermata home su questo dispositivo
 ¿Cuál es el launcher de fábrica?	Qual è il launcher di fabbrica?
 No se pudo abrir	Impossibile aprire
-No encontré otra pantalla de inicio: StradaOS no se puede desactivar en este equipo	Non ho trovato un'altra schermata home: StradaOS non si può disattivare su questo dispositivo
-¿Desactivar StradaOS?	Disattivare StradaOS?
-StradaOS deja de ser la pantalla de inicio, ya no se abre al encender y vuelve el launcher de fábrica. No pide confirmaciones de Android, así que sirve aunque la pantalla haya quedado atrapada.\n\nPara volver a usarlo después: desinstálalo desde los ajustes de la pantalla e instálalo de nuevo.	StradaOS smette di essere la schermata home, non si apre più all'accensione e torna il launcher di fabbrica. Non chiede conferme ad Android, quindi funziona anche se lo schermo è rimasto bloccato.\n\nPer usarla di nuovo: disinstallala dalle impostazioni dello schermo e reinstallala.
+No encontré otra pantalla de inicio: MiniLauncher no se puede desactivar en este equipo	Non ho trovato un'altra schermata home: MiniLauncher non si può disattivare su questo dispositivo
+¿Desactivar MiniLauncher?	Disattivare MiniLauncher?
+MiniLauncher deja de ser la pantalla de inicio, ya no se abre al encender y vuelve el launcher de fábrica. No pide confirmaciones de Android, así que sirve aunque la pantalla haya quedado atrapada.\n\nPara volver a usarlo después: desinstálalo desde los ajustes de la pantalla e instálalo de nuevo.	MiniLauncher smette di essere la schermata home, non si apre più all'accensione e torna il launcher di fabbrica. Non chiede conferme ad Android, quindi funziona anche se lo schermo è rimasto bloccato.\n\nPer usarla di nuovo: disinstallala dalle impostazioni dello schermo e reinstallala.
 Desactivar	Disattiva
-# 2.15: diseño del inicio
+# diseño del inicio
 Diseño del inicio	Layout della home
 Reproductor de música	Lettore musicale
 Ponlo del lado del conductor para tenerlo a la mano	Mettilo dal lato del guidatore per averlo a portata di mano
@@ -556,7 +554,7 @@ Pausar	Pausa
 Continuar	Riprendi
 Cancelar descarga	Annulla download
 Descarga cancelada	Download annullato
-Este mapa lo descargó StradaOS. Puedes dejar de usarlo o borrarlo para liberar espacio.	Questa mappa è stata scaricata da StradaOS. Puoi smettere di usarla o eliminarla per liberare spazio.
+Este mapa lo descargó MiniLauncher. Puedes dejar de usarlo o borrarlo para liberar espacio.	Questa mappa è stata scaricata da MiniLauncher. Puoi smettere di usarla o eliminarla per liberare spazio.
 Puedes dejar de usar este mapa (el archivo no se borra).	Puoi smettere di usare questa mappa (il file non viene eliminato).
 Dejar de usarlo	Smetti di usarla
 Borrar el archivo	Elimina il file
@@ -578,7 +576,7 @@ se cortó la descarga	il download si è interrotto
 Sin señal GPS · mapa sin conexión	Nessun segnale GPS · mappa offline
 Sin señal GPS ni internet	Nessun segnale GPS né internet
 Sin señal GPS · última posición	Nessun segnale GPS · ultima posizione
-# 2.17: tema por horario o del sistema, íconos de Wi-Fi y Bluetooth, barra, diagnóstico del mapa
+# tema por horario o del sistema, íconos de Wi-Fi y Bluetooth, barra, diagnóstico del mapa
 Auto: por horario. Sistema: sigue el modo oscuro de la pantalla (algunas lo cambian al encender las luces)	Auto: a orario. Sistema: segue la modalità scura dello schermo (alcuni la attivano accendendo i fari)
 Oscuro desde	Scuro dalle
 Claro desde	Chiaro dalle
@@ -609,7 +607,7 @@ apagado	spento
 encendida	accesa
 apagada	spenta
 Última señal: {}	Ultimo segnale: {}
-ninguna desde que abrió StradaOS	nessuno da quando si è aperto StradaOS
+ninguna desde que abrió MiniLauncher	nessuno da quando si è aperto MiniLauncher
 hace {} s	{} s fa
 hace {} min	{} min fa
 Buscando desde hace {} min	In ricerca da {} min
@@ -645,7 +643,7 @@ Tema según el modo oscuro del sistema	Tema secondo la modalità scura del siste
 Pantallas que lo cambian (p. ej. con las luces)	Schermi che lo cambiano (es. con i fari)
 el sistema está en modo oscuro	il sistema è in modalità scura
 el sistema está en modo claro	il sistema è in modalità chiara
-# 2.18: botones de conexión, clima detallado, ocultar velocidad/aceite/reproductor, botón del navegador, foto tal cual
+# botones de conexión, clima detallado, ocultar velocidad/aceite/reproductor, botón del navegador, foto tal cual
 Cargando…	Caricamento…
 Esperando la ubicación…	In attesa della posizione…
 Máx {} · Mín {}	Max {} · Min {}
@@ -688,9 +686,9 @@ Usar la foto original, con fondo	Usa la foto originale, con lo sfondo
 Quitar el fondo	Togli lo sfondo
 No se detectó un fondo liso: se usa la foto tal cual	Nessuno sfondo uniforme trovato: la foto si usa così com'è
 Se usa tal cual; si quieres, le puedes quitar el fondo	Si usa così com'è; se vuoi, puoi togliere lo sfondo
-# 2.19: cantidad y tamaño de los botones, íconos de apps, packs de íconos, barra oculta, tamaño de la letra
+# cantidad y tamaño de los botones, íconos de apps, packs de íconos, barra oculta, tamaño de la letra
 Cantidad de botones	Numero di pulsanti
-«Apps» siempre queda al final	«App» resta sempre per ultimo
+«Apps» siempre queda al final	«Apps» resta sempre per ultimo
 Tamaño de los íconos	Dimensione delle icone
 Pequeño	Piccolo
 Pequeña	Piccola
@@ -703,11 +701,11 @@ Ninguno (íconos de siempre)	Nessuno (icone di sempre)
 No hay packs de íconos instalados	Nessun pacchetto di icone installato
 Ese pack no trae la lista de íconos (appfilter)	Quel pacchetto non ha l'elenco delle icone (appfilter)
 Pack listo: {} íconos	Pacchetto pronto: {} icone
-Lateral: los botones van al costado y todo se ve más grande en pantallas bajas como 1280×480. Oculta: el botón Apps va arriba	Laterale: i pulsanti vanno di lato e tutto sembra più grande su schermi bassi come 1280×480. Nascosta: il pulsante App va in alto
+Lateral: los botones van al costado y todo se ve más grande en pantallas bajas como 1280×480. Oculta: el botón Apps va arriba	Laterale: i pulsanti vanno di lato e tutto sembra più grande su schermi bassi come 1280×480. Nascosta: il pulsante Apps va in alto
 Oculta	Nascosta
 Tamaño de la letra	Dimensione del testo
 Para leer mejor de lejos o que quepa más	Per leggere meglio da lontano o farci stare di più
-# 2.20: velocímetro analógico, velocímetro sobre el mapa, mantenimientos a medida
+# velocímetro analógico, velocímetro sobre el mapa, mantenimientos a medida
 Velocímetro	Tachimetro
 En la tarjeta del vehículo. Toma el color de acento	Nella scheda del veicolo. Usa il colore d'accento
 Digital	Digitale
@@ -740,7 +738,7 @@ Lo que llegue primero	Ciò che arriva prima
 ¿A cuántos {} fue la última vez?	A quanti {} è stata l'ultima volta?
 ¿Cuándo fue la última vez?	Quando è stata l'ultima volta?
 Kilometraje del tablero	Chilometraggio del cruscotto
-StradaOS no puede leer el kilometraje del carro. Escríbelo una vez y StradaOS le suma lo que recorras con el GPS.	StradaOS non può leggere il chilometraggio dell'auto. Scrivilo una volta e StradaOS aggiunge ciò che percorri col GPS.
+MiniLauncher no puede leer el kilometraje del carro. Escríbelo una vez y MiniLauncher le suma lo que recorras con el GPS.	MiniLauncher non può leggere il chilometraggio dell'auto. Scrivilo una volta e MiniLauncher aggiunge ciò che percorri col GPS.
 Escribirlo	Scrivilo
 Última vez	Ultima volta
 Cambiar cada cuánto	Cambia ogni quanto
@@ -765,7 +763,7 @@ cada {} semanas	ogni {} settimane
 {} meses	{} mesi
 {} día	{} giorno
 {} días	{} giorni
-# 2.20: Ajustes reordenados, sección Mantenimientos, íconos, velocímetro del mapa
+# Ajustes reordenados, sección Mantenimientos, íconos, velocímetro del mapa
 Mantenimientos	Manutenzione
 Barra de apps	Barra delle app
 Tarjetas	Schede
@@ -774,7 +772,7 @@ Diseño de la barra	Aspetto della barra
 Botones (déjalos presionados en el inicio para cambiarlos)	Pulsanti (tienili premuti nella schermata iniziale per cambiarli)
 Texto	Testo
 Kilometraje	Chilometraggio
-Escríbelo una vez y StradaOS le suma lo que recorras con el GPS	Scrivilo una volta e StradaOS aggiunge ciò che percorri col GPS
+Escríbelo una vez y MiniLauncher le suma lo que recorras con el GPS	Scrivilo una volta e MiniLauncher aggiunge ciò che percorri col GPS
 Avisa cuando toca el cambio	Avvisa quando è ora del cambio
 En el inicio	Nella schermata iniziale
 Mantenimiento en el inicio	Manutenzione nella schermata iniziale
@@ -797,3 +795,108 @@ Cambiar el ícono	Cambia l'icona
 Filtro de combustible	Filtro del carburante
 Aire acondicionado	Aria condizionata
 Lavado	Lavaggio
+Se guardó en:\n{}\n\nCopia la carpeta MiniLauncherDiag a una memoria USB y adjúntala en un «issue» del repositorio de MiniLauncher en GitHub.	Salvato in:\n{}\n\nCopia la cartella MiniLauncherDiag su una chiavetta USB e allegala a una «issue» del repository di MiniLauncher su GitHub.
+Consejo: usa una foto del carro de lado o de frente. Se usa tal cual; si tiene fondo liso (blanco, gris o cielo), luego le puedes quitar el fondo.	Consiglio: usa una foto dell'auto di lato o di fronte. Si usa così com'è; se ha uno sfondo uniforme (bianco, grigio o cielo), poi puoi togliere lo sfondo.
+Solo en MiniLauncher. No cambia el tamaño de letra de Android ni de otras apps	Solo in MiniLauncher. Non cambia la dimensione del testo di Android o delle altre app
+Cuenta tu modelo de pantalla y su versión de Android. Puedes adjuntar la carpeta MiniLauncherDiag (Sistema → Exportar diagnóstico).	Indica il modello del tuo schermo e la sua versione di Android. Puoi allegare la cartella MiniLauncherDiag (Sistema → Esporta diagnostica).
+Reproductor	Lettore musicale
+Conecta el celular por Bluetooth	Collega il telefono via Bluetooth
+Abre tu app de música	Apri la tua app di musica
+Falta el acceso a notificaciones	Manca l'accesso alle notifiche
+Acceso a notificaciones	Accesso alle notifiche
+Para mostrar la canción que suena por Bluetooth o en tu app de música, MiniLauncher necesita «Acceso a notificaciones». En la pantalla que se abre, actívalo para MiniLauncher.	Per mostrare il brano in riproduzione via Bluetooth o nella tua app di musica, MiniLauncher ha bisogno dell'«Accesso alle notifiche». Nella schermata che si apre, attivalo per MiniLauncher.
+Combustible	Carburante
+Autonomía	Autonomia
+Consumo	Consumo
+Puerta abierta:	Porta aperta:
+conductor	guidatore
+pasajero	passeggero
+No disponible	Non disponibile
+No se detectó el software SPD en esta pantalla. Los datos del carro solo se leen en pantallas SPD.	Il software SPD non è stato rilevato su questo schermo. I dati dell'auto si leggono solo sugli schermi SPD.
+Consumo medio	Consumo medio
+Velocidad media	Velocità media
+Temperatura exterior	Temperatura esterna
+Puertas	Porte
+Neumáticos	Pneumatici
+Presión en bar, en el orden que envía el carro	Pressione in bar, nell'ordine in cui la invia l'auto
+Fecha prevista	Data prevista
+Distancia restante	Distanza rimanente
+Sin datos de mantenimiento	Nessun dato di manutenzione
+Actualizado	Aggiornato
+Nunca	Mai
+hace {} h	{} h fa
+delantera izquierda	anteriore sinistra
+delantera derecha	anteriore destra
+trasera izquierda	posteriore sinistra
+trasera derecha	posteriore destra
+maletero	bagagliaio
+capó	cofano
+Cerradas	Chiuse
+Abiertas:	Aperte:
+Abierta:	Aperta:
+Aceite del motor	Olio motore
+Inspección del vehículo	Revisione del veicolo
+Servicio {}	Servizio {}
+Diagnóstico del carro	Diagnostica dell'auto
+Estado	Stato
+Conectado al carro	Collegato all'auto
+Conectando con el carro…	Collegamento all'auto…
+Sin conexión con el servicio SPD	Nessun collegamento al servizio SPD
+Leído del carro	Letto dall'auto
+MiniLauncher lee el kilometraje del carro y te avisa cuando toque el cambio.	MiniLauncher legge il chilometraggio dell'auto e ti avvisa quando è ora del cambio.
+Auto: claro de 6 a.m. a 6 p.m. Sistema: sigue el modo oscuro de la pantalla (algunas lo cambian al encender las luces)	Auto: chiaro dalle 6 alle 18. Sistema: segue la modalità scura dello schermo (alcuni cambiano quando si accendono i fari)
+Apagado	Spento
+Conectado	Connesso
+Encendido sin conexión	Acceso senza connessione
+cabecera inválida	intestazione non valida
+versión de mapa no compatible: {}	versione della mappa non supportata: {}
+proyección no compatible: {}	proiezione non supportata: {}
+mapa sin datos	mappa senza dati
+subarchivo inválido	sottofile non valido
+archivo dañado ({})	file danneggiato ({})
+fin de archivo inesperado	fine del file inattesa
+Datos simulados	Dati simulati
+Voltaje de la batería	Tensione della batteria
+Lecturas SPD en validación	Letture SPD da verificare
+Última consulta SPD	Ultima lettura SPD
+Cada 10 segundos mientras MiniLauncher está visible	Ogni 10 secondi mentre MiniLauncher è visibile
+Avisos Check Control	Avvisi Check Control
+Ignición / ACC	Accensione / ACC
+Freno de pie	Freno a pedale
+Freno de mano	Freno a mano
+Estacionamiento	Parcheggio
+Marcha engranada	Marcia inserita
+Régimen del motor ({})	Regime motore ({})
+Velocidad por CAN	Velocità dal CAN
+Luces	Luci
+Brillo de las luces	Luminosità delle luci
+Nivel de aceite del motor	Livello dell'olio motore
+Valores brutos: códigos y unidades por confirmar. Un 0 no demuestra que la función esté disponible o apagada.	Valori grezzi: codici e unità da confermare. Uno 0 non dimostra che la funzione sia disponibile o disattivata.
+Sin actualizar	Non aggiornato
+Lectura no disponible	Lettura non disponibile
+Valores fijados al abrir; vuelve a abrir el diagnóstico para actualizarlos.	Valori acquisiti all'apertura; riapri il diagnostico per aggiornarli.
+Depuración	Debug
+Depuración USB	Debug USB
+Conectar ADB por cable USB	Collega ADB tramite cavo USB
+Conectar ADB por cable USB · al apagar se desactiva también la depuración por Wi-Fi	Collega ADB tramite cavo USB · disattivando si disattiva anche il debug Wi-Fi
+Depuración por Wi-Fi	Debug Wi-Fi
+ADB inalámbrico de Android · empareja en las opciones de desarrollador	ADB wireless di Android · associa nelle opzioni sviluppatore
+Requiere root y depuración USB · al apagar se desactiva también USB · puerto 5555	Richiede root e debug USB · disattivando si disattiva anche l'USB · porta 5555
+Opciones de desarrollador	Opzioni sviluppatore
+Emparejar por Wi-Fi y autorizar ordenadores	Associa tramite Wi-Fi e autorizza i computer
+Autorizar ordenadores y abrir los ajustes de Android	Autorizza i computer e apri le impostazioni Android
+Permiso para los interruptores	Permesso per gli interruttori
+Cómo permitir los cambios desde MiniLauncher	Come consentire le modifiche da MiniLauncher
+Android no permite leer el estado · toca para abrir sus ajustes	Android non consente di leggere lo stato · tocca per aprire le impostazioni
+Estado no disponible	Stato non disponibile
+Estado no disponible · toca para activar o desactivar	Stato non disponibile · tocca per attivare o disattivare
+Android no informa si ADB está escuchando por Wi-Fi. Elige activar o desactivar. Al desactivar se apaga también la depuración USB.	Android non indica se ADB è in ascolto tramite Wi-Fi. Scegli se attivare o disattivare. Disattivando si disattiva anche il debug USB.
+Aplicando cambio…	Applicazione della modifica…
+Activa primero la depuración USB	Attiva prima il debug USB
+Se agotó el tiempo de espera del permiso root. Vuelve a intentarlo.	Tempo di attesa per il permesso root scaduto. Riprova.
+No se pudo confirmar el cambio. Revisa el estado en las opciones de desarrollador.	Impossibile confermare la modifica. Controlla lo stato nelle opzioni sviluppatore.
+Abrir ajustes	Apri impostazioni
+Android no permitió el cambio. Usa las opciones de desarrollador o concede el permiso de abajo.	Android non ha consentito la modifica. Usa le opzioni sviluppatore o concedi il permesso qui sotto.
+Para usar estos interruptores sin root, conecta un ordenador con ADB y ejecuta una vez:	Per usare questi interruttori senza root, collega un computer con ADB ed esegui una volta:
+El permiso permite cambiar la depuración USB y, desde Android 11, la depuración por Wi-Fi. En Android 4 a 10, Wi-Fi requiere root y depuración USB; al apagar cualquiera se desactivan ambas. Usa una red de confianza.	Il permesso consente di modificare il debug USB e, da Android 11, il debug Wi-Fi. Su Android da 4 a 10, il Wi-Fi richiede root e debug USB; disattivandone uno si disattivano entrambi. Usa una rete attendibile.
+Si no tienes este permiso, MiniLauncher intenta usar root al tocar un interruptor. El emparejamiento y la autorización de ordenadores se gestionan en Android.	Senza questo permesso, MiniLauncher tenta di usare root quando tocchi un interruttore. L'associazione e l'autorizzazione dei computer sono gestite da Android.

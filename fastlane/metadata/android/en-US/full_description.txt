@@ -1,11 +1,14 @@
-<p><b>StradaOS</b> gives your car's Android head unit a new life: it replaces the generic factory menu with a modern home screen, without flashing anything or touching the system.</p>
+<p>MiniLauncher 0.1.0 is the first release of this GPL-3.0 fork of StradaOS 2.20.1 by lordnordic-debug.</p>
+<p><b>MiniLauncher</b> gives your car's Android head unit a new life: it replaces the generic factory menu with a modern home screen, without flashing anything or touching the system.</p>
 <p>It is designed for head units that claim "Android 6+" but actually run Android 4.x, where the Play Store no longer works and most apps won't install. It also works on modern units.</p>
 <p><b>Features</b></p>
 <ul>
 <li>Live and offline map: download your country's map from the app and use it without internet.</li>
 <li>Android Auto and CarPlay buttons: opens your unit's projection app or Open Headunit.</li>
-<li>Your music on the home screen: title, artist and time of what plays over Bluetooth; with Android Auto, the album art too.</li>
-<li>GPS speedometer, weather, clock, oil change reminder and a photo of your vehicle with its background removed.</li>
+<li>Bluetooth/Player input selector, title, artist, playback controls and album art from compatible music sessions.</li>
+<li>BMW MINI vehicle data on compatible SPD units: fuel, range, consumption, voltage, doors, tyres, mileage, maintenance and read-only diagnostics.</li>
+<li>USB and Wi-Fi ADB controls with permission guidance in System settings.</li>
+<li>SPD speedometer with GPS fallback, weather, clock, oil change reminder and a photo of your vehicle with its background removed.</li>
 <li>Design your home screen: player on the left or right, normal, compact or side button bar, and foldable Android Auto and CarPlay buttons.</li>
 <li>A bottom bar your way and hideable apps. The reverse camera keeps working.</li>
 <li>Dark, light, scheduled or system theme, 10 colors and 8 languages.</li>

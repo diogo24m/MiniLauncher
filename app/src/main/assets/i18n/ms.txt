@@ -1,4 +1,4 @@
-# StradaOS · terjemahan ms. Format: español	terjemahan. Lihat I18n.java.
+# MiniLauncher · terjemahan ms. Format: español	terjemahan. Lihat I18n.java.
 Radio	Radio
 Cámara	Kamera
 Archivos	Fail
@@ -33,7 +33,7 @@ Restablecer ({})	Tetapkan semula ({})
 Botón restablecido	Butang ditetapkan semula
 Cerrar	Tutup
 Cerrar  ✕	Tutup  ✕
-★  Funciones de StradaOS (Música, Navegación, Android Auto…)	★  Fungsi StradaOS (Muzik, Navigasi, Android Auto…)
+★  Funciones de MiniLauncher (Música, Navegación, Android Auto…)	★  Fungsi MiniLauncher (Muzik, Navigasi, Android Auto…)
 ¿Qué abre el botón {}?	Apakah yang dibuka butang {}?
 Función del botón {}	Fungsi butang {}
 Nombre del botón {} (vacío = el de la app)	Nama butang {} (kosong = nama aplikasi)
@@ -49,7 +49,7 @@ Buenas tardes	Selamat petang
 Buenas noches	Selamat malam
 Diagnóstico del reproductor	Diagnostik pemain
 Accesibilidad	Kebolehcapaian
-Activa «Carátula de Android Auto» (StradaOS)	Hidupkan «Kulit album Android Auto» (StradaOS)
+Activa «Carátula de Android Auto» (MiniLauncher)	Hidupkan «Kulit album Android Auto» (MiniLauncher)
 No se pudo abrir Accesibilidad	Tidak dapat membuka Kebolehcapaian
 Activa «Pista actual de AA» en Open Headunit	Hidupkan «Trek semasa AA» dalam Open Headunit
 «Ninguna aplic. funciona con este accesorio USB»	«Tiada aplikasi berfungsi dengan aksesori USB ini»
@@ -58,7 +58,7 @@ Abrir EasyConnection	Buka EasyConnection
 No hay apps de espejo instaladas	Tiada aplikasi cerminan dipasang
 Exportando… puede tardar un minuto	Mengeksport… mungkin ambil masa seminit
 Diagnóstico listo	Diagnostik siap
-Se guardó en:\n{}\n\nCopia la carpeta StradaDiag a una memoria USB y adjúntala en un «issue» del repositorio de StradaOS en GitHub.	Disimpan di:\n{}\n\nSalin folder StradaDiag ke pemacu USB dan lampirkannya dalam «issue» repositori StradaOS di GitHub.
+Se guardó en:\n{}\n\nCopia la carpeta MiniLauncherDiag a una memoria USB y adjúntala en un «issue» del repositorio de MiniLauncher en GitHub.	Disimpan di:\n{}\n\nSalin folder MiniLauncherDiag ke pemacu USB dan lampirkannya dalam «issue» repositori MiniLauncher di GitHub.
 12 horas	12 jam
 24 horas	24 jam
 Automático	Automatik
@@ -66,7 +66,7 @@ Automática	Automatik
 Auto	Auto
 12 horas (a.m./p.m.)	12 jam (a.m./p.m.)
 Formato de hora	Format masa
-Se aplicará al reiniciar StradaOS	Berkesan selepas StradaOS dimulakan semula
+Se aplicará al reiniciar MiniLauncher	Berkesan selepas MiniLauncher dimulakan semula
 Rojo	Merah
 Naranja	Oren
 Amarillo	Kuning
@@ -76,7 +76,7 @@ Azul	Biru
 Morado	Ungu
 Rosa	Merah jambu
 Plata	Perak
-Bienvenido a StradaOS	Selamat datang ke StradaOS
+Bienvenido a MiniLauncher	Selamat datang ke MiniLauncher
 Vamos a dejar el launcher a tu gusto: tu nombre, tu vehículo, el color y la foto. Toma menos de un minuto y lo puedes cambiar después en el engranaje ⚙.	Mari sesuaikan pelancar ikut citarasa anda: nama, kenderaan, warna dan gambar anda. Kurang dari seminit dan boleh ditukar kemudian dengan gear ⚙.
 Empezar	Mula
 ¿Cómo te llamas?	Siapa nama anda?
@@ -214,7 +214,7 @@ Audio Bluetooth	Audio Bluetooth
 Volver al Bluetooth al desconectar Android Auto	Kembali ke Bluetooth bila Android Auto diputuskan
 Al quitar el cable, abre un instante la app de música Bluetooth para que el sonido siga por Bluetooth	Bila kabel dicabut, buka sekejap aplikasi muzik Bluetooth supaya bunyi terus melalui Bluetooth
 Escuchar el Bluetooth	Dengar Bluetooth
-En esta pantalla, toca ▶ en el inicio: StradaOS pasa el sonido a Bluetooth (por ejemplo, si venías de la radio)	Pada skrin ini, ketik ▶ di utama: StradaOS mengalih bunyi ke Bluetooth (contohnya, jika sebelum ini dari radio)
+En esta pantalla, toca ▶ en el inicio: MiniLauncher pasa el sonido a Bluetooth (por ejemplo, si venías de la radio)	Pada skrin ini, ketik ▶ di utama: MiniLauncher mengalih bunyi ke Bluetooth (contohnya, jika sebelum ini dari radio)
 Pasar a Bluetooth al dar play en el celular (en prueba)	Alih ke Bluetooth bila tekan main di telefon (percubaan)
 Abre un instante «Audio Bluetooth» y vuelve. En algunas pantallas no detecta el play del celular	Buka sekejap «Audio Bluetooth» dan kembali. Sesetengah skrin tidak mengesan main dari telefon
 Probar ahora	Cuba sekarang
@@ -271,7 +271,7 @@ Si la pantalla lo trae	Jika skrin menyokongnya
 no detectado	tidak dikesan
 Pantalla con CarPlay o adaptador USB	Skrin dengan CarPlay atau penyesuai USB
 Mapa con internet seguro (TLS 1.2)	Peta dengan internet selamat (TLS 1.2)
-Android 4.1+ (StradaOS lo activa)	Android 4.1+ (StradaOS mengaktifkannya)
+Android 4.1+ (MiniLauncher lo activa)	Android 4.1+ (MiniLauncher mengaktifkannya)
 en Android 4.x solo algunos servidores de mapas responden	pada Android 4.x hanya sesetengah pelayan peta bertindak balas
 Instalar actualizaciones desde la app	Pasang kemas kini dari aplikasi
 pide permiso «Instalar apps desconocidas»	minta kebenaran «Pasang aplikasi tidak dikenali»
@@ -283,7 +283,7 @@ Gratis y de código abierto. Una nueva vida para las pantallas Android del carro
 Versión	Versi
 Android de la pantalla	Android skrin
 Real: {} · ver qué funciona aquí	Sebenar: {} · lihat apa yang berfungsi di sini
-Cierres inesperados o bloqueos de StradaOS en esta pantalla	Gantung atau sekat StradaOS yang tidak dijangka pada skrin ini
+Cierres inesperados o bloqueos de MiniLauncher en esta pantalla	Gantung atau sekat MiniLauncher yang tidak dijangka pada skrin ini
 Sin fallos	Tiada kegagalan
 Ver	Lihat
 Actualizaciones	Kemas kini
@@ -292,9 +292,9 @@ Las actualizaciones llegan por esa app	Kemas kini tiba melalui aplikasi itu
 Avisar también de versiones en GitHub	Maklumkan juga versi di GitHub
 Comprobar actualizaciones automáticamente	Semak kemas kini automatik
 Opcional: las descargas de GitHub no pasan por la revisión de la tienda	Pilihan: muat turun GitHub tidak melalui semakan kedai
-Al abrir StradaOS con internet, una vez al día	Bila StradaOS dibuka dengan internet, sekali sehari
+Al abrir MiniLauncher con internet, una vez al día	Bila MiniLauncher dibuka dengan internet, sekali sehari
 Actualizaciones desde GitHub	Kemas kini dari GitHub
-Instalaste StradaOS desde {}. Si activas esto, StradaOS revisará una vez al día las versiones publicadas en github.com/{} y te ofrecerá descargarlas desde ahí.\n\nEsas descargas no pasan por la revisión de la tienda. Puede que GitHub tenga una versión un poco antes que la tienda.	Anda memasang StradaOS dari {}. Jika dihidupkan, StradaOS akan menyemak versi yang diterbitkan di github.com/{} sekali sehari dan menawarkan muat turun dari sana.\n\nMuat turun itu tidak melalui semakan kedai. GitHub mungkin ada versi sedikit lebih awal daripada kedai.
+Instalaste MiniLauncher desde {}. Si activas esto, MiniLauncher revisará una vez al día las versiones publicadas en github.com/{} y te ofrecerá descargarlas desde ahí.\n\nEsas descargas no pasan por la revisión de la tienda. Puede que GitHub tenga una versión un poco antes que la tienda.	Anda memasang MiniLauncher dari {}. Jika dihidupkan, MiniLauncher akan menyemak versi yang diterbitkan di github.com/{} sekali sehari dan menawarkan muat turun dari sana.\n\nMuat turun itu tidak melalui semakan kedai. GitHub mungkin ada versi sedikit lebih awal daripada kedai.
 Activar	Hidupkan
 Canal de actualizaciones	Saluran kemas kini
 Buscar actualizaciones	Cari kemas kini
@@ -302,17 +302,17 @@ Aún no se ha comprobado	Belum disemak
 Última comprobación: {}	Semakan terakhir: {}
 Comunidad	Komuniti
 Dar una estrella en GitHub	Beri bintang di GitHub
-Ayuda a que más personas encuentren StradaOS	Bantu lebih ramai temui StradaOS
+Ayuda a que más personas encuentren MiniLauncher	Bantu lebih ramai temui MiniLauncher
 Dar una estrella ⭐	Beri bintang ⭐
 Abre el repositorio y toca «Star». ¡Gracias!	Buka repositori dan ketik «Star». Terima kasih!
 Donar	Derma
-Si StradaOS revivió tu pantalla, invítame un café	Jika StradaOS menghidupkan semula skrin anda, belanja saya kopi
+Si MiniLauncher revivió tu pantalla, invítame un café	Jika MiniLauncher menghidupkan semula skrin anda, belanja saya kopi
 Apoya el proyecto ☕	Sokong projek ☕
-StradaOS es gratis. Las donaciones ayudan a mantenerlo y a probarlo en más pantallas.	StradaOS adalah percuma. Derma membantu mengekalkannya dan mengujinya pada lebih banyak skrin.
+MiniLauncher es gratis. Las donaciones ayudan a mantenerlo y a probarlo en más pantallas.	MiniLauncher adalah percuma. Derma membantu mengekalkannya dan mengujinya pada lebih banyak skrin.
 Reportar un problema o sugerir algo	Laporkan masalah atau beri cadangan
 Crea un «issue» en GitHub (adjunta el diagnóstico)	Cipta «issue» di GitHub (lampirkan diagnostik)
 Reportar un problema	Laporkan masalah
-Cuenta tu modelo de pantalla y su versión de Android. Puedes adjuntar la carpeta StradaDiag (Sistema → Exportar diagnóstico).	Nyatakan model skrin dan versi Android anda. Anda boleh lampirkan folder StradaDiag (Sistem → Eksport diagnostik).
+Cuenta tu modelo de pantalla y su versión de Android. Puedes adjuntar la carpeta MiniLauncherDiag (Sistema → Exportar diagnóstico).	Nyatakan model skrin dan versi Android anda. Anda boleh lampirkan folder MiniLauncherDiag (Sistem → Eksport diagnostik).
 Código fuente	Kod sumber
 Licencia GPL-3.0	Lesen GPL-3.0
 Créditos y licencias	Kredit & lesen
@@ -336,7 +336,7 @@ error de red	ralat rangkaian
 tu tienda de apps	kedai aplikasi anda
 Tienes la {} · nueva: {}	Anda ada {} · baharu: {}
 Mejoras y correcciones.	Penambahbaikan dan pembetulan.
-Nueva versión de StradaOS	Versi baharu StradaOS
+Nueva versión de MiniLauncher	Versi baharu MiniLauncher
 Tienes la {} · en GitHub: {}\nActualiza desde {} cuando llegue. Descargar de GitHub omite la revisión de la tienda.	Anda ada {} · di GitHub: {}\nKemas kini dari {} bila tiba. Muat turun dari GitHub melangkau semakan kedai.
 Ver en GitHub	Lihat di GitHub
 Descarga desde GitHub:	Muat turun dari GitHub:
@@ -344,13 +344,13 @@ Descargar e instalar	Muat turun dan pasang
 Descarga la nueva versión desde:	Muat turun versi baharu dari:
 Omitir esta versión	Langkau versi ini
 Más tarde	Kemudian
-Descargando StradaOS {}…	Memuat turun StradaOS {}…
+Descargando MiniLauncher {}…	Memuat turun MiniLauncher {}…
 Descárgala desde tu celular	Muat turun dari telefon anda
 Esta pantalla no pudo descargar el archivo. Escanea el código, descarga el APK y pásalo por USB.	Skrin ini tidak dapat memuat turun fail. Imbas kod, muat turun APK dan pindahkan melalui USB.
-¿Disfrutando StradaOS?	Menikmati StradaOS?
-Si te gusta usar StradaOS, dale una estrella en GitHub. Y si revivió tu pantalla, considera invitarme un café ☕	Jika anda suka menggunakan StradaOS, beri bintang di GitHub. Dan jika ia menghidupkan semula skrin anda, pertimbangkan untuk belanja saya kopi ☕
+¿Disfrutando MiniLauncher?	Menikmati MiniLauncher?
+Si te gusta usar MiniLauncher, dale una estrella en GitHub. Y si revivió tu pantalla, considera invitarme un café ☕	Jika anda suka menggunakan MiniLauncher, beri bintang di GitHub. Dan jika ia menghidupkan semula skrin anda, pertimbangkan untuk belanja saya kopi ☕
 Dar una estrella	Beri bintang
-StradaOS es gratis. Las donaciones ayudan a mantenerlo.	StradaOS adalah percuma. Derma membantu mengekalkannya.
+MiniLauncher es gratis. Las donaciones ayudan a mantenerlo.	MiniLauncher adalah percuma. Derma membantu mengekalkannya.
 Escanéalo con la cámara de tu celular o entra a:	Imbas dengan kamera telefon anda atau pergi ke:
 Abrir aquí	Buka di sini
 No hay navegador disponible	Tiada pelayar tersedia
@@ -373,7 +373,7 @@ Conexión: {}. Cámbiala dejando presionado el botón.	Sambungan: {}. Tukarnya d
 el navegador	pelayar
 «{}» necesita un Android más nuevo que el de esta pantalla. Abro el navegador de fábrica.	«{}» memerlukan Android lebih baharu daripada skrin ini. Membuka pelayar kilang.
 No encontré un navegador. Déjalo presionado para elegir uno.	Tiada pelayar dijumpai. Tekan lama untuk pilih satu.
-Permite «Instalar apps desconocidas» para StradaOS y vuelve a tocar.	Benarkan «Pasang aplikasi tidak dikenali» untuk StradaOS dan ketik semula.
+Permite «Instalar apps desconocidas» para MiniLauncher y vuelve a tocar.	Benarkan «Pasang aplikasi tidak dikenali» untuk MiniLauncher dan ketik semula.
 Activa «Orígenes desconocidos» y vuelve a tocar.	Hidupkan «Sumber tidak dikenali» dan ketik semula.
 No se pudo preparar {}	Tidak dapat menyediakan {}
 No se pudo abrir el instalador para {}	Tidak dapat membuka pemasang untuk {}
@@ -389,30 +389,30 @@ Tormenta	Ribut
 Mapa en vivo apagado	Peta langsung dimatikan
 Rendimiento	Prestasi
 Apágalo si la pantalla va lenta: queda un mapa de adorno y el velocímetro sigue funcionando	Matikannya jika skrin perlahan: peta hiasan kekal dan meter kelajuan terus berfungsi
-StradaOS aún no es tu pantalla de inicio	StradaOS belum menjadi skrin utama anda
-Por eso al encender el carro o al tocar Inicio aparece el menú de fábrica.\n\nToca «Fijar ahora», elige StradaOS y luego «Siempre».	Sebab itu menu kilang muncul bila kereta dihidupkan atau bila ketik Utama.\n\nKetik «Tetapkan sekarang», pilih StradaOS kemudian «Sentiasa».
+MiniLauncher aún no es tu pantalla de inicio	MiniLauncher belum menjadi skrin utama anda
+Por eso al encender el carro o al tocar Inicio aparece el menú de fábrica.\n\nToca «Fijar ahora», elige MiniLauncher y luego «Siempre».	Sebab itu menu kilang muncul bila kereta dihidupkan atau bila ketik Utama.\n\nKetik «Tetapkan sekarang», pilih MiniLauncher kemudian «Sentiasa».
 Fijar ahora	Tetapkan sekarang
 Ahora no	Bukan sekarang
 No volver a preguntar	Jangan tanya lagi
-Elige StradaOS y toca «Siempre»	Pilih StradaOS dan ketik «Sentiasa»
-Listo: StradaOS es tu pantalla de inicio	Siap: StradaOS ialah skrin utama anda
-Fijar StradaOS a mano	Tetapkan StradaOS manual
-Algunas pantallas no muestran la lista para elegir. Prueba así:\n\n1. Toca el botón Inicio (la casita) de la pantalla. Si pregunta qué app usar, elige StradaOS → Siempre.\n2. Si no pregunta: en los ajustes de la pantalla busca Aplicaciones → Aplicaciones predeterminadas → Pantalla de inicio (o «App de inicio») y elige StradaOS.\n3. Con Android 10 o más nuevo, no lo elijas desde el modo fábrica de la pantalla («Launcher», «Interfaz» o «UI»): en algunas marcas eso deja las demás apps sin poder abrirse. En Android 4 a 9 sí puedes usar esa opción.\n\nSi tu pantalla siempre vuelve a su menú de fábrica al encender, activa «Abrir StradaOS al encender» en Ajustes → Sistema.	Sesetengah skrin tidak menunjukkan senarai pilihan. Cuba begini:\n\n1. Ketik butang Utama (rumah) skrin. Jika ditanya aplikasi mana, pilih StradaOS → Sentiasa.\n2. Jika tidak ditanya: dalam tetapan skrin cari Aplikasi → Aplikasi lalai → Skrin utama (atau «Aplikasi utama») dan pilih StradaOS.\n3. Pada Android 10 atau lebih baharu, jangan pilihnya dari mod kilang skrin («Launcher», «Antara muka» atau «UI»): pada sesetengah jenama, aplikasi lain tidak dapat dibuka. Pada Android 4 hingga 9 anda boleh guna pilihan itu.\n\nJika skrin anda sentiasa kembali ke menu kilang semasa dihidupkan, hidupkan «Buka StradaOS semasa dihidupkan» dalam Tetapan → Sistem.
+Elige MiniLauncher y toca «Siempre»	Pilih MiniLauncher dan ketik «Sentiasa»
+Listo: MiniLauncher es tu pantalla de inicio	Siap: MiniLauncher ialah skrin utama anda
+Fijar MiniLauncher a mano	Tetapkan MiniLauncher manual
+Algunas pantallas no muestran la lista para elegir. Prueba así:\n\n1. Toca el botón Inicio (la casita) de la pantalla. Si pregunta qué app usar, elige MiniLauncher → Siempre.\n2. Si no pregunta: en los ajustes de la pantalla busca Aplicaciones → Aplicaciones predeterminadas → Pantalla de inicio (o «App de inicio») y elige MiniLauncher.\n3. Con Android 10 o más nuevo, no lo elijas desde el modo fábrica de la pantalla («Launcher», «Interfaz» o «UI»): en algunas marcas eso deja las demás apps sin poder abrirse. En Android 4 a 9 sí puedes usar esa opción.\n\nSi tu pantalla siempre vuelve a su menú de fábrica al encender, activa «Abrir MiniLauncher al encender» en Ajustes → Sistema.	Sesetengah skrin tidak menunjukkan senarai pilihan. Cuba begini:\n\n1. Ketik butang Utama (rumah) skrin. Jika ditanya aplikasi mana, pilih MiniLauncher → Sentiasa.\n2. Jika tidak ditanya: dalam tetapan skrin cari Aplikasi → Aplikasi lalai → Skrin utama (atau «Aplikasi utama») dan pilih MiniLauncher.\n3. Pada Android 10 atau lebih baharu, jangan pilihnya dari mod kilang skrin («Launcher», «Antara muka» atau «UI»): pada sesetengah jenama, aplikasi lain tidak dapat dibuka. Pada Android 4 hingga 9 anda boleh guna pilihan itu.\n\nJika skrin anda sentiasa kembali ke menu kilang semasa dihidupkan, hidupkan «Buka MiniLauncher semasa dihidupkan» dalam Tetapan → Sistem.
 Pantalla de inicio	Skrin utama
 La que aparece al encender y al tocar Inicio	Yang muncul semasa dihidupkan dan bila ketik Utama
-StradaOS ✓	StradaOS ✓
+MiniLauncher ✓	MiniLauncher ✓
 Otra · toca para cambiar	Lain · ketik untuk tukar
-Abrir StradaOS al encender	Buka StradaOS semasa dihidupkan
+Abrir MiniLauncher al encender	Buka MiniLauncher semasa dihidupkan
 Para pantallas que siempre arrancan en su menú de fábrica (Android 4 a 9)	Untuk skrin yang sentiasa bermula pada menu kilang (Android 4 hingga 9)
 ¿La música Bluetooth se corta o no aparece?	Muzik Bluetooth terputus atau tidak muncul?
 Qué hacer en cada caso	Apa nak buat setiap keadaan
-• Se corta al salir de la app Bluetooth: sal con el botón Inicio (la casita), no con Atrás. Atrás cierra la app de fábrica y con ella la música.\n\n• No suena hasta abrir la app Bluetooth: activa «Abrir la app de música Bluetooth al conectar el celular» (aquí mismo). Abre la app un instante y vuelve al inicio.\n\n• La canción no aparece en el inicio (Android 5 o más nuevo): activa «Música de cualquier app» arriba y dale acceso a notificaciones a StradaOS.\n\n• Revisa en Ajustes → Accesos y apps que «Música Bluetooth» sea la app Bluetooth de tu pantalla.	• Terputus bila keluar dari aplikasi Bluetooth: keluar dengan butang Utama (rumah), bukan Kembali. Kembali menutup aplikasi kilang dan muzik bersamanya.\n\n• Tidak berbunyi sehingga aplikasi Bluetooth dibuka: hidupkan «Buka aplikasi muzik Bluetooth bila telefon disambung» (di sini). Buka aplikasi sekejap dan kembali ke utama.\n\n• Lagu tidak muncul di utama (Android 5 atau lebih baharu): hidupkan «Muzik dari mana-mana aplikasi» di atas dan beri StradaOS akses notifikasi.\n\n• Semak dalam Tetapan → Pintasan & aplikasi bahawa «Muzik Bluetooth» ialah aplikasi Bluetooth skrin anda.
+• Se corta al salir de la app Bluetooth: sal con el botón Inicio (la casita), no con Atrás. Atrás cierra la app de fábrica y con ella la música.\n\n• No suena hasta abrir la app Bluetooth: activa «Abrir la app de música Bluetooth al conectar el celular» (aquí mismo). Abre la app un instante y vuelve al inicio.\n\n• La canción no aparece en el inicio (Android 5 o más nuevo): activa «Música de cualquier app» arriba y dale acceso a notificaciones a MiniLauncher.\n\n• Revisa en Ajustes → Accesos y apps que «Música Bluetooth» sea la app Bluetooth de tu pantalla.	• Terputus bila keluar dari aplikasi Bluetooth: keluar dengan butang Utama (rumah), bukan Kembali. Kembali menutup aplikasi kilang dan muzik bersamanya.\n\n• Tidak berbunyi sehingga aplikasi Bluetooth dibuka: hidupkan «Buka aplikasi muzik Bluetooth bila telefon disambung» (di sini). Buka aplikasi sekejap dan kembali ke utama.\n\n• Lagu tidak muncul di utama (Android 5 atau lebih baharu): hidupkan «Muzik dari mana-mana aplikasi» di atas dan beri MiniLauncher akses notifikasi.\n\n• Semak dalam Tetapan → Pintasan & aplikasi bahawa «Muzik Bluetooth» ialah aplikasi Bluetooth skrin anda.
 Sin permiso	Tiada kebenaran
 GPS apagado	GPS dimatikan
 Unidades	Unit
 Automático: mph en EE. UU. y Reino Unido	Automatik: mph di AS dan UK
 Permisos → Ubicación → Permitir	Kebenaran → Lokasi → Benarkan
-Activa la ubicación para StradaOS en los ajustes de la pantalla	Hidupkan lokasi untuk StradaOS dalam tetapan skrin
+Activa la ubicación para MiniLauncher en los ajustes de la pantalla	Hidupkan lokasi untuk MiniLauncher dalam tetapan skrin
 Activa la ubicación (GPS)	Hidupkan lokasi (GPS)
 Activa la ubicación (GPS) en los ajustes de la pantalla	Hidupkan lokasi (GPS) dalam tetapan skrin
 Sin permiso de ubicación · toca aquí	Tiada kebenaran lokasi · ketik di sini
@@ -435,7 +435,7 @@ Corregir el kilometraje actual	Betulkan odometer semasa
 Cambiar cada cuánto se hace	Tukar kekerapan selang
 Desactivar el recordatorio	Matikan peringatan
 Recordatorio de cambio de aceite	Peringatan tukar minyak
-StradaOS no puede leer el kilometraje del tablero del carro. Escríbelo una vez y StradaOS le irá sumando lo que recorras con el GPS, para avisarte cuando toque el cambio.\n\nDe vez en cuando puedes corregirlo con el valor real del tablero.	StradaOS tidak dapat membaca odometer papan pemuka kereta. Tulis sekali dan StradaOS akan menambah jarak perjalanan anda dengan GPS, untuk mengingatkan bila tiba masa tukar.\n\nSekali-sekala anda boleh betulkannya dengan bacaan sebenar papan pemuka.
+MiniLauncher no puede leer el kilometraje del tablero del carro. Escríbelo una vez y MiniLauncher le irá sumando lo que recorras con el GPS, para avisarte cuando toque el cambio.\n\nDe vez en cuando puedes corregirlo con el valor real del tablero.	MiniLauncher tidak dapat membaca odometer papan pemuka kereta. Tulis sekali dan MiniLauncher akan menambah jarak perjalanan anda dengan GPS, untuk mengingatkan bila tiba masa tukar.\n\nSekali-sekala anda boleh betulkannya dengan bacaan sebenar papan pemuka.
 ¿A cuántos {} fue el último cambio de aceite?	Berapa {} odometer semasa tukar minyak terakhir?
 Kilometraje actual del tablero	Odometer semasa papan pemuka
 ¿Cada cuántos {} cambias el aceite?	Setiap berapa {} anda tukar minyak?
@@ -455,7 +455,7 @@ El mapa apunta	Peta menghala
 Según tu dirección: gira con el carro mientras te mueves	Ikut arah anda: berpusing dengan kereta semasa bergerak
 Norte arriba	Utara di atas
 Según tu dirección	Ikut arah anda
-# 2.13: aceite y apps ocultas (traducidas por el mantenedor; revisión bienvenida)
+# aceite y apps ocultas (traducidas por el mantenedor; revisión bienvenida)
 Último cambio	Pertukaran terakhir
 Corregir el último cambio	Betulkan pertukaran terakhir
 ¿Tu tablero marca kilómetros o millas?	Adakah papan pemuka anda menunjukkan kilometer atau batu?
@@ -477,24 +477,24 @@ Buscar app	Cari aplikasi
 Apps ocultas en el cajón	Aplikasi yang disembunyikan dari laci
 Se muestran todas las apps	Semua aplikasi dipaparkan
 Apps ocultas: {}	Aplikasi tersembunyi: {}
-# 2.14: desinstalar desde el cajón
+# desinstalar desde el cajón
 Desinstalar	Nyahpasang
-# 2.14: salir de StradaOS (issue #9)
-Salir de StradaOS	Keluar dari StradaOS
+# salir de MiniLauncher (issue #9)
+Salir de MiniLauncher	Keluar dari MiniLauncher
 Abrir el launcher de fábrica	Buka pelancar kilang
-Sale de StradaOS sin desinstalarlo	Keluar dari StradaOS tanpa menyahpasangnya
-Desactivar StradaOS	Nyahaktifkan StradaOS
-Si la pantalla quedó atrapada en StradaOS: se apaga solo, sin ventanas de Android	Jika skrin tersekat pada StradaOS: ia mematikan dirinya sendiri, tanpa tetingkap Android
-Desinstalar StradaOS	Nyahpasang StradaOS
+Sale de MiniLauncher sin desinstalarlo	Keluar dari MiniLauncher tanpa menyahpasangnya
+Desactivar MiniLauncher	Nyahaktifkan MiniLauncher
+Si la pantalla quedó atrapada en MiniLauncher: se apaga solo, sin ventanas de Android	Jika skrin tersekat pada MiniLauncher: ia mematikan dirinya sendiri, tanpa tetingkap Android
+Desinstalar MiniLauncher	Nyahpasang MiniLauncher
 Android pide confirmar	Android meminta pengesahan
 No encontré otra pantalla de inicio en este equipo	Tiada skrin utama lain ditemui pada peranti ini
 ¿Cuál es el launcher de fábrica?	Yang mana pelancar kilang?
 No se pudo abrir	Tidak dapat dibuka
-No encontré otra pantalla de inicio: StradaOS no se puede desactivar en este equipo	Tiada skrin utama lain ditemui: StradaOS tidak boleh dinyahaktifkan pada peranti ini
-¿Desactivar StradaOS?	Nyahaktifkan StradaOS?
-StradaOS deja de ser la pantalla de inicio, ya no se abre al encender y vuelve el launcher de fábrica. No pide confirmaciones de Android, así que sirve aunque la pantalla haya quedado atrapada.\n\nPara volver a usarlo después: desinstálalo desde los ajustes de la pantalla e instálalo de nuevo.	StradaOS tidak lagi menjadi skrin utama, tidak dibuka semasa dihidupkan dan pelancar kilang kembali. Ia tidak memerlukan pengesahan Android, jadi ia berfungsi walaupun skrin tersekat.\n\nUntuk menggunakannya semula: nyahpasang dari tetapan skrin dan pasang semula.
+No encontré otra pantalla de inicio: MiniLauncher no se puede desactivar en este equipo	Tiada skrin utama lain ditemui: MiniLauncher tidak boleh dinyahaktifkan pada peranti ini
+¿Desactivar MiniLauncher?	Nyahaktifkan MiniLauncher?
+MiniLauncher deja de ser la pantalla de inicio, ya no se abre al encender y vuelve el launcher de fábrica. No pide confirmaciones de Android, así que sirve aunque la pantalla haya quedado atrapada.\n\nPara volver a usarlo después: desinstálalo desde los ajustes de la pantalla e instálalo de nuevo.	MiniLauncher tidak lagi menjadi skrin utama, tidak dibuka semasa dihidupkan dan pelancar kilang kembali. Ia tidak memerlukan pengesahan Android, jadi ia berfungsi walaupun skrin tersekat.\n\nUntuk menggunakannya semula: nyahpasang dari tetapan skrin dan pasang semula.
 Desactivar	Nyahaktifkan
-# 2.15: diseño del inicio
+# diseño del inicio
 Diseño del inicio	Reka letak skrin utama
 Reproductor de música	Pemain muzik
 Ponlo del lado del conductor para tenerlo a la mano	Letakkannya di sebelah pemandu supaya mudah dicapai
@@ -556,7 +556,7 @@ Pausar	Jeda
 Continuar	Sambung
 Cancelar descarga	Batalkan muat turun
 Descarga cancelada	Muat turun dibatalkan
-Este mapa lo descargó StradaOS. Puedes dejar de usarlo o borrarlo para liberar espacio.	Peta ini dimuat turun oleh StradaOS. Anda boleh berhenti menggunakannya atau memadamnya untuk mengosongkan ruang.
+Este mapa lo descargó MiniLauncher. Puedes dejar de usarlo o borrarlo para liberar espacio.	Peta ini dimuat turun oleh MiniLauncher. Anda boleh berhenti menggunakannya atau memadamnya untuk mengosongkan ruang.
 Puedes dejar de usar este mapa (el archivo no se borra).	Anda boleh berhenti menggunakan peta ini (fail tidak dipadam).
 Dejar de usarlo	Berhenti menggunakannya
 Borrar el archivo	Padam fail
@@ -578,7 +578,7 @@ se cortó la descarga	muat turun terputus
 Sin señal GPS · mapa sin conexión	Tiada isyarat GPS · peta luar talian
 Sin señal GPS ni internet	Tiada isyarat GPS atau internet
 Sin señal GPS · última posición	Tiada isyarat GPS · kedudukan terakhir
-# 2.17: tema por horario o del sistema, íconos de Wi-Fi y Bluetooth, barra, diagnóstico del mapa
+# tema por horario o del sistema, íconos de Wi-Fi y Bluetooth, barra, diagnóstico del mapa
 Auto: por horario. Sistema: sigue el modo oscuro de la pantalla (algunas lo cambian al encender las luces)	Auto: ikut jadual. Sistem: ikut mod gelap skrin (sesetengah skrin menukarnya apabila lampu dinyalakan)
 Oscuro desde	Gelap dari
 Claro desde	Cerah dari
@@ -609,7 +609,7 @@ apagado	mati
 encendida	hidup
 apagada	mati
 Última señal: {}	Isyarat terakhir: {}
-ninguna desde que abrió StradaOS	tiada sejak StradaOS dibuka
+ninguna desde que abrió MiniLauncher	tiada sejak MiniLauncher dibuka
 hace {} s	{} s lalu
 hace {} min	{} min lalu
 Buscando desde hace {} min	Mencari sejak {} min
@@ -645,7 +645,7 @@ Tema según el modo oscuro del sistema	Tema ikut mod gelap sistem
 Pantallas que lo cambian (p. ej. con las luces)	Skrin yang menukarnya (cth. dengan lampu)
 el sistema está en modo oscuro	sistem dalam mod gelap
 el sistema está en modo claro	sistem dalam mod cerah
-# 2.18: botones de conexión, clima detallado, ocultar velocidad/aceite/reproductor, botón del navegador, foto tal cual
+# botones de conexión, clima detallado, ocultar velocidad/aceite/reproductor, botón del navegador, foto tal cual
 Cargando…	Memuatkan…
 Esperando la ubicación…	Menunggu lokasi…
 Máx {} · Mín {}	Maks {} · Min {}
@@ -688,7 +688,7 @@ Usar la foto original, con fondo	Guna foto asal, dengan latar
 Quitar el fondo	Buang latar
 No se detectó un fondo liso: se usa la foto tal cual	Tiada latar rata dikesan: foto digunakan seadanya
 Se usa tal cual; si quieres, le puedes quitar el fondo	Digunakan seadanya; jika mahu, anda boleh buang latarnya
-# 2.19: cantidad y tamaño de los botones, íconos de apps, packs de íconos, barra oculta, tamaño de la letra
+# cantidad y tamaño de los botones, íconos de apps, packs de íconos, barra oculta, tamaño de la letra
 Cantidad de botones	Bilangan butang
 «Apps» siempre queda al final	«Aplikasi» sentiasa di hujung
 Tamaño de los íconos	Saiz ikon
@@ -707,7 +707,7 @@ Lateral: los botones van al costado y todo se ve más grande en pantallas bajas 
 Oculta	Tersembunyi
 Tamaño de la letra	Saiz teks
 Para leer mejor de lejos o que quepa más	Untuk baca lebih jelas dari jauh atau muat lebih banyak
-# 2.20: velocímetro analógico, velocímetro sobre el mapa, mantenimientos a medida
+# velocímetro analógico, velocímetro sobre el mapa, mantenimientos a medida
 Velocímetro	Meter kelajuan
 En la tarjeta del vehículo. Toma el color de acento	Pada kad kenderaan. Guna warna aksen
 Digital	Digital
@@ -740,7 +740,7 @@ Lo que llegue primero	Yang mana dahulu
 ¿A cuántos {} fue la última vez?	Pada berapa {} kali terakhir?
 ¿Cuándo fue la última vez?	Bilakah kali terakhir?
 Kilometraje del tablero	Odometer papan pemuka
-StradaOS no puede leer el kilometraje del carro. Escríbelo una vez y StradaOS le suma lo que recorras con el GPS.	StradaOS tidak boleh membaca odometer kereta. Taip sekali dan StradaOS menambah jarak perjalanan dengan GPS.
+MiniLauncher no puede leer el kilometraje del carro. Escríbelo una vez y MiniLauncher le suma lo que recorras con el GPS.	MiniLauncher tidak boleh membaca odometer kereta. Taip sekali dan MiniLauncher menambah jarak perjalanan dengan GPS.
 Escribirlo	Taip
 Última vez	Kali terakhir
 Cambiar cada cuánto	Tukar kekerapan
@@ -765,7 +765,7 @@ cada {} semanas	setiap {} minggu
 {} meses	{} bulan
 {} día	{} hari
 {} días	{} hari
-# 2.20: Ajustes reordenados, sección Mantenimientos, íconos, velocímetro del mapa
+# Ajustes reordenados, sección Mantenimientos, íconos, velocímetro del mapa
 Mantenimientos	Penyelenggaraan
 Barra de apps	Bar aplikasi
 Tarjetas	Kad
@@ -774,7 +774,7 @@ Diseño de la barra	Reka letak bar
 Botones (déjalos presionados en el inicio para cambiarlos)	Butang (tekan lama di skrin utama untuk menukarnya)
 Texto	Teks
 Kilometraje	Odometer
-Escríbelo una vez y StradaOS le suma lo que recorras con el GPS	Taip sekali dan StradaOS menambah jarak dengan GPS
+Escríbelo una vez y MiniLauncher le suma lo que recorras con el GPS	Taip sekali dan MiniLauncher menambah jarak dengan GPS
 Avisa cuando toca el cambio	Mengingatkan bila tiba masa tukar
 En el inicio	Di skrin utama
 Mantenimiento en el inicio	Penyelenggaraan di skrin utama

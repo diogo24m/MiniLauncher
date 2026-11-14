@@ -1,8 +1,8 @@
 #!/bin/bash
-# Bloque 7 (2.19): cantidad y tamaño de botones, íconos de apps, pack de íconos, barra oculta y tamaño de letra.
+# Bloque 7: cantidad y tamaño de botones, íconos de apps, pack de íconos, barra oculta y tamaño de letra.
 API=$1; OUT=$2; mkdir -p $OUT
-PKG=com.stradaos.launcher.debug
-ACT=$PKG/com.stradaos.launcher.Main
+PKG=com.mini.launcher.debug
+ACT=$PKG/com.mini.launcher.Main
 adb wait-for-device
 for i in $(seq 1 100); do [ "$(adb shell getprop sys.boot_completed | tr -d '\r')" = "1" ] && break; sleep 3; done
 sleep 15
@@ -43,6 +43,6 @@ go diseno:base 4
 go ajustes:4 6; shot 16-accesos
 adb shell input swipe 640 300 640 300 50; sleep 1
 go inicio 3; go idioma:en 6; go diseno:botones-9 5; shot 17-ingles-9; go idioma:es 6; go diseno:base 4
-adb logcat -d | grep -E "FATAL EXCEPTION|AndroidRuntime: (java|Caused|\tat com.stradaos)" | tail -40 > $OUT/logcat.txt
-if grep -q "com.stradaos" $OUT/logcat.txt; then echo "CIERRE" > $OUT/CIERRES.txt; fi
+adb logcat -d | grep -E "FATAL EXCEPTION|AndroidRuntime: (java|Caused|\tat com.mini.launcher)" | tail -40 > $OUT/logcat.txt
+if grep -q "com.mini.launcher" $OUT/logcat.txt; then echo "CIERRE" > $OUT/CIERRES.txt; fi
 ls -l $OUT

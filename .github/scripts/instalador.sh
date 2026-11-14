@@ -35,6 +35,6 @@ for f in apks/*.apk; do
   if [ -n "$id" ]; then abrir "content://media/external/file/$id"; else echo "   (no está en MediaStore)"; fi
   echo "-- pm install desde /sdcard/Download"
   adb shell pm install -r "/sdcard/Download/$n" 2>&1 | tail -2 | sed 's/^/   /'
-  adb shell pm uninstall com.stradaos.launcher >/dev/null 2>&1
-  adb shell pm uninstall com.stradaos.launcher.debug >/dev/null 2>&1
+  adb shell pm uninstall com.mini.launcher >/dev/null 2>&1
+  adb shell pm uninstall com.mini.launcher.debug >/dev/null 2>&1
 done

@@ -1,9 +1,9 @@
 #!/bin/bash
-# Bloque 5 (2.17): capturas del inicio con las opciones nuevas (íconos Wi-Fi/Bluetooth, barra compacta, sin nombres,
+# Bloque 5: capturas del inicio con las opciones nuevas (íconos Wi-Fi/Bluetooth, barra compacta, sin nombres,
 # lateral a cada lado, velocidad arriba sin GPS), Apariencia, diagnóstico del mapa en inglés, árabe y tema del sistema.
 API=$1; OUT=$2; mkdir -p $OUT
-PKG=com.stradaos.launcher.debug
-ACT=$PKG/com.stradaos.launcher.Main
+PKG=com.mini.launcher.debug
+ACT=$PKG/com.mini.launcher.Main
 adb wait-for-device
 for i in $(seq 1 100); do [ "$(adb shell getprop sys.boot_completed | tr -d '\r')" = "1" ] && break; sleep 3; done
 sleep 15
@@ -44,6 +44,6 @@ if [ "$API" -ge 29 ]; then
   adb shell cmd uimode night yes; sleep 6; shot 14-sistema-noche
   adb shell cmd uimode night no; sleep 6; shot 15-sistema-dia
 fi
-adb logcat -d | grep -E "FATAL EXCEPTION|AndroidRuntime: (java|Caused|\tat com.stradaos)" | tail -40 > $OUT/logcat.txt
+adb logcat -d | grep -E "FATAL EXCEPTION|AndroidRuntime: (java|Caused|\tat com.mini.launcher)" | tail -40 > $OUT/logcat.txt
 if grep -q "FATAL EXCEPTION" $OUT/logcat.txt; then echo "CIERRE" > $OUT/CIERRES.txt; fi
 ls -l $OUT

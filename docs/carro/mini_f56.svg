@@ -1,0 +1,208 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="-6 -2 1152 862" width="1152" height="862">
+  <!-- MINI F56 (2018) de frente, cinzento escuro com detalhes vermelhos. Ilustração vetorial do MiniLauncher. -->
+  <defs>
+    <linearGradient id="body" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#535456"/>
+      <stop offset="0.5" stop-color="#4b4c4e"/>
+      <stop offset="1" stop-color="#434446"/>
+    </linearGradient>
+    <linearGradient id="edges" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#000" stop-opacity="0.18"/>
+      <stop offset="0.12" stop-color="#000" stop-opacity="0"/>
+      <stop offset="0.88" stop-color="#000" stop-opacity="0"/>
+      <stop offset="1" stop-color="#000" stop-opacity="0.18"/>
+    </linearGradient>
+    <linearGradient id="roof" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#e4e4e4"/>
+      <stop offset="1" stop-color="#a9a9a9"/>
+    </linearGradient>
+    <linearGradient id="glass" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2c2c2e"/>
+      <stop offset="1" stop-color="#050506"/>
+    </linearGradient>
+    <linearGradient id="mirror" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#dadada"/>
+      <stop offset="0.45" stop-color="#c6c6c6"/>
+      <stop offset="1" stop-color="#a6a6a6"/>
+    </linearGradient>
+    <linearGradient id="ring" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#9c9c9c"/>
+      <stop offset="0.6" stop-color="#d9d9d9"/>
+      <stop offset="1" stop-color="#f2f2f2"/>
+    </linearGradient>
+    <radialGradient id="lens" cx="0.45" cy="0.4" r="0.7">
+      <stop offset="0" stop-color="#3d3d3f"/>
+      <stop offset="1" stop-color="#1c1c1d"/>
+    </radialGradient>
+    <linearGradient id="module" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#a8a8a8"/>
+      <stop offset="1" stop-color="#666"/>
+    </linearGradient>
+    <linearGradient id="slat" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#6c6c6e"/>
+      <stop offset="1" stop-color="#38383a"/>
+    </linearGradient>
+    <linearGradient id="red" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ea1c0f"/>
+      <stop offset="1" stop-color="#c40000"/>
+    </linearGradient>
+    <radialGradient id="shadow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#000" stop-opacity="0.55"/>
+      <stop offset="0.65" stop-color="#000" stop-opacity="0.25"/>
+      <stop offset="1" stop-color="#000" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- favo da grelha: hexágonos alongados em tijolo -->
+    <pattern id="hex" width="48" height="24" patternUnits="userSpaceOnUse">
+      <rect width="48" height="24" fill="#161617"/>
+      <g fill="#1f1f20" stroke="#3c3c3e" stroke-width="2.4" stroke-linejoin="round">
+        <path d="M4 12 L12 2 L36 2 L44 12 L36 22 L12 22 Z"/>
+        <path d="M-20 0 L-12 -10 L12 -10 L20 0 L12 10 L-12 10 Z"/>
+        <path d="M28 0 L36 -10 L60 -10 L68 0 L60 10 L36 10 Z"/>
+        <path d="M-20 24 L-12 14 L12 14 L20 24 L12 34 L-12 34 Z"/>
+        <path d="M28 24 L36 14 L60 14 L68 24 L60 34 L36 34 Z"/>
+      </g>
+    </pattern>
+    <pattern id="hexSmall" href="#hex" xlink:href="#hex" patternTransform="scale(0.72)"/>
+    <!-- aletas do intercooler -->
+    <pattern id="fins" width="10" height="9" patternUnits="userSpaceOnUse">
+      <rect width="10" height="9" fill="#5b5b5b"/>
+      <rect width="10" height="4.5" fill="#dcdcdc"/>
+      <rect y="4.5" width="10" height="1.2" fill="#9a9a9a"/>
+    </pattern>
+
+    <path id="bodyShape" d="M 150 262 C 100 266 62 300 52 345 C 46 450 44 560 46 640 C 48 720 70 760 150 772 Q 570 788 990 772 C 1070 760 1092 720 1094 640 C 1096 560 1094 450 1088 345 C 1078 300 1040 266 990 262 Q 570 248 150 262 Z"/>
+    <path id="grilleOuter" d="M 300 411 Q 570 399 840 411 C 890 413 914 440 927 470 L 942 532 C 948 572 934 610 900 628 Q 872 642 830 642 L 310 642 Q 268 642 240 628 C 206 610 192 572 198 532 L 213 470 C 226 440 250 413 300 411 Z"/>
+    <path id="grilleInner" d="M 320 444 Q 570 436 820 444 C 858 446 879 462 888 486 L 900 545 C 904 572 893 598 868 610 Q 850 618 820 618 L 320 618 Q 290 618 272 610 C 247 598 236 572 240 545 L 252 486 C 261 462 282 446 320 444 Z"/>
+    <path id="lowerOuter" d="M 222 668 C 222 656 238 650 262 650 L 878 650 C 902 650 918 656 918 668 L 911 734 C 908 754 890 762 862 762 L 278 762 C 250 762 232 754 229 734 Z"/>
+    <clipPath id="grilleClip"><use href="#grilleInner" xlink:href="#grilleInner"/></clipPath>
+    <clipPath id="lowerClip"><path d="M 236 670 C 236 664 246 661 262 661 L 878 661 C 894 661 904 664 904 670 L 898 732 C 896 746 884 751 862 751 L 278 751 C 256 751 244 746 242 732 Z"/></clipPath>
+
+    <!-- lado esquerdo atrás da carroçaria (o direito é o espelho) -->
+    <g id="back">
+      <rect x="4" y="660" width="170" height="182" rx="26" fill="#0c0c0d" stroke="#000" stroke-width="2"/>
+      <path d="M 14 760 V 812 C 14 826 22 834 36 834 H 142 C 156 834 164 826 164 812 V 760" stroke="#303033" stroke-width="3" fill="none"/>
+      <!-- cava da roda em plástico preto -->
+      <path d="M 70 330 C 34 352 14 404 11 468 L 9 770 C 9 790 24 798 46 798 L 90 798 L 90 330 Z" fill="#2b2b2d" stroke="#111" stroke-width="3" stroke-linejoin="round"/>
+      <path d="M 54 352 C 32 380 24 420 22 470 L 21 760" stroke="#47474a" stroke-width="2.5" fill="none"/>
+      <path d="M 10 622 L 46 626" stroke="#111" stroke-width="3"/>
+      <!-- interior da cava, por baixo do para-choques -->
+      <path d="M 96 764 L 214 768 L 214 800 L 96 800 Z" fill="#1b1b1c"/>
+      <path d="M 130 768 V 800 M 166 768 V 800" stroke="#2c2c2e" stroke-width="3"/>
+      <!-- espelho -->
+      <path d="M 100 262 L 130 250 L 148 286 L 114 298 Z" fill="#1c1c1d" stroke="#111" stroke-width="2.5" stroke-linejoin="round"/>
+      <path d="M 40 205 C 56 186 120 184 136 200 C 149 214 147 254 133 270 C 119 283 60 283 40 268 C 24 255 26 222 40 205 Z" fill="url(#mirror)" stroke="#161616" stroke-width="3"/>
+      <path d="M 44 228 C 74 222 108 222 140 228" stroke="#ececec" stroke-width="6" stroke-opacity="0.6" fill="none"/>
+    </g>
+
+    <!-- lado esquerdo por cima da carroçaria -->
+    <g id="front">
+      <!-- vinco do capô à volta do farol -->
+      <path d="M 176 272 C 244 300 280 350 270 414" stroke="#5f6062" stroke-width="2.5" fill="none"/>
+      <path d="M 172 276 C 238 304 273 352 263 414" stroke="#3a3b3d" stroke-width="2" fill="none"/>
+      <!-- vinco lateral do para-choques -->
+      <path d="M 50 466 C 110 474 170 476 214 470" stroke="#5c5d5f" stroke-width="2" fill="none"/>
+      <!-- superfície do para-choques (luz) e entrada lateral -->
+      <path d="M 60 560 C 110 548 190 552 212 566 C 226 610 224 668 210 702 C 160 716 100 712 70 700 C 56 660 54 600 60 560 Z" fill="#58595b" opacity="0.55"/>
+      <path d="M 76 572 C 120 564 182 566 200 576 C 214 612 212 668 200 694 C 160 702 110 702 88 692 C 72 652 70 602 76 572 Z" fill="#38393b" stroke="#2a2a2b" stroke-width="2"/>
+      <path d="M 86 582 L 172 581 C 186 600 196 640 192 688 L 98 684 C 88 650 82 612 86 582 Z" fill="url(#hexSmall)" stroke="#111" stroke-width="3" stroke-linejoin="round"/>
+      <!-- vinco inferior -->
+      <path d="M 50 642 C 58 712 104 742 228 746" stroke="#5c5d5f" stroke-width="2" fill="none"/>
+      <!-- esguicho do lava-vidros -->
+      <rect x="422" y="262" width="12" height="7" rx="3" fill="#1b1b1c"/>
+      <!-- farol LED com anel -->
+      <circle cx="150" cy="377" r="84" fill="#252526" stroke="#111" stroke-width="3"/>
+      <circle cx="150" cy="377" r="72" fill="url(#ring)" stroke="#2b2b2c" stroke-width="2"/>
+      <circle cx="150" cy="377" r="55" fill="#1e1e1f"/>
+      <circle cx="150" cy="377" r="51" fill="none" stroke="#f7f7f7" stroke-width="4"/>
+      <circle cx="150" cy="377" r="48" fill="url(#lens)"/>
+      <rect x="131" y="333" width="40" height="17" rx="5" fill="#2e2e30" stroke="#9a9a9a" stroke-width="2.5"/>
+      <path d="M 138 341 H 164" stroke="#d0d0d0" stroke-width="3" stroke-dasharray="2.5 2"/>
+      <rect x="110" y="349" width="80" height="50" rx="16" fill="#2a2a2c" stroke="#9c9c9c" stroke-width="3"/>
+      <rect x="129" y="357" width="43" height="33" rx="9" fill="url(#module)" stroke="#2a2a2a" stroke-width="2"/>
+      <g fill="#d6d6d6" stroke="#4a4a4a" stroke-width="1.5">
+        <circle cx="141" cy="367" r="5"/><circle cx="160" cy="367" r="5"/>
+        <circle cx="141" cy="381" r="5"/><circle cx="160" cy="381" r="5"/>
+      </g>
+      <path d="M 104 352 A 58 58 0 0 1 132 326" stroke="#fff" stroke-opacity="0.18" stroke-width="5" fill="none"/>
+    </g>
+
+    <!-- metade da peça vermelha de baixo -->
+    <g id="redHalf">
+      <path d="M 233 700 C 233 672 244 662 266 662 L 372 662 L 392 750 L 268 752 C 246 752 236 742 234 724 Z" fill="url(#red)" stroke="#111" stroke-width="2.5" stroke-linejoin="round"/>
+      <path d="M 262 684 C 262 672 268 668 280 668 L 346 668 C 354 668 357 672 358 678 L 364 712 C 365 721 360 726 350 726 L 278 726 C 268 726 262 720 262 710 Z" fill="#1a1a1b" stroke="#7a0000" stroke-width="3"/>
+      <path d="M 392 662 L 412 662 L 432 734 L 570 734 L 570 750 L 422 750 C 416 750 412 746 411 742 Z" fill="url(#red)" stroke="#111" stroke-width="2.5" stroke-linejoin="round"/>
+    </g>
+  </defs>
+
+  <!-- sombra e linha do chão -->
+  <ellipse cx="570" cy="843" rx="560" ry="15" fill="url(#shadow)"/>
+  <path d="M 150 842 H 990" stroke="#000" stroke-width="3" stroke-opacity="0.7"/>
+
+  <use href="#back" xlink:href="#back"/>
+  <use href="#back" xlink:href="#back" transform="translate(1140 0) scale(-1 1)"/>
+
+  <!-- tejadilho branco -->
+  <path d="M 262 50 Q 570 -32 878 50 Q 570 34 262 50 Z" fill="url(#roof)" stroke="#161616" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M 344 38 Q 570 4 796 38" stroke="#fff" stroke-opacity="0.6" stroke-width="4" fill="none"/>
+
+  <!-- para-brisas -->
+  <path d="M 256 44 Q 570 30 884 44 L 998 266 Q 570 246 142 266 Z" fill="#1a1a1b" stroke="#111" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M 272 54 Q 570 40 868 54 L 974 256 Q 570 238 166 256 Z" fill="url(#glass)"/>
+  <path d="M 259 49 L 147 262 M 881 49 L 993 262" stroke="#636365" stroke-width="2"/>
+
+  <!-- carroçaria -->
+  <use href="#bodyShape" xlink:href="#bodyShape" fill="url(#body)" stroke="#111" stroke-width="3" stroke-linejoin="round"/>
+  <use href="#bodyShape" xlink:href="#bodyShape" fill="url(#edges)"/>
+  <!-- cúpula do capô -->
+  <path d="M 410 300 C 470 284 670 284 730 300" stroke="#5c5d5f" stroke-width="2" fill="none"/>
+  <!-- friso prateado na base do para-brisas -->
+  <path d="M 148 266 Q 570 245 992 266" stroke="#d6d6d6" stroke-width="6" fill="none" stroke-linecap="round"/>
+  <path d="M 150 272 Q 570 252 990 272" stroke="#2a2a2b" stroke-width="2" fill="none"/>
+
+  <use href="#front" xlink:href="#front"/>
+  <use href="#front" xlink:href="#front" transform="translate(1140 0) scale(-1 1)"/>
+
+  <!-- emblema (simplificado, sem letras) -->
+  <g stroke="#6b6c6e" stroke-width="1.8" fill="#2a2a2b">
+    <path d="M 556 382 L 520 377 L 526 383 L 532 388 L 556 390 Z"/>
+    <path d="M 584 382 L 620 377 L 614 383 L 608 388 L 584 390 Z"/>
+    <circle cx="570" cy="385" r="12"/>
+  </g>
+
+  <!-- grelha -->
+  <use href="#grilleOuter" xlink:href="#grilleOuter" fill="#2a2a2b" stroke="#111" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M 302 421 Q 570 410 838 421" stroke="#3b3b3d" stroke-width="3" fill="none"/>
+  <use href="#grilleInner" xlink:href="#grilleInner" fill="url(#hex)" stroke="#0e0e0f" stroke-width="3"/>
+  <g clip-path="url(#grilleClip)">
+    <g fill="url(#slat)" stroke="#161616" stroke-width="1.5">
+      <rect x="346" y="451" width="58" height="13" rx="2"/><rect x="412" y="451" width="58" height="13" rx="2"/>
+      <rect x="478" y="451" width="58" height="13" rx="2"/><rect x="544" y="451" width="52" height="13" rx="2"/>
+      <rect x="604" y="451" width="58" height="13" rx="2"/><rect x="670" y="451" width="58" height="13" rx="2"/>
+      <rect x="736" y="451" width="58" height="13" rx="2"/>
+      <rect x="378" y="467" width="58" height="12" rx="2"/><rect x="444" y="467" width="58" height="12" rx="2"/>
+      <rect x="510" y="467" width="58" height="12" rx="2"/><rect x="572" y="467" width="58" height="12" rx="2"/>
+      <rect x="638" y="467" width="58" height="12" rx="2"/><rect x="704" y="467" width="58" height="12" rx="2"/>
+    </g>
+    <!-- barra vermelha -->
+    <path d="M 252 482 L 888 482 C 898 490 898 508 888 517 L 252 517 C 242 508 242 490 252 482 Z" fill="url(#red)" stroke="#111" stroke-width="2.5"/>
+    <rect x="280" y="485" width="580" height="8" rx="4" fill="#0d0d0e"/>
+    <!-- ranhura de baixo -->
+    <rect x="306" y="600" width="528" height="30" rx="8" fill="#0e0e0f"/>
+    <path d="M 450 606 V 630 M 520 606 V 630 M 620 606 V 630 M 690 606 V 630" stroke="#333335" stroke-width="3"/>
+  </g>
+
+  <!-- entrada de ar inferior com a peça vermelha -->
+  <use href="#lowerOuter" xlink:href="#lowerOuter" fill="#2c2c2d" stroke="#111" stroke-width="3" stroke-linejoin="round"/>
+  <g clip-path="url(#lowerClip)">
+    <rect x="230" y="655" width="680" height="100" fill="#161617"/>
+    <rect x="352" y="662" width="436" height="80" fill="url(#fins)"/>
+    <path d="M 430 662 V 742 M 494 662 V 742 M 570 662 V 742 M 646 662 V 742 M 710 662 V 742" stroke="#2e2e30" stroke-width="3"/>
+  </g>
+  <use href="#redHalf" xlink:href="#redHalf"/>
+  <use href="#redHalf" xlink:href="#redHalf" transform="translate(1140 0) scale(-1 1)"/>
+  <path d="M 432 742 H 708" stroke="#7a0000" stroke-width="2"/>
+
+  <!-- lábio inferior -->
+  <path d="M 196 764 Q 570 784 944 764 L 940 780 Q 570 802 200 780 Z" fill="#232324" stroke="#111" stroke-width="2.5" stroke-linejoin="round"/>
+</svg>

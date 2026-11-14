@@ -1,0 +1,29 @@
+AntiFeatures:
+  NonFreeNet:
+    en-US: May use Esri map tiles and BigDataCloud (city name) when free servers do not respond.
+    es: Puede usar mapas de Esri y BigDataCloud (nombre de la ciudad) cuando los servidores libres no responden.
+Categories:
+  - Navigation
+  - System
+License: GPL-3.0-only
+AuthorName: Diogo Carvalho
+SourceCode: https://github.com/diogo24m/MiniLauncher
+IssueTracker: https://github.com/diogo24m/MiniLauncher/issues
+Changelog: https://github.com/diogo24m/MiniLauncher/releases
+Donate: https://ko-fi.com/stradaos
+
+AutoName: MiniLauncher
+
+
+RepoType: git
+Repo: https://github.com/diogo24m/MiniLauncher.git
+Binaries: https://github.com/diogo24m/MiniLauncher/releases/download/v%v/MiniLauncher-%v.apk
+
+# Preparação para a primeira versão. Preencher o build com o commit publicado e a chave do MiniLauncher.
+# Base do fork: StradaOS 2.20.1, de lordnordic-debug.
+Builds: []
+
+AutoUpdateMode: Version
+UpdateCheckMode: Tags ^v[0-9.]+$
+CurrentVersion: 0.1.0
+CurrentVersionCode: 1

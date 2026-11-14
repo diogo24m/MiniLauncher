@@ -1,0 +1,7 @@
+# Preserve original diagnostic bytes and SHA-256 hashes across Git checkouts.
+/Logcat-*.txt -text
+/openlauncher-can-diagnostics.txt -text
+/openlauncher-can-diagnostics-*.txt -text
+/bmw-mini-can-profile.jpg -text
+/2026-11-10-*.jpg -text
+/SHA256SUMS text eol=lf

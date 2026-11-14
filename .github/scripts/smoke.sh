@@ -2,8 +2,8 @@
 # Prueba de humo en un emulador: instala la versión de prueba, abre cada pantalla, toma capturas y revisa
 # que no haya cierres. Uso: smoke.sh API APK CARPETA
 API=$1; APK=$2; OUT=$3
-PKG=com.stradaos.launcher.debug
-ACT=$PKG/com.stradaos.launcher.Main
+PKG=com.mini.launcher.debug
+ACT=$PKG/com.mini.launcher.Main
 mkdir -p "$OUT"
 adb wait-for-device
 for i in $(seq 1 60); do [ "$(adb shell getprop sys.boot_completed | tr -d '\r')" = "1" ] && break; sleep 3; done
@@ -27,7 +27,7 @@ shot() {
   fi
   [ -s /tmp/shot.png ] && cp /tmp/shot.png "$OUT/$1.png"
 }
-go() {  # abre StradaOS con un valor de prueba y espera
+go() {  # abre MiniLauncher con un valor de prueba y espera
   adb shell am start -n $ACT --es prueba "$1" >/dev/null
   sleep "${2:-6}"
 }
@@ -139,9 +139,9 @@ go inicio 3
 
 adb logcat -d > "$OUT/logcat.txt"
 adb shell "run-as $PKG cat files/fallos.txt" > "$OUT/fallos.txt" 2>/dev/null || true
-grep -E "FATAL EXCEPTION|ANR in com.stradaos" -A 30 "$OUT/logcat.txt" > "$OUT/CIERRES.txt"
-if grep -q "com.stradaos" "$OUT/CIERRES.txt"; then
-  echo "::error::API $API: StradaOS se cerró o se trabó (ver CIERRES.txt)"
+grep -E "FATAL EXCEPTION|ANR in com.mini.launcher" -A 30 "$OUT/logcat.txt" > "$OUT/CIERRES.txt"
+if grep -q "com.mini.launcher" "$OUT/CIERRES.txt"; then
+  echo "::error::API $API: MiniLauncher se cerró o se trabó (ver CIERRES.txt)"
   exit 1
 fi
 if ! grep -q "PRUEBA verificar-apk: propio=true otro=false" "$OUT/fallos.txt"; then

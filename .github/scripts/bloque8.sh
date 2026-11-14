@@ -1,8 +1,8 @@
 #!/bin/bash
-# Bloque 8 (2.20 / 2.20.1): velocímetro analógico/mixto y mantenimientos a medida.
+# Bloque 8: velocímetro analógico/mixto y mantenimientos a medida.
 API=$1; OUT=$2; mkdir -p $OUT
-PKG=com.stradaos.launcher.debug
-ACT=$PKG/com.stradaos.launcher.Main
+PKG=com.mini.launcher.debug
+ACT=$PKG/com.mini.launcher.Main
 adb wait-for-device
 for i in $(seq 1 100); do [ "$(adb shell getprop sys.boot_completed | tr -d '\r')" = "1" ] && break; sleep 3; done
 sleep 15
@@ -21,7 +21,7 @@ shot() {
 go() { adb shell am start -n $ACT --es prueba "$1" >/dev/null; sleep "${2:-5}"; }
 adb shell am start -n $ACT --es prueba saltar >/dev/null; sleep 25
 go idioma:es 6; go tema:oscuro 6; go inicio 4
-# 2.20.1: velocímetro centrado y más grande, mantenimiento debajo; tiempo en días/semanas/meses
+# velocímetro centrado y más grande, mantenimiento debajo; tiempo en días/semanas/meses
 go demo-aceite 5; go demo-mant 6
 go diseno:velo-1 5; go vel:85 3; shot 01-analogico-mant
 go diseno:velo-2 5; go vel:85 3; shot 02-mixto-mant
@@ -34,6 +34,6 @@ adb shell input keyevent 4; sleep 2
 go ajustes:2 6; shot 08-lista-mantenimientos
 go inicio 3; go diseno:base 4; go vel:85 3; shot 09-digital-sin-cambios
 go inicio 3; go diseno:base 4
-adb logcat -d | grep -E "FATAL EXCEPTION|AndroidRuntime: (java|Caused|\tat com.stradaos)" | tail -40 > $OUT/logcat.txt
-if grep -q "com.stradaos" $OUT/logcat.txt; then echo "CIERRE" > $OUT/CIERRES.txt; fi
+adb logcat -d | grep -E "FATAL EXCEPTION|AndroidRuntime: (java|Caused|\tat com.mini.launcher)" | tail -40 > $OUT/logcat.txt
+if grep -q "com.mini.launcher" $OUT/logcat.txt; then echo "CIERRE" > $OUT/CIERRES.txt; fi
 ls -l $OUT

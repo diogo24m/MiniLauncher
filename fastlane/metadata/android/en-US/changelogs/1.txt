@@ -1,0 +1,1 @@
+First MiniLauncher release, a fork of StradaOS 2.20.1: BMW MINI CAN/SPD data, SPD speed with GPS fallback, Bluetooth/Player selection, ADB controls, MINI branding, European Portuguese and text sizes from 85 to 150%.

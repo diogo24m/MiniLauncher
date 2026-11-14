@@ -1,7 +1,7 @@
 name: Pruebas en emuladores
 
 # Instala la versión de prueba en emuladores de varias versiones de Android (pantalla 1024x600), abre cada
-# pantalla, toma capturas y falla si StradaOS se cierra o se traba. Las capturas quedan en la rama «pruebas»
+# pantalla, toma capturas y falla si MiniLauncher se cierra o se traba. Las capturas quedan en la rama «pruebas»
 # (carpeta por versión de Android) para revisarlas sin el carro.
 on:
   push:

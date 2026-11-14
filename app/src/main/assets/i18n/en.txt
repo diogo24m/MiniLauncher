@@ -1,4 +1,4 @@
-# StradaOS · traducción en. Formato: español<TAB>traducción. Ver I18n.java.
+# MiniLauncher · traducción en. Formato: español<TAB>traducción. Ver I18n.java.
 Radio	Radio
 Cámara	Camera
 Archivos	Files
@@ -33,7 +33,7 @@ Restablecer ({})	Reset ({})
 Botón restablecido	Button reset
 Cerrar	Close
 Cerrar  ✕	Close  ✕
-★  Funciones de StradaOS (Música, Navegación, Android Auto…)	★  StradaOS functions (Music, Navigation, Android Auto…)
+★  Funciones de MiniLauncher (Música, Navegación, Android Auto…)	★  MiniLauncher functions (Music, Navigation, Android Auto…)
 ¿Qué abre el botón {}?	What does button {} open?
 Función del botón {}	Button {} function
 Nombre del botón {} (vacío = el de la app)	Button {} name (empty = the app's name)
@@ -49,7 +49,7 @@ Buenas tardes	Good afternoon
 Buenas noches	Good evening
 Diagnóstico del reproductor	Player diagnostics
 Accesibilidad	Accessibility
-Activa «Carátula de Android Auto» (StradaOS)	Turn on “Android Auto album art” (StradaOS)
+Activa «Carátula de Android Auto» (MiniLauncher)	Turn on “Android Auto album art” (MiniLauncher)
 No se pudo abrir Accesibilidad	Couldn't open Accessibility
 Activa «Pista actual de AA» en Open Headunit	Turn on “AA current track” in Open Headunit
 «Ninguna aplic. funciona con este accesorio USB»	“No installed apps work with this USB accessory”
@@ -58,7 +58,6 @@ Abrir EasyConnection	Open EasyConnection
 No hay apps de espejo instaladas	No mirroring apps installed
 Exportando… puede tardar un minuto	Exporting… this can take a minute
 Diagnóstico listo	Diagnostics ready
-Se guardó en:\n{}\n\nCopia la carpeta StradaDiag a una memoria USB y adjúntala en un «issue» del repositorio de StradaOS en GitHub.	Saved to:\n{}\n\nCopy the StradaDiag folder to a USB drive and attach it to an issue in the StradaOS repository on GitHub.
 12 horas	12 hours
 24 horas	24 hours
 Automático	Automatic
@@ -66,7 +65,7 @@ Automática	Automatic
 Auto	Auto
 12 horas (a.m./p.m.)	12 hours (a.m./p.m.)
 Formato de hora	Time format
-Se aplicará al reiniciar StradaOS	Applies when StradaOS restarts
+Se aplicará al reiniciar MiniLauncher	Applies when MiniLauncher restarts
 Rojo	Red
 Naranja	Orange
 Amarillo	Yellow
@@ -76,7 +75,7 @@ Azul	Blue
 Morado	Purple
 Rosa	Pink
 Plata	Silver
-Bienvenido a StradaOS	Welcome to StradaOS
+Bienvenido a MiniLauncher	Welcome to MiniLauncher
 Vamos a dejar el launcher a tu gusto: tu nombre, tu vehículo, el color y la foto. Toma menos de un minuto y lo puedes cambiar después en el engranaje ⚙.	Let's set up the launcher your way: your name, your vehicle, the color and the photo. It takes less than a minute and you can change it later with the gear ⚙.
 Empezar	Start
 ¿Cómo te llamas?	What's your name?
@@ -214,7 +213,7 @@ Audio Bluetooth	Bluetooth audio
 Volver al Bluetooth al desconectar Android Auto	Back to Bluetooth when Android Auto disconnects
 Al quitar el cable, abre un instante la app de música Bluetooth para que el sonido siga por Bluetooth	When the cable is unplugged, briefly opens the Bluetooth music app so the sound keeps playing over Bluetooth
 Escuchar el Bluetooth	Listen to Bluetooth
-En esta pantalla, toca ▶ en el inicio: StradaOS pasa el sonido a Bluetooth (por ejemplo, si venías de la radio)	On this screen, tap ▶ on the home screen: StradaOS switches the sound to Bluetooth (for example, coming from the radio)
+En esta pantalla, toca ▶ en el inicio: MiniLauncher pasa el sonido a Bluetooth (por ejemplo, si venías de la radio)	On this screen, tap ▶ on the home screen: MiniLauncher switches the sound to Bluetooth (for example, coming from the radio)
 Pasar a Bluetooth al dar play en el celular (en prueba)	Switch to Bluetooth when you press play on the phone (beta)
 Abre un instante «Audio Bluetooth» y vuelve. En algunas pantallas no detecta el play del celular	Briefly opens “Bluetooth audio” and comes back. Some screens don't detect play from the phone
 Probar ahora	Try now
@@ -271,7 +270,7 @@ Si la pantalla lo trae	If the screen has it
 no detectado	not detected
 Pantalla con CarPlay o adaptador USB	Screen with CarPlay or USB adapter
 Mapa con internet seguro (TLS 1.2)	Map with secure internet (TLS 1.2)
-Android 4.1+ (StradaOS lo activa)	Android 4.1+ (StradaOS enables it)
+Android 4.1+ (MiniLauncher lo activa)	Android 4.1+ (MiniLauncher enables it)
 en Android 4.x solo algunos servidores de mapas responden	on Android 4.x only some map servers respond
 Instalar actualizaciones desde la app	Install updates from the app
 pide permiso «Instalar apps desconocidas»	asks for “Install unknown apps” permission
@@ -283,7 +282,7 @@ Gratis y de código abierto. Una nueva vida para las pantallas Android del carro
 Versión	Version
 Android de la pantalla	Screen's Android
 Real: {} · ver qué funciona aquí	Actual: {} · see what works here
-Cierres inesperados o bloqueos de StradaOS en esta pantalla	Unexpected crashes or freezes of StradaOS on this screen
+Cierres inesperados o bloqueos de MiniLauncher en esta pantalla	Unexpected crashes or freezes of MiniLauncher on this screen
 Sin fallos	No crashes
 Ver	View
 Actualizaciones	Updates
@@ -292,9 +291,9 @@ Las actualizaciones llegan por esa app	Updates arrive through that app
 Avisar también de versiones en GitHub	Also notify about versions on GitHub
 Comprobar actualizaciones automáticamente	Check for updates automatically
 Opcional: las descargas de GitHub no pasan por la revisión de la tienda	Optional: GitHub downloads don't go through the store's review
-Al abrir StradaOS con internet, una vez al día	When StradaOS opens with internet, once a day
+Al abrir MiniLauncher con internet, una vez al día	When MiniLauncher opens with internet, once a day
 Actualizaciones desde GitHub	Updates from GitHub
-Instalaste StradaOS desde {}. Si activas esto, StradaOS revisará una vez al día las versiones publicadas en github.com/{} y te ofrecerá descargarlas desde ahí.\n\nEsas descargas no pasan por la revisión de la tienda. Puede que GitHub tenga una versión un poco antes que la tienda.	You installed StradaOS from {}. If you turn this on, StradaOS will check the versions published at github.com/{} once a day and offer to download them from there.\n\nThose downloads don't go through the store's review. GitHub may have a version a little before the store.
+Instalaste MiniLauncher desde {}. Si activas esto, MiniLauncher revisará una vez al día las versiones publicadas en github.com/{} y te ofrecerá descargarlas desde ahí.\n\nEsas descargas no pasan por la revisión de la tienda. Puede que GitHub tenga una versión un poco antes que la tienda.	You installed MiniLauncher from {}. If you turn this on, MiniLauncher will check the versions published at github.com/{} once a day and offer to download them from there.\n\nThose downloads don't go through the store's review. GitHub may have a version a little before the store.
 Activar	Turn on
 Canal de actualizaciones	Update channel
 Buscar actualizaciones	Check for updates
@@ -302,17 +301,16 @@ Aún no se ha comprobado	Not checked yet
 Última comprobación: {}	Last checked: {}
 Comunidad	Community
 Dar una estrella en GitHub	Star it on GitHub
-Ayuda a que más personas encuentren StradaOS	Helps more people find StradaOS
+Ayuda a que más personas encuentren MiniLauncher	Helps more people find MiniLauncher
 Dar una estrella ⭐	Give it a star ⭐
 Abre el repositorio y toca «Star». ¡Gracias!	Open the repository and tap “Star”. Thanks!
 Donar	Donate
-Si StradaOS revivió tu pantalla, invítame un café	If StradaOS brought your screen back to life, buy me a coffee
+Si MiniLauncher revivió tu pantalla, invítame un café	If MiniLauncher brought your screen back to life, buy me a coffee
 Apoya el proyecto ☕	Support the project ☕
-StradaOS es gratis. Las donaciones ayudan a mantenerlo y a probarlo en más pantallas.	StradaOS is free. Donations help maintain it and test it on more screens.
+MiniLauncher es gratis. Las donaciones ayudan a mantenerlo y a probarlo en más pantallas.	MiniLauncher is free. Donations help maintain it and test it on more screens.
 Reportar un problema o sugerir algo	Report a problem or suggest something
 Crea un «issue» en GitHub (adjunta el diagnóstico)	Create an issue on GitHub (attach the diagnostics)
 Reportar un problema	Report a problem
-Cuenta tu modelo de pantalla y su versión de Android. Puedes adjuntar la carpeta StradaDiag (Sistema → Exportar diagnóstico).	Tell us your screen model and its Android version. You can attach the StradaDiag folder (System → Export diagnostics).
 Código fuente	Source code
 Licencia GPL-3.0	GPL-3.0 license
 Créditos y licencias	Credits & licenses
@@ -336,7 +334,7 @@ error de red	network error
 tu tienda de apps	your app store
 Tienes la {} · nueva: {}	You have {} · new: {}
 Mejoras y correcciones.	Improvements and fixes.
-Nueva versión de StradaOS	New StradaOS version
+Nueva versión de MiniLauncher	New MiniLauncher version
 Tienes la {} · en GitHub: {}\nActualiza desde {} cuando llegue. Descargar de GitHub omite la revisión de la tienda.	You have {} · on GitHub: {}\nUpdate from {} when it arrives. Downloading from GitHub skips the store's review.
 Ver en GitHub	View on GitHub
 Descarga desde GitHub:	Download from GitHub:
@@ -344,13 +342,13 @@ Descargar e instalar	Download and install
 Descarga la nueva versión desde:	Download the new version from:
 Omitir esta versión	Skip this version
 Más tarde	Later
-Descargando StradaOS {}…	Downloading StradaOS {}…
+Descargando MiniLauncher {}…	Downloading MiniLauncher {}…
 Descárgala desde tu celular	Download it from your phone
 Esta pantalla no pudo descargar el archivo. Escanea el código, descarga el APK y pásalo por USB.	This screen couldn't download the file. Scan the code, download the APK and copy it via USB.
-¿Disfrutando StradaOS?	Enjoying StradaOS?
-Si te gusta usar StradaOS, dale una estrella en GitHub. Y si revivió tu pantalla, considera invitarme un café ☕	If you like using StradaOS, give it a star on GitHub. And if it brought your screen back to life, consider buying me a coffee ☕
+¿Disfrutando MiniLauncher?	Enjoying MiniLauncher?
+Si te gusta usar MiniLauncher, dale una estrella en GitHub. Y si revivió tu pantalla, considera invitarme un café ☕	If you like using MiniLauncher, give it a star on GitHub. And if it brought your screen back to life, consider buying me a coffee ☕
 Dar una estrella	Give a star
-StradaOS es gratis. Las donaciones ayudan a mantenerlo.	StradaOS is free. Donations help maintain it.
+MiniLauncher es gratis. Las donaciones ayudan a mantenerlo.	MiniLauncher is free. Donations help maintain it.
 Escanéalo con la cámara de tu celular o entra a:	Scan it with your phone's camera or go to:
 Abrir aquí	Open here
 No hay navegador disponible	No browser available
@@ -373,7 +371,7 @@ Conexión: {}. Cámbiala dejando presionado el botón.	Connection: {}. Change it
 el navegador	the browser
 «{}» necesita un Android más nuevo que el de esta pantalla. Abro el navegador de fábrica.	“{}” needs a newer Android than this screen has. Opening the factory browser.
 No encontré un navegador. Déjalo presionado para elegir uno.	No browser found. Long-press it to choose one.
-Permite «Instalar apps desconocidas» para StradaOS y vuelve a tocar.	Allow “Install unknown apps” for StradaOS and tap again.
+Permite «Instalar apps desconocidas» para MiniLauncher y vuelve a tocar.	Allow “Install unknown apps” for MiniLauncher and tap again.
 Activa «Orígenes desconocidos» y vuelve a tocar.	Turn on “Unknown sources” and tap again.
 No se pudo preparar {}	Couldn't prepare {}
 No se pudo abrir el instalador para {}	Couldn't open the installer for {}
@@ -389,30 +387,30 @@ Tormenta	Storm
 Mapa en vivo apagado	Live map off
 Rendimiento	Performance
 Apágalo si la pantalla va lenta: queda un mapa de adorno y el velocímetro sigue funcionando	Turn it off if the screen is slow: a decorative map stays and the speedometer keeps working
-StradaOS aún no es tu pantalla de inicio	StradaOS isn't your home screen yet
-Por eso al encender el carro o al tocar Inicio aparece el menú de fábrica.\n\nToca «Fijar ahora», elige StradaOS y luego «Siempre».	That's why the factory menu shows up when you start the car or tap Home.\n\nTap “Set now”, choose StradaOS and then “Always”.
+MiniLauncher aún no es tu pantalla de inicio	MiniLauncher isn't your home screen yet
+Por eso al encender el carro o al tocar Inicio aparece el menú de fábrica.\n\nToca «Fijar ahora», elige MiniLauncher y luego «Siempre».	That's why the factory menu shows up when you start the car or tap Home.\n\nTap “Set now”, choose MiniLauncher and then “Always”.
 Fijar ahora	Set now
 Ahora no	Not now
 No volver a preguntar	Don't ask again
-Elige StradaOS y toca «Siempre»	Choose StradaOS and tap “Always”
-Listo: StradaOS es tu pantalla de inicio	Done: StradaOS is your home screen
-Fijar StradaOS a mano	Set StradaOS manually
-Algunas pantallas no muestran la lista para elegir. Prueba así:\n\n1. Toca el botón Inicio (la casita) de la pantalla. Si pregunta qué app usar, elige StradaOS → Siempre.\n2. Si no pregunta: en los ajustes de la pantalla busca Aplicaciones → Aplicaciones predeterminadas → Pantalla de inicio (o «App de inicio») y elige StradaOS.\n3. Con Android 10 o más nuevo, no lo elijas desde el modo fábrica de la pantalla («Launcher», «Interfaz» o «UI»): en algunas marcas eso deja las demás apps sin poder abrirse. En Android 4 a 9 sí puedes usar esa opción.\n\nSi tu pantalla siempre vuelve a su menú de fábrica al encender, activa «Abrir StradaOS al encender» en Ajustes → Sistema.	Some screens don't show the list to choose from. Try this:\n\n1. Tap the screen's Home button (the house). If it asks which app to use, choose StradaOS → Always.\n2. If it doesn't ask: in the screen's settings look for Apps → Default apps → Home app and choose StradaOS.\n3. On Android 10 or newer, don't choose it from the screen's factory mode (“Launcher”, “Interface” or “UI”): on some brands that leaves other apps unable to open. On Android 4 to 9 you can use that option.\n\nIf your screen always goes back to its factory menu when it starts, turn on “Open StradaOS at startup” in Settings → System.
+Elige MiniLauncher y toca «Siempre»	Choose MiniLauncher and tap “Always”
+Listo: MiniLauncher es tu pantalla de inicio	Done: MiniLauncher is your home screen
+Fijar MiniLauncher a mano	Set MiniLauncher manually
+Algunas pantallas no muestran la lista para elegir. Prueba así:\n\n1. Toca el botón Inicio (la casita) de la pantalla. Si pregunta qué app usar, elige MiniLauncher → Siempre.\n2. Si no pregunta: en los ajustes de la pantalla busca Aplicaciones → Aplicaciones predeterminadas → Pantalla de inicio (o «App de inicio») y elige MiniLauncher.\n3. Con Android 10 o más nuevo, no lo elijas desde el modo fábrica de la pantalla («Launcher», «Interfaz» o «UI»): en algunas marcas eso deja las demás apps sin poder abrirse. En Android 4 a 9 sí puedes usar esa opción.\n\nSi tu pantalla siempre vuelve a su menú de fábrica al encender, activa «Abrir MiniLauncher al encender» en Ajustes → Sistema.	Some screens don't show the list to choose from. Try this:\n\n1. Tap the screen's Home button (the house). If it asks which app to use, choose MiniLauncher → Always.\n2. If it doesn't ask: in the screen's settings look for Apps → Default apps → Home app and choose MiniLauncher.\n3. On Android 10 or newer, don't choose it from the screen's factory mode (“Launcher”, “Interface” or “UI”): on some brands that leaves other apps unable to open. On Android 4 to 9 you can use that option.\n\nIf your screen always goes back to its factory menu when it starts, turn on “Open MiniLauncher at startup” in Settings → System.
 Pantalla de inicio	Home screen
 La que aparece al encender y al tocar Inicio	The one that shows at startup and when you tap Home
-StradaOS ✓	StradaOS ✓
+MiniLauncher ✓	MiniLauncher ✓
 Otra · toca para cambiar	Another · tap to change
-Abrir StradaOS al encender	Open StradaOS at startup
+Abrir MiniLauncher al encender	Open MiniLauncher at startup
 Para pantallas que siempre arrancan en su menú de fábrica (Android 4 a 9)	For screens that always start on their factory menu (Android 4 to 9)
 ¿La música Bluetooth se corta o no aparece?	Bluetooth music cuts out or doesn't show?
 Qué hacer en cada caso	What to do in each case
-• Se corta al salir de la app Bluetooth: sal con el botón Inicio (la casita), no con Atrás. Atrás cierra la app de fábrica y con ella la música.\n\n• No suena hasta abrir la app Bluetooth: activa «Abrir la app de música Bluetooth al conectar el celular» (aquí mismo). Abre la app un instante y vuelve al inicio.\n\n• La canción no aparece en el inicio (Android 5 o más nuevo): activa «Música de cualquier app» arriba y dale acceso a notificaciones a StradaOS.\n\n• Revisa en Ajustes → Accesos y apps que «Música Bluetooth» sea la app Bluetooth de tu pantalla.	• It cuts out when you leave the Bluetooth app: leave with the Home button (the house), not Back. Back closes the factory app, and the music with it.\n\n• It doesn't play until you open the Bluetooth app: turn on “Open the Bluetooth music app when the phone connects” (right here). It opens the app for a moment and returns home.\n\n• The song doesn't show on the home screen (Android 5 or newer): turn on “Music from any app” above and give StradaOS notification access.\n\n• Check in Settings → Shortcuts & apps that “Bluetooth music” is your screen's Bluetooth app.
+• Se corta al salir de la app Bluetooth: sal con el botón Inicio (la casita), no con Atrás. Atrás cierra la app de fábrica y con ella la música.\n\n• No suena hasta abrir la app Bluetooth: activa «Abrir la app de música Bluetooth al conectar el celular» (aquí mismo). Abre la app un instante y vuelve al inicio.\n\n• La canción no aparece en el inicio (Android 5 o más nuevo): activa «Música de cualquier app» arriba y dale acceso a notificaciones a MiniLauncher.\n\n• Revisa en Ajustes → Accesos y apps que «Música Bluetooth» sea la app Bluetooth de tu pantalla.	• It cuts out when you leave the Bluetooth app: leave with the Home button (the house), not Back. Back closes the factory app, and the music with it.\n\n• It doesn't play until you open the Bluetooth app: turn on “Open the Bluetooth music app when the phone connects” (right here). It opens the app for a moment and returns home.\n\n• The song doesn't show on the home screen (Android 5 or newer): turn on “Music from any app” above and give MiniLauncher notification access.\n\n• Check in Settings → Shortcuts & apps that “Bluetooth music” is your screen's Bluetooth app.
 Sin permiso	No permission
 GPS apagado	GPS off
 Unidades	Units
 Automático: mph en EE. UU. y Reino Unido	Automatic: mph in the US and UK
 Permisos → Ubicación → Permitir	Permissions → Location → Allow
-Activa la ubicación para StradaOS en los ajustes de la pantalla	Turn on location for StradaOS in the screen's settings
+Activa la ubicación para MiniLauncher en los ajustes de la pantalla	Turn on location for MiniLauncher in the screen's settings
 Activa la ubicación (GPS)	Turn on location (GPS)
 Activa la ubicación (GPS) en los ajustes de la pantalla	Turn on location (GPS) in the screen's settings
 Sin permiso de ubicación · toca aquí	No location permission · tap here
@@ -435,7 +433,7 @@ Corregir el kilometraje actual	Correct the current odometer
 Cambiar cada cuánto se hace	Change how often it's done
 Desactivar el recordatorio	Turn off the reminder
 Recordatorio de cambio de aceite	Oil change reminder
-StradaOS no puede leer el kilometraje del tablero del carro. Escríbelo una vez y StradaOS le irá sumando lo que recorras con el GPS, para avisarte cuando toque el cambio.\n\nDe vez en cuando puedes corregirlo con el valor real del tablero.	StradaOS can't read the car's dashboard odometer. Enter it once and StradaOS will add the distance you drive using GPS, to remind you when the change is due.\n\nNow and then you can correct it with the real dashboard reading.
+MiniLauncher no puede leer el kilometraje del tablero del carro. Escríbelo una vez y MiniLauncher le irá sumando lo que recorras con el GPS, para avisarte cuando toque el cambio.\n\nDe vez en cuando puedes corregirlo con el valor real del tablero.	MiniLauncher can't read the car's dashboard odometer. Enter it once and MiniLauncher will add the distance you drive using GPS, to remind you when the change is due.\n\nNow and then you can correct it with the real dashboard reading.
 ¿A cuántos {} fue el último cambio de aceite?	Odometer at the last oil change ({})
 Kilometraje actual del tablero	Current dashboard odometer
 ¿Cada cuántos {} cambias el aceite?	How many {} between oil changes?
@@ -455,7 +453,7 @@ El mapa apunta	Map points
 Según tu dirección: gira con el carro mientras te mueves	Direction of travel: turns with the car while you drive
 Norte arriba	North up
 Según tu dirección	Direction of travel
-# 2.13: aceite (último cambio, unidad) y apps ocultas del cajón
+# aceite (último cambio, unidad) y apps ocultas del cajón
 Último cambio	Last change
 Corregir el último cambio	Correct the last change
 ¿Tu tablero marca kilómetros o millas?	Does your dashboard show kilometers or miles?
@@ -477,24 +475,24 @@ Buscar app	Search apps
 Apps ocultas en el cajón	Apps hidden from the drawer
 Se muestran todas las apps	All apps are shown
 Apps ocultas: {}	Hidden apps: {}
-# 2.14: desinstalar desde el cajón
+# desinstalar desde el cajón
 Desinstalar	Uninstall
-# 2.14: salir de StradaOS (issue #9)
-Salir de StradaOS	Leave StradaOS
+# salir de MiniLauncher (issue #9)
+Salir de MiniLauncher	Leave MiniLauncher
 Abrir el launcher de fábrica	Open the factory launcher
-Sale de StradaOS sin desinstalarlo	Leaves StradaOS without uninstalling it
-Desactivar StradaOS	Disable StradaOS
-Si la pantalla quedó atrapada en StradaOS: se apaga solo, sin ventanas de Android	If the screen got stuck on StradaOS: it turns itself off, with no Android pop-ups
-Desinstalar StradaOS	Uninstall StradaOS
+Sale de MiniLauncher sin desinstalarlo	Leaves MiniLauncher without uninstalling it
+Desactivar MiniLauncher	Disable MiniLauncher
+Si la pantalla quedó atrapada en MiniLauncher: se apaga solo, sin ventanas de Android	If the screen got stuck on MiniLauncher: it turns itself off, with no Android pop-ups
+Desinstalar MiniLauncher	Uninstall MiniLauncher
 Android pide confirmar	Android asks for confirmation
 No encontré otra pantalla de inicio en este equipo	I couldn't find another home screen on this device
 ¿Cuál es el launcher de fábrica?	Which one is the factory launcher?
 No se pudo abrir	Couldn't open it
-No encontré otra pantalla de inicio: StradaOS no se puede desactivar en este equipo	I couldn't find another home screen: StradaOS can't be disabled on this device
-¿Desactivar StradaOS?	Disable StradaOS?
-StradaOS deja de ser la pantalla de inicio, ya no se abre al encender y vuelve el launcher de fábrica. No pide confirmaciones de Android, así que sirve aunque la pantalla haya quedado atrapada.\n\nPara volver a usarlo después: desinstálalo desde los ajustes de la pantalla e instálalo de nuevo.	StradaOS stops being the home screen, no longer opens at startup and the factory launcher comes back. It doesn't need Android confirmations, so it works even if the screen got stuck.\n\nTo use it again later: uninstall it from the screen's settings and install it again.
+No encontré otra pantalla de inicio: MiniLauncher no se puede desactivar en este equipo	I couldn't find another home screen: MiniLauncher can't be disabled on this device
+¿Desactivar MiniLauncher?	Disable MiniLauncher?
+MiniLauncher deja de ser la pantalla de inicio, ya no se abre al encender y vuelve el launcher de fábrica. No pide confirmaciones de Android, así que sirve aunque la pantalla haya quedado atrapada.\n\nPara volver a usarlo después: desinstálalo desde los ajustes de la pantalla e instálalo de nuevo.	MiniLauncher stops being the home screen, no longer opens at startup and the factory launcher comes back. It doesn't need Android confirmations, so it works even if the screen got stuck.\n\nTo use it again later: uninstall it from the screen's settings and install it again.
 Desactivar	Disable
-# 2.15: diseño del inicio
+# diseño del inicio
 Diseño del inicio	Home layout
 Reproductor de música	Music player
 Ponlo del lado del conductor para tenerlo a la mano	Put it on the driver's side to keep it within reach
@@ -556,7 +554,7 @@ Pausar	Pause
 Continuar	Resume
 Cancelar descarga	Cancel download
 Descarga cancelada	Download canceled
-Este mapa lo descargó StradaOS. Puedes dejar de usarlo o borrarlo para liberar espacio.	StradaOS downloaded this map. You can stop using it or delete it to free up space.
+Este mapa lo descargó MiniLauncher. Puedes dejar de usarlo o borrarlo para liberar espacio.	MiniLauncher downloaded this map. You can stop using it or delete it to free up space.
 Puedes dejar de usar este mapa (el archivo no se borra).	You can stop using this map (the file isn't deleted).
 Dejar de usarlo	Stop using it
 Borrar el archivo	Delete the file
@@ -578,7 +576,7 @@ se cortó la descarga	the download was interrupted
 Sin señal GPS · mapa sin conexión	No GPS signal · offline map
 Sin señal GPS ni internet	No GPS signal or internet
 Sin señal GPS · última posición	No GPS signal · last position
-# 2.17: tema por horario o del sistema, íconos de Wi-Fi y Bluetooth, barra, diagnóstico del mapa
+# tema por horario o del sistema, íconos de Wi-Fi y Bluetooth, barra, diagnóstico del mapa
 Auto: por horario. Sistema: sigue el modo oscuro de la pantalla (algunas lo cambian al encender las luces)	Auto: by schedule. System: follows the screen's dark mode (some switch it when you turn on the headlights)
 Oscuro desde	Dark from
 Claro desde	Light from
@@ -609,7 +607,7 @@ apagado	off
 encendida	on
 apagada	off
 Última señal: {}	Last signal: {}
-ninguna desde que abrió StradaOS	none since StradaOS opened
+ninguna desde que abrió MiniLauncher	none since MiniLauncher opened
 hace {} s	{} s ago
 hace {} min	{} min ago
 Buscando desde hace {} min	Searching for {} min
@@ -645,7 +643,7 @@ Tema según el modo oscuro del sistema	Theme that follows the system dark mode
 Pantallas que lo cambian (p. ej. con las luces)	Screens that switch it (e.g. with the headlights)
 el sistema está en modo oscuro	the system is in dark mode
 el sistema está en modo claro	the system is in light mode
-# 2.18: botones de conexión, clima detallado, ocultar velocidad/aceite/reproductor, botón del navegador, foto tal cual
+# botones de conexión, clima detallado, ocultar velocidad/aceite/reproductor, botón del navegador, foto tal cual
 Cargando…	Loading…
 Esperando la ubicación…	Waiting for location…
 Máx {} · Mín {}	High {} · Low {}
@@ -688,7 +686,7 @@ Usar la foto original, con fondo	Use the original photo, with background
 Quitar el fondo	Remove background
 No se detectó un fondo liso: se usa la foto tal cual	No plain background found: the photo is used as is
 Se usa tal cual; si quieres, le puedes quitar el fondo	Used as is; you can remove the background if you want
-# 2.19: cantidad y tamaño de los botones, íconos de apps, packs de íconos, barra oculta, tamaño de la letra
+# cantidad y tamaño de los botones, íconos de apps, packs de íconos, barra oculta, tamaño de la letra
 Cantidad de botones	Number of buttons
 «Apps» siempre queda al final	"Apps" always stays last
 Tamaño de los íconos	Icon size
@@ -707,7 +705,7 @@ Lateral: los botones van al costado y todo se ve más grande en pantallas bajas 
 Oculta	Hidden
 Tamaño de la letra	Text size
 Para leer mejor de lejos o que quepa más	To read better from afar or fit more
-# 2.20: velocímetro analógico, velocímetro sobre el mapa, mantenimientos a medida
+# velocímetro analógico, velocímetro sobre el mapa, mantenimientos a medida
 Velocímetro	Speedometer
 En la tarjeta del vehículo. Toma el color de acento	On the vehicle card. Uses the accent color
 Digital	Digital
@@ -740,7 +738,7 @@ Lo que llegue primero	Whichever comes first
 ¿A cuántos {} fue la última vez?	At how many {} was the last time?
 ¿Cuándo fue la última vez?	When was the last time?
 Kilometraje del tablero	Dashboard odometer
-StradaOS no puede leer el kilometraje del carro. Escríbelo una vez y StradaOS le suma lo que recorras con el GPS.	StradaOS can't read the car's odometer. Type it once and StradaOS adds what you drive using GPS.
+MiniLauncher no puede leer el kilometraje del carro. Escríbelo una vez y MiniLauncher le suma lo que recorras con el GPS.	MiniLauncher can't read the car's odometer. Type it once and MiniLauncher adds what you drive using GPS.
 Escribirlo	Type it
 Última vez	Last time
 Cambiar cada cuánto	Change how often
@@ -765,7 +763,7 @@ cada {} semanas	every {} weeks
 {} meses	{} months
 {} día	{} day
 {} días	{} days
-# 2.20: Ajustes reordenados, sección Mantenimientos, íconos, velocímetro del mapa
+# Ajustes reordenados, sección Mantenimientos, íconos, velocímetro del mapa
 Mantenimientos	Maintenance
 Barra de apps	App bar
 Tarjetas	Cards
@@ -774,7 +772,7 @@ Diseño de la barra	Bar layout
 Botones (déjalos presionados en el inicio para cambiarlos)	Buttons (press and hold them on the home screen to change them)
 Texto	Text
 Kilometraje	Odometer
-Escríbelo una vez y StradaOS le suma lo que recorras con el GPS	Type it once and StradaOS adds what you drive using GPS
+Escríbelo una vez y MiniLauncher le suma lo que recorras con el GPS	Type it once and MiniLauncher adds what you drive using GPS
 Avisa cuando toca el cambio	Reminds you when the change is due
 En el inicio	On the home screen
 Mantenimiento en el inicio	Maintenance on the home screen
@@ -797,3 +795,108 @@ Cambiar el ícono	Change the icon
 Filtro de combustible	Fuel filter
 Aire acondicionado	Air conditioning
 Lavado	Car wash
+Se guardó en:\n{}\n\nCopia la carpeta MiniLauncherDiag a una memoria USB y adjúntala en un «issue» del repositorio de MiniLauncher en GitHub.	Saved to:\n{}\n\nCopy the MiniLauncherDiag folder to a USB drive and attach it to an issue in the MiniLauncher repository on GitHub.
+Consejo: usa una foto del carro de lado o de frente. Se usa tal cual; si tiene fondo liso (blanco, gris o cielo), luego le puedes quitar el fondo.	Tip: use a side or front photo of the car. It is used as is; if it has a plain background (white, gray or sky), you can remove it afterwards.
+Solo en MiniLauncher. No cambia el tamaño de letra de Android ni de otras apps	Only in MiniLauncher. Does not change the text size in Android or other apps
+Cuenta tu modelo de pantalla y su versión de Android. Puedes adjuntar la carpeta MiniLauncherDiag (Sistema → Exportar diagnóstico).	Tell us your screen model and its Android version. You can attach the MiniLauncherDiag folder (System → Export diagnostics).
+Reproductor	Music player
+Conecta el celular por Bluetooth	Connect your phone via Bluetooth
+Abre tu app de música	Open your music app
+Falta el acceso a notificaciones	Notification access is missing
+Acceso a notificaciones	Notification access
+Para mostrar la canción que suena por Bluetooth o en tu app de música, MiniLauncher necesita «Acceso a notificaciones». En la pantalla que se abre, actívalo para MiniLauncher.	To show the song playing over Bluetooth or in your music app, MiniLauncher needs “Notification access”. On the screen that opens, turn it on for MiniLauncher.
+Combustible	Fuel
+Autonomía	Range
+Consumo	Consumption
+Puerta abierta:	Door open:
+conductor	driver
+pasajero	passenger
+No disponible	Not available
+No se detectó el software SPD en esta pantalla. Los datos del carro solo se leen en pantallas SPD.	No SPD software was found on this screen. Car data can only be read on SPD screens.
+Consumo medio	Average consumption
+Velocidad media	Average speed
+Temperatura exterior	Outside temperature
+Puertas	Doors
+Neumáticos	Tires
+Presión en bar, en el orden que envía el carro	Pressure in bar, in the order the car sends it
+Fecha prevista	Planned date
+Distancia restante	Distance remaining
+Sin datos de mantenimiento	No maintenance data
+Actualizado	Updated
+Nunca	Never
+hace {} h	{} h ago
+delantera izquierda	front left
+delantera derecha	front right
+trasera izquierda	rear left
+trasera derecha	rear right
+maletero	trunk
+capó	hood
+Cerradas	Closed
+Abiertas:	Open:
+Abierta:	Open:
+Aceite del motor	Engine oil
+Inspección del vehículo	Vehicle inspection
+Servicio {}	Service {}
+Diagnóstico del carro	Car diagnostics
+Estado	Status
+Conectado al carro	Connected to the car
+Conectando con el carro…	Connecting to the car…
+Sin conexión con el servicio SPD	No connection to the SPD service
+Leído del carro	Read from the car
+MiniLauncher lee el kilometraje del carro y te avisa cuando toque el cambio.	MiniLauncher reads the car's odometer and lets you know when the change is due.
+Auto: claro de 6 a.m. a 6 p.m. Sistema: sigue el modo oscuro de la pantalla (algunas lo cambian al encender las luces)	Auto: light from 6 a.m. to 6 p.m. System: follows the screen’s dark mode (some change when the headlights turn on)
+Apagado	Off
+Conectado	Connected
+Encendido sin conexión	On, not connected
+cabecera inválida	invalid header
+versión de mapa no compatible: {}	unsupported map version: {}
+proyección no compatible: {}	unsupported projection: {}
+mapa sin datos	map has no data
+subarchivo inválido	invalid subfile
+archivo dañado ({})	damaged file ({})
+fin de archivo inesperado	unexpected end of file
+Datos simulados	Simulated data
+Voltaje de la batería	Battery voltage
+Lecturas SPD en validación	SPD readings awaiting validation
+Última consulta SPD	Last SPD query
+Cada 10 segundos mientras MiniLauncher está visible	Every 10 seconds while MiniLauncher is visible
+Avisos Check Control	Check Control warnings
+Ignición / ACC	Ignition / ACC
+Freno de pie	Foot brake
+Freno de mano	Handbrake
+Estacionamiento	Parking
+Marcha engranada	Selected gear
+Régimen del motor ({})	Engine speed ({})
+Velocidad por CAN	CAN speed
+Luces	Lights
+Brillo de las luces	Light brightness
+Nivel de aceite del motor	Engine oil level
+Valores brutos: códigos y unidades por confirmar. Un 0 no demuestra que la función esté disponible o apagada.	Raw values: codes and units await confirmation. A 0 does not prove that the function is supported or switched off.
+Sin actualizar	Not updated
+Lectura no disponible	Reading unavailable
+Valores fijados al abrir; vuelve a abrir el diagnóstico para actualizarlos.	Values are captured when opened; reopen the diagnostic to refresh them.
+Depuración	Debugging
+Depuración USB	USB debugging
+Conectar ADB por cable USB	Connect ADB over a USB cable
+Conectar ADB por cable USB · al apagar se desactiva también la depuración por Wi-Fi	Connect ADB over a USB cable · turning off also disables Wi-Fi debugging
+Depuración por Wi-Fi	Wi-Fi debugging
+ADB inalámbrico de Android · empareja en las opciones de desarrollador	Android wireless ADB · pair in developer options
+Requiere root y depuración USB · al apagar se desactiva también USB · puerto 5555	Requires root and USB debugging · turning off also disables USB · port 5555
+Opciones de desarrollador	Developer options
+Emparejar por Wi-Fi y autorizar ordenadores	Pair over Wi-Fi and authorize computers
+Autorizar ordenadores y abrir los ajustes de Android	Authorize computers and open Android settings
+Permiso para los interruptores	Permission for the switches
+Cómo permitir los cambios desde MiniLauncher	How to allow changes from MiniLauncher
+Android no permite leer el estado · toca para abrir sus ajustes	Android does not allow reading the state · tap to open its settings
+Estado no disponible	State unavailable
+Estado no disponible · toca para activar o desactivar	State unavailable · tap to enable or disable
+Android no informa si ADB está escuchando por Wi-Fi. Elige activar o desactivar. Al desactivar se apaga también la depuración USB.	Android does not report whether ADB is listening over Wi-Fi. Choose enable or disable. Disabling also turns off USB debugging.
+Aplicando cambio…	Applying change…
+Activa primero la depuración USB	Enable USB debugging first
+Se agotó el tiempo de espera del permiso root. Vuelve a intentarlo.	Timed out waiting for root permission. Try again.
+No se pudo confirmar el cambio. Revisa el estado en las opciones de desarrollador.	Could not confirm the change. Check the state in developer options.
+Abrir ajustes	Open settings
+Android no permitió el cambio. Usa las opciones de desarrollador o concede el permiso de abajo.	Android did not allow the change. Use developer options or grant the permission below.
+Para usar estos interruptores sin root, conecta un ordenador con ADB y ejecuta una vez:	To use these switches without root, connect a computer with ADB and run once:
+El permiso permite cambiar la depuración USB y, desde Android 11, la depuración por Wi-Fi. En Android 4 a 10, Wi-Fi requiere root y depuración USB; al apagar cualquiera se desactivan ambas. Usa una red de confianza.	The permission allows changing USB debugging and, on Android 11 or later, Wi-Fi debugging. On Android 4 to 10, Wi-Fi requires root and USB debugging; turning off either disables both. Use a trusted network.
+Si no tienes este permiso, MiniLauncher intenta usar root al tocar un interruptor. El emparejamiento y la autorización de ordenadores se gestionan en Android.	Without this permission, MiniLauncher attempts to use root when you tap a switch. Pairing and computer authorization are managed by Android.

@@ -1,8 +1,8 @@
 #!/bin/bash
-# Capturas para imágenes de redes y de la página: StradaOS Prueba a doble resolución (2048x1200 = 1024x600 x2),
+# Capturas para imágenes de redes y de la página: MiniLauncher Prueba a doble resolución (2048x1200 = 1024x600 x2),
 # en español e inglés, tema claro y oscuro, con una ciudad de ejemplo (Medellín) y canción de ejemplo.
-PKG=com.stradaos.launcher.debug
-ACT=$PKG/com.stradaos.launcher.Main
+PKG=com.mini.launcher.debug
+ACT=$PKG/com.mini.launcher.Main
 OUT=capturas; mkdir -p $OUT
 adb wait-for-device
 for i in $(seq 1 60); do [ "$(adb shell getprop sys.boot_completed | tr -d '\r')" = "1" ] && break; sleep 3; done

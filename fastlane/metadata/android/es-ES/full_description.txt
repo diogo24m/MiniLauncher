@@ -1,11 +1,14 @@
-<p><b>StradaOS</b> le da una nueva vida a la pantalla Android de tu carro: reemplaza el menú genérico de fábrica por una pantalla de inicio moderna, sin flashear nada y sin tocar el sistema.</p>
+<p>MiniLauncher 0.1.0 es la primera versión de este fork GPL-3.0 de StradaOS 2.20.1, de lordnordic-debug.</p>
+<p><b>MiniLauncher</b> le da una nueva vida a la pantalla Android de tu carro: reemplaza el menú genérico de fábrica por una pantalla de inicio moderna, sin flashear nada y sin tocar el sistema.</p>
 <p>Está pensado para las radios que dicen «Android 6 o superior» pero por dentro corren Android 4.x, donde ya no funciona la Play Store y casi ninguna app se instala. También funciona en pantallas modernas.</p>
 <p><b>Funciones</b></p>
 <ul>
 <li>Mapa en vivo y sin conexión: descarga el mapa de tu país desde la app y úsalo sin internet.</li>
 <li>Botones de Android Auto y CarPlay: abre la app de proyección de tu pantalla o Open Headunit.</li>
-<li>Tu música en el inicio: título, artista y tiempo de lo que suena por Bluetooth; con Android Auto, también la carátula.</li>
-<li>Velocímetro por GPS, clima, reloj, recordatorio de cambio de aceite y la foto de tu vehículo con el fondo quitado.</li>
+<li>Selector Bluetooth/Reproductor, título, artista, controles y carátulas de las sesiones de música compatibles.</li>
+<li>Datos BMW MINI en centrales SPD compatibles: combustible, autonomía, consumo, voltaje, puertas, neumáticos, kilometraje, mantenimiento y diagnóstico de solo lectura.</li>
+<li>Controles de ADB por USB y Wi-Fi con ayuda sobre permisos en los ajustes de Sistema.</li>
+<li>Velocímetro SPD con GPS de reserva, clima, reloj, recordatorio de cambio de aceite y la foto de tu vehículo con el fondo quitado.</li>
 <li>Diseña tu inicio: reproductor a la izquierda o a la derecha, barra normal, compacta o lateral, y Android Auto y CarPlay plegables.</li>
 <li>Barra inferior a tu medida y apps ocultables. La cámara de reversa sigue funcionando.</li>
 <li>Modo oscuro, claro, por horario o del sistema, 10 colores y 8 idiomas.</li>

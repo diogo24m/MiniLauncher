@@ -2,8 +2,8 @@
 # Mapa sin conexión en el emulador: copia colombia.map, corta el internet y toma capturas del mapa
 # (Medellín como ciudad de ejemplo) en oscuro y claro, a varios zooms, y del diagnóstico.
 API=${API:-30}
-PKG=com.stradaos.launcher.debug
-ACT=$PKG/com.stradaos.launcher.Main
+PKG=com.mini.launcher.debug
+ACT=$PKG/com.mini.launcher.Main
 OUT=salida; mkdir -p $OUT
 adb wait-for-device
 for i in $(seq 1 100); do [ "$(adb shell getprop sys.boot_completed | tr -d '\r')" = "1" ] && break; sleep 3; done
@@ -37,14 +37,14 @@ go mapa-lista 12; shot descarga-1-continentes; adb shell input keyevent 4; sleep
 go mapa-lista:south-america/ 12; shot descarga-2-paises; adb shell input keyevent 4; sleep 2
 go mapa-descargar:south-america/guyana.map 6
 adb shell am start -n $ACT --es prueba mapa-pausar >/dev/null; sleep 3
-echo "en pausa:"; adb shell ls -l /sdcard/Download/StradaOS/ 2>&1
+echo "en pausa:"; adb shell ls -l /sdcard/Download/MiniLauncher/ 2>&1
 go mapa-continuar 2
 for i in $(seq 1 60); do
-  adb shell ls /sdcard/Download/StradaOS/guyana.map >/dev/null 2>&1 && ! adb shell ls /sdcard/Download/StradaOS/ | grep -q part && break
+  adb shell ls /sdcard/Download/MiniLauncher/guyana.map >/dev/null 2>&1 && ! adb shell ls /sdcard/Download/MiniLauncher/ | grep -q part && break
   [ $i = 3 ] && { go ajustes:5 3; adb shell input swipe 600 500 600 100 400; sleep 1; adb shell input swipe 600 500 600 100 400; sleep 2; shot descarga-3-progreso; }
   sleep 3
 done
-echo "terminado:"; adb shell ls -l /sdcard/Download/StradaOS/ 2>&1
+echo "terminado:"; adb shell ls -l /sdcard/Download/MiniLauncher/ 2>&1
 adb shell input keyevent 4; sleep 2
 kill $GEO 2>/dev/null
 ( for i in $(seq 1 12); do adb emu geo fix -58.1551 6.8013 >/dev/null 2>&1; sleep 2; done ) &
@@ -71,5 +71,5 @@ sleep 4
 go ajustes:5 6; adb shell input swipe 600 500 600 100 400; sleep 2; adb shell input swipe 600 500 600 100 400; sleep 3; shot ajustes-mapa
 adb shell input keyevent 4; sleep 2
 go mapa-diag 4; shot diag-final
-adb logcat -d | grep -iE "AndroidRuntime|FATAL|stradaos" | tail -40 > $OUT/logcat.txt
+adb logcat -d | grep -iE "AndroidRuntime|FATAL|minilauncher" | tail -40 > $OUT/logcat.txt
 ls -l $OUT

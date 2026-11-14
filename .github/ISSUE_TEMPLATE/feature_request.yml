@@ -1,5 +1,5 @@
 name: 💡 Sugerir una mejora
-description: Una idea para StradaOS
+description: Una idea para MiniLauncher
 labels: [mejora]
 body:
   - type: textarea

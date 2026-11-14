@@ -1,4 +1,4 @@
-# StradaOS · traducción tr. Formato: español<TAB>traducción. Ver I18n.java.
+# MiniLauncher · traducción tr. Formato: español<TAB>traducción. Ver I18n.java.
 Radio	Radyo
 Cámara	Kamera
 Archivos	Dosyalar
@@ -33,7 +33,7 @@ Restablecer ({})	Sıfırla ({})
 Botón restablecido	Düğme sıfırlandı
 Cerrar	Kapat
 Cerrar  ✕	Kapat  ✕
-★  Funciones de StradaOS (Música, Navegación, Android Auto…)	★  StradaOS işlevleri (Müzik, Navigasyon, Android Auto…)
+★  Funciones de MiniLauncher (Música, Navegación, Android Auto…)	★  MiniLauncher işlevleri (Müzik, Navigasyon, Android Auto…)
 ¿Qué abre el botón {}?	{} düğmesi ne açıyor?
 Función del botón {}	{} düğmesinin işlevi
 Nombre del botón {} (vacío = el de la app)	{} düğmesinin adı (boş = uygulamanın adı)
@@ -49,7 +49,7 @@ Buenas tardes	İyi günler
 Buenas noches	İyi akşamlar
 Diagnóstico del reproductor	Oynatıcı teşhisi
 Accesibilidad	Erişilebilirlik
-Activa «Carátula de Android Auto» (StradaOS)	«Android Auto albüm kapağı»nı açın (StradaOS)
+Activa «Carátula de Android Auto» (MiniLauncher)	«Android Auto albüm kapağı»nı açın (MiniLauncher)
 No se pudo abrir Accesibilidad	Erişilebilirlik açılamadı
 Activa «Pista actual de AA» en Open Headunit	Open Headunit'te «AA geçerli parça»yı açın
 «Ninguna aplic. funciona con este accesorio USB»	«Bu USB aksesuarıyla hiçbir uygulama çalışmıyor»
@@ -58,7 +58,7 @@ Abrir EasyConnection	EasyConnection'ı aç
 No hay apps de espejo instaladas	Yansıtma uygulaması yüklü değil
 Exportando… puede tardar un minuto	Dışa aktarılıyor… bir dakika sürebilir
 Diagnóstico listo	Teşhis hazır
-Se guardó en:\n{}\n\nCopia la carpeta StradaDiag a una memoria USB y adjúntala en un «issue» del repositorio de StradaOS en GitHub.	Şuraya kaydedildi:\n{}\n\nStradaDiag klasörünü bir USB belleğe kopyalayın ve GitHub'daki StradaOS deposunda bir «issue»ya ekleyin.
+Se guardó en:\n{}\n\nCopia la carpeta MiniLauncherDiag a una memoria USB y adjúntala en un «issue» del repositorio de MiniLauncher en GitHub.	Şuraya kaydedildi:\n{}\n\nMiniLauncherDiag klasörünü bir USB belleğe kopyalayın ve GitHub'daki MiniLauncher deposunda bir «issue»ya ekleyin.
 12 horas	12 saat
 24 horas	24 saat
 Automático	Otomatik
@@ -66,7 +66,7 @@ Automática	Otomatik
 Auto	Oto
 12 horas (a.m./p.m.)	12 saat (öö/ös)
 Formato de hora	Saat biçimi
-Se aplicará al reiniciar StradaOS	StradaOS yeniden başlatılınca uygulanır
+Se aplicará al reiniciar MiniLauncher	MiniLauncher yeniden başlatılınca uygulanır
 Rojo	Kırmızı
 Naranja	Turuncu
 Amarillo	Sarı
@@ -76,7 +76,7 @@ Azul	Mavi
 Morado	Mor
 Rosa	Pembe
 Plata	Gümüş
-Bienvenido a StradaOS	StradaOS'a hoş geldiniz
+Bienvenido a MiniLauncher	MiniLauncher'a hoş geldiniz
 Vamos a dejar el launcher a tu gusto: tu nombre, tu vehículo, el color y la foto. Toma menos de un minuto y lo puedes cambiar después en el engranaje ⚙.	Başlatıcıyı size göre ayarlayalım: adınız, aracınız, renk ve fotoğraf. Bir dakikadan kısa sürer ve sonra dişli ⚙ simgesinden değiştirebilirsiniz.
 Empezar	Başla
 ¿Cómo te llamas?	Adınız nedir?
@@ -214,7 +214,7 @@ Audio Bluetooth	Bluetooth sesi
 Volver al Bluetooth al desconectar Android Auto	Android Auto bağlantısı kesilince Bluetooth'a dön
 Al quitar el cable, abre un instante la app de música Bluetooth para que el sonido siga por Bluetooth	Kablo çıkarıldığında sesin Bluetooth üzerinden devam etmesi için Bluetooth müzik uygulamasını bir an açar
 Escuchar el Bluetooth	Bluetooth'u dinle
-En esta pantalla, toca ▶ en el inicio: StradaOS pasa el sonido a Bluetooth (por ejemplo, si venías de la radio)	Bu ekranda ana ekrandaki ▶ simgesine dokunun: StradaOS sesi Bluetooth'a geçirir (örneğin radyodan geliyorsanız)
+En esta pantalla, toca ▶ en el inicio: MiniLauncher pasa el sonido a Bluetooth (por ejemplo, si venías de la radio)	Bu ekranda ana ekrandaki ▶ simgesine dokunun: MiniLauncher sesi Bluetooth'a geçirir (örneğin radyodan geliyorsanız)
 Pasar a Bluetooth al dar play en el celular (en prueba)	Telefonda oynat'a basınca Bluetooth'a geç (deneme)
 Abre un instante «Audio Bluetooth» y vuelve. En algunas pantallas no detecta el play del celular	«Bluetooth sesi»ni bir an açar ve geri döner. Bazı ekranlarda telefondan gelen oynat'ı algılamaz
 Probar ahora	Şimdi dene
@@ -271,7 +271,7 @@ Si la pantalla lo trae	Ekranda varsa
 no detectado	algılanmadı
 Pantalla con CarPlay o adaptador USB	CarPlay'li ekran veya USB adaptör
 Mapa con internet seguro (TLS 1.2)	Güvenli internete sahip harita (TLS 1.2)
-Android 4.1+ (StradaOS lo activa)	Android 4.1+ (StradaOS etkinleştirir)
+Android 4.1+ (MiniLauncher lo activa)	Android 4.1+ (MiniLauncher etkinleştirir)
 en Android 4.x solo algunos servidores de mapas responden	Android 4.x'te yalnızca bazı harita sunucuları yanıt verir
 Instalar actualizaciones desde la app	Güncellemeleri uygulamadan kur
 pide permiso «Instalar apps desconocidas»	«Bilinmeyen uygulamaları yükle» izni ister
@@ -283,7 +283,7 @@ Gratis y de código abierto. Una nueva vida para las pantallas Android del carro
 Versión	Sürüm
 Android de la pantalla	Ekranın Android sürümü
 Real: {} · ver qué funciona aquí	Gerçek: {} · burada nelerin çalıştığını gör
-Cierres inesperados o bloqueos de StradaOS en esta pantalla	Bu ekranda StradaOS'un beklenmedik kapanmaları veya kilitlenmeleri
+Cierres inesperados o bloqueos de MiniLauncher en esta pantalla	Bu ekranda MiniLauncher'un beklenmedik kapanmaları veya kilitlenmeleri
 Sin fallos	Çökme yok
 Ver	Gör
 Actualizaciones	Güncellemeler
@@ -292,9 +292,9 @@ Las actualizaciones llegan por esa app	Güncellemeler o uygulama üzerinden geli
 Avisar también de versiones en GitHub	GitHub'daki sürümleri de bildir
 Comprobar actualizaciones automáticamente	Güncellemeleri otomatik denetle
 Opcional: las descargas de GitHub no pasan por la revisión de la tienda	İsteğe bağlı: GitHub indirmeleri mağaza denetiminden geçmez
-Al abrir StradaOS con internet, una vez al día	StradaOS internetle açıldığında, günde bir kez
+Al abrir MiniLauncher con internet, una vez al día	MiniLauncher internetle açıldığında, günde bir kez
 Actualizaciones desde GitHub	GitHub'dan güncellemeler
-Instalaste StradaOS desde {}. Si activas esto, StradaOS revisará una vez al día las versiones publicadas en github.com/{} y te ofrecerá descargarlas desde ahí.\n\nEsas descargas no pasan por la revisión de la tienda. Puede que GitHub tenga una versión un poco antes que la tienda.	StradaOS'u {} üzerinden kurdunuz. Bunu açarsanız StradaOS günde bir kez github.com/{} adresinde yayımlanan sürümleri denetler ve oradan indirmeyi önerir.\n\nBu indirmeler mağaza denetiminden geçmez. GitHub'da bir sürüm mağazadan biraz önce olabilir.
+Instalaste MiniLauncher desde {}. Si activas esto, MiniLauncher revisará una vez al día las versiones publicadas en github.com/{} y te ofrecerá descargarlas desde ahí.\n\nEsas descargas no pasan por la revisión de la tienda. Puede que GitHub tenga una versión un poco antes que la tienda.	MiniLauncher'u {} üzerinden kurdunuz. Bunu açarsanız MiniLauncher günde bir kez github.com/{} adresinde yayımlanan sürümleri denetler ve oradan indirmeyi önerir.\n\nBu indirmeler mağaza denetiminden geçmez. GitHub'da bir sürüm mağazadan biraz önce olabilir.
 Activar	Aç
 Canal de actualizaciones	Güncelleme kanalı
 Buscar actualizaciones	Güncellemeleri denetle
@@ -302,17 +302,17 @@ Aún no se ha comprobado	Henüz denetlenmedi
 Última comprobación: {}	Son denetim: {}
 Comunidad	Topluluk
 Dar una estrella en GitHub	GitHub'da yıldız ver
-Ayuda a que más personas encuentren StradaOS	Daha fazla kişinin StradaOS'u bulmasına yardımcı olur
+Ayuda a que más personas encuentren MiniLauncher	Daha fazla kişinin MiniLauncher'u bulmasına yardımcı olur
 Dar una estrella ⭐	Yıldız ver ⭐
 Abre el repositorio y toca «Star». ¡Gracias!	Depoyu açın ve «Star»a dokunun. Teşekkürler!
 Donar	Bağış yap
-Si StradaOS revivió tu pantalla, invítame un café	StradaOS ekranınızı hayata döndürdüyse bana bir kahve ısmarlayın
+Si MiniLauncher revivió tu pantalla, invítame un café	MiniLauncher ekranınızı hayata döndürdüyse bana bir kahve ısmarlayın
 Apoya el proyecto ☕	Projeyi destekle ☕
-StradaOS es gratis. Las donaciones ayudan a mantenerlo y a probarlo en más pantallas.	StradaOS ücretsizdir. Bağışlar onu sürdürmeye ve daha fazla ekranda test etmeye yardımcı olur.
+MiniLauncher es gratis. Las donaciones ayudan a mantenerlo y a probarlo en más pantallas.	MiniLauncher ücretsizdir. Bağışlar onu sürdürmeye ve daha fazla ekranda test etmeye yardımcı olur.
 Reportar un problema o sugerir algo	Sorun bildir veya öneri sun
 Crea un «issue» en GitHub (adjunta el diagnóstico)	GitHub'da bir «issue» oluşturun (teşhisi ekleyin)
 Reportar un problema	Sorun bildir
-Cuenta tu modelo de pantalla y su versión de Android. Puedes adjuntar la carpeta StradaDiag (Sistema → Exportar diagnóstico).	Ekran modelinizi ve Android sürümünü yazın. StradaDiag klasörünü ekleyebilirsiniz (Sistem → Teşhisi dışa aktar).
+Cuenta tu modelo de pantalla y su versión de Android. Puedes adjuntar la carpeta MiniLauncherDiag (Sistema → Exportar diagnóstico).	Ekran modelinizi ve Android sürümünü yazın. MiniLauncherDiag klasörünü ekleyebilirsiniz (Sistem → Teşhisi dışa aktar).
 Código fuente	Kaynak kodu
 Licencia GPL-3.0	GPL-3.0 lisansı
 Créditos y licencias	Katkılar ve lisanslar
@@ -336,7 +336,7 @@ error de red	ağ hatası
 tu tienda de apps	uygulama mağazanız
 Tienes la {} · nueva: {}	Sizde {} var · yeni: {}
 Mejoras y correcciones.	İyileştirmeler ve düzeltmeler.
-Nueva versión de StradaOS	Yeni StradaOS sürümü
+Nueva versión de MiniLauncher	Yeni MiniLauncher sürümü
 Tienes la {} · en GitHub: {}\nActualiza desde {} cuando llegue. Descargar de GitHub omite la revisión de la tienda.	Sizde {} var · GitHub'da: {}\nGeldiğinde {} üzerinden güncelleyin. GitHub'dan indirmek mağaza denetimini atlar.
 Ver en GitHub	GitHub'da gör
 Descarga desde GitHub:	GitHub'dan indir:
@@ -344,13 +344,13 @@ Descargar e instalar	İndir ve kur
 Descarga la nueva versión desde:	Yeni sürümü şuradan indirin:
 Omitir esta versión	Bu sürümü atla
 Más tarde	Daha sonra
-Descargando StradaOS {}…	StradaOS {} indiriliyor…
+Descargando MiniLauncher {}…	MiniLauncher {} indiriliyor…
 Descárgala desde tu celular	Telefonunuzdan indirin
 Esta pantalla no pudo descargar el archivo. Escanea el código, descarga el APK y pásalo por USB.	Bu ekran dosyayı indiremedi. Kodu tarayın, APK'yı indirin ve USB ile aktarın.
-¿Disfrutando StradaOS?	StradaOS'u beğendiniz mi?
-Si te gusta usar StradaOS, dale una estrella en GitHub. Y si revivió tu pantalla, considera invitarme un café ☕	StradaOS'u kullanmayı seviyorsanız GitHub'da bir yıldız verin. Ekranınızı hayata döndürdüyse bir kahve ısmarlamayı düşünün ☕
+¿Disfrutando MiniLauncher?	MiniLauncher'u beğendiniz mi?
+Si te gusta usar MiniLauncher, dale una estrella en GitHub. Y si revivió tu pantalla, considera invitarme un café ☕	MiniLauncher'u kullanmayı seviyorsanız GitHub'da bir yıldız verin. Ekranınızı hayata döndürdüyse bir kahve ısmarlamayı düşünün ☕
 Dar una estrella	Yıldız ver
-StradaOS es gratis. Las donaciones ayudan a mantenerlo.	StradaOS ücretsizdir. Bağışlar onu sürdürmeye yardımcı olur.
+MiniLauncher es gratis. Las donaciones ayudan a mantenerlo.	MiniLauncher ücretsizdir. Bağışlar onu sürdürmeye yardımcı olur.
 Escanéalo con la cámara de tu celular o entra a:	Telefonunuzun kamerasıyla tarayın veya şuraya gidin:
 Abrir aquí	Burada aç
 No hay navegador disponible	Kullanılabilir tarayıcı yok
@@ -373,7 +373,7 @@ Conexión: {}. Cámbiala dejando presionado el botón.	Bağlantı: {}. Düğmeyi
 el navegador	tarayıcı
 «{}» necesita un Android más nuevo que el de esta pantalla. Abro el navegador de fábrica.	«{}» bu ekrandakinden daha yeni bir Android gerektiriyor. Fabrika tarayıcısını açıyorum.
 No encontré un navegador. Déjalo presionado para elegir uno.	Tarayıcı bulunamadı. Birini seçmek için basılı tutun.
-Permite «Instalar apps desconocidas» para StradaOS y vuelve a tocar.	StradaOS için «Bilinmeyen uygulamaları yükle»ye izin verin ve yeniden dokunun.
+Permite «Instalar apps desconocidas» para MiniLauncher y vuelve a tocar.	MiniLauncher için «Bilinmeyen uygulamaları yükle»ye izin verin ve yeniden dokunun.
 Activa «Orígenes desconocidos» y vuelve a tocar.	«Bilinmeyen kaynaklar»ı açın ve yeniden dokunun.
 No se pudo preparar {}	{} hazırlanamadı
 No se pudo abrir el instalador para {}	{} için yükleyici açılamadı
@@ -389,30 +389,30 @@ Tormenta	Fırtına
 Mapa en vivo apagado	Canlı harita kapalı
 Rendimiento	Performans
 Apágalo si la pantalla va lenta: queda un mapa de adorno y el velocímetro sigue funcionando	Ekran yavaşsa kapatın: süs amaçlı bir harita kalır ve hız göstergesi çalışmaya devam eder
-StradaOS aún no es tu pantalla de inicio	StradaOS henüz ana ekranınız değil
-Por eso al encender el carro o al tocar Inicio aparece el menú de fábrica.\n\nToca «Fijar ahora», elige StradaOS y luego «Siempre».	Bu yüzden arabayı çalıştırınca veya Ana ekran'a dokununca fabrika menüsü görünür.\n\n«Şimdi ayarla»ya dokunun, StradaOS'u seçin ve ardından «Her zaman»ı seçin.
+MiniLauncher aún no es tu pantalla de inicio	MiniLauncher henüz ana ekranınız değil
+Por eso al encender el carro o al tocar Inicio aparece el menú de fábrica.\n\nToca «Fijar ahora», elige MiniLauncher y luego «Siempre».	Bu yüzden arabayı çalıştırınca veya Ana ekran'a dokununca fabrika menüsü görünür.\n\n«Şimdi ayarla»ya dokunun, MiniLauncher'u seçin ve ardından «Her zaman»ı seçin.
 Fijar ahora	Şimdi ayarla
 Ahora no	Şimdi değil
 No volver a preguntar	Bir daha sorma
-Elige StradaOS y toca «Siempre»	StradaOS'u seçin ve «Her zaman»a dokunun
-Listo: StradaOS es tu pantalla de inicio	Tamam: StradaOS artık ana ekranınız
-Fijar StradaOS a mano	StradaOS'u elle ayarla
-Algunas pantallas no muestran la lista para elegir. Prueba así:\n\n1. Toca el botón Inicio (la casita) de la pantalla. Si pregunta qué app usar, elige StradaOS → Siempre.\n2. Si no pregunta: en los ajustes de la pantalla busca Aplicaciones → Aplicaciones predeterminadas → Pantalla de inicio (o «App de inicio») y elige StradaOS.\n3. Con Android 10 o más nuevo, no lo elijas desde el modo fábrica de la pantalla («Launcher», «Interfaz» o «UI»): en algunas marcas eso deja las demás apps sin poder abrirse. En Android 4 a 9 sí puedes usar esa opción.\n\nSi tu pantalla siempre vuelve a su menú de fábrica al encender, activa «Abrir StradaOS al encender» en Ajustes → Sistema.	Bazı ekranlar seçim listesini göstermez. Şöyle deneyin:\n\n1. Ekranın Ana ekran düğmesine (ev simgesi) dokunun. Hangi uygulamanın kullanılacağını sorarsa StradaOS → Her zaman seçin.\n2. Sormuyorsa: ekranın ayarlarında Uygulamalar → Varsayılan uygulamalar → Ana ekran (veya «Ana uygulama») bölümünü bulun ve StradaOS'u seçin.\n3. Android 10 veya daha yenide, ekranın fabrika modundan («Launcher», «Arayüz» veya «UI») seçmeyin: bazı markalarda bu, diğer uygulamaların açılamamasına yol açar. Android 4 ile 9 arasında bu seçeneği kullanabilirsiniz.\n\nEkranınız açılışta her zaman fabrika menüsüne dönüyorsa Ayarlar → Sistem bölümünde «StradaOS'u açılışta aç»ı etkinleştirin.
+Elige MiniLauncher y toca «Siempre»	MiniLauncher'u seçin ve «Her zaman»a dokunun
+Listo: MiniLauncher es tu pantalla de inicio	Tamam: MiniLauncher artık ana ekranınız
+Fijar MiniLauncher a mano	MiniLauncher'u elle ayarla
+Algunas pantallas no muestran la lista para elegir. Prueba así:\n\n1. Toca el botón Inicio (la casita) de la pantalla. Si pregunta qué app usar, elige MiniLauncher → Siempre.\n2. Si no pregunta: en los ajustes de la pantalla busca Aplicaciones → Aplicaciones predeterminadas → Pantalla de inicio (o «App de inicio») y elige MiniLauncher.\n3. Con Android 10 o más nuevo, no lo elijas desde el modo fábrica de la pantalla («Launcher», «Interfaz» o «UI»): en algunas marcas eso deja las demás apps sin poder abrirse. En Android 4 a 9 sí puedes usar esa opción.\n\nSi tu pantalla siempre vuelve a su menú de fábrica al encender, activa «Abrir MiniLauncher al encender» en Ajustes → Sistema.	Bazı ekranlar seçim listesini göstermez. Şöyle deneyin:\n\n1. Ekranın Ana ekran düğmesine (ev simgesi) dokunun. Hangi uygulamanın kullanılacağını sorarsa MiniLauncher → Her zaman seçin.\n2. Sormuyorsa: ekranın ayarlarında Uygulamalar → Varsayılan uygulamalar → Ana ekran (veya «Ana uygulama») bölümünü bulun ve MiniLauncher'u seçin.\n3. Android 10 veya daha yenide, ekranın fabrika modundan («Launcher», «Arayüz» veya «UI») seçmeyin: bazı markalarda bu, diğer uygulamaların açılamamasına yol açar. Android 4 ile 9 arasında bu seçeneği kullanabilirsiniz.\n\nEkranınız açılışta her zaman fabrika menüsüne dönüyorsa Ayarlar → Sistem bölümünde «MiniLauncher'u açılışta aç»ı etkinleştirin.
 Pantalla de inicio	Ana ekran
 La que aparece al encender y al tocar Inicio	Açılışta ve Ana ekran'a dokununca görünen ekran
-StradaOS ✓	StradaOS ✓
+MiniLauncher ✓	MiniLauncher ✓
 Otra · toca para cambiar	Başka · değiştirmek için dokunun
-Abrir StradaOS al encender	StradaOS'u açılışta aç
+Abrir MiniLauncher al encender	MiniLauncher'u açılışta aç
 Para pantallas que siempre arrancan en su menú de fábrica (Android 4 a 9)	Her zaman fabrika menüsünde başlayan ekranlar için (Android 4-9)
 ¿La música Bluetooth se corta o no aparece?	Bluetooth müziği kesiliyor veya görünmüyor mu?
 Qué hacer en cada caso	Her durumda ne yapmalı
-• Se corta al salir de la app Bluetooth: sal con el botón Inicio (la casita), no con Atrás. Atrás cierra la app de fábrica y con ella la música.\n\n• No suena hasta abrir la app Bluetooth: activa «Abrir la app de música Bluetooth al conectar el celular» (aquí mismo). Abre la app un instante y vuelve al inicio.\n\n• La canción no aparece en el inicio (Android 5 o más nuevo): activa «Música de cualquier app» arriba y dale acceso a notificaciones a StradaOS.\n\n• Revisa en Ajustes → Accesos y apps que «Música Bluetooth» sea la app Bluetooth de tu pantalla.	• Bluetooth uygulamasından çıkınca kesiliyor: Geri yerine Ana ekran düğmesiyle (ev simgesi) çıkın. Geri, fabrika uygulamasını ve onunla birlikte müziği kapatır.\n\n• Bluetooth uygulamasını açana kadar ses çıkmıyor: «Telefon bağlanınca Bluetooth müzik uygulamasını aç»ı (tam burada) etkinleştirin. Uygulamayı bir an açar ve ana ekrana döner.\n\n• Şarkı ana ekranda görünmüyor (Android 5 veya daha yeni): yukarıdaki «Herhangi bir uygulamadan müzik»i etkinleştirin ve StradaOS'a bildirim erişimi verin.\n\n• Ayarlar → Kısayollar ve uygulamalar bölümünde «Bluetooth müziği»nin ekranınızın Bluetooth uygulaması olduğunu kontrol edin.
+• Se corta al salir de la app Bluetooth: sal con el botón Inicio (la casita), no con Atrás. Atrás cierra la app de fábrica y con ella la música.\n\n• No suena hasta abrir la app Bluetooth: activa «Abrir la app de música Bluetooth al conectar el celular» (aquí mismo). Abre la app un instante y vuelve al inicio.\n\n• La canción no aparece en el inicio (Android 5 o más nuevo): activa «Música de cualquier app» arriba y dale acceso a notificaciones a MiniLauncher.\n\n• Revisa en Ajustes → Accesos y apps que «Música Bluetooth» sea la app Bluetooth de tu pantalla.	• Bluetooth uygulamasından çıkınca kesiliyor: Geri yerine Ana ekran düğmesiyle (ev simgesi) çıkın. Geri, fabrika uygulamasını ve onunla birlikte müziği kapatır.\n\n• Bluetooth uygulamasını açana kadar ses çıkmıyor: «Telefon bağlanınca Bluetooth müzik uygulamasını aç»ı (tam burada) etkinleştirin. Uygulamayı bir an açar ve ana ekrana döner.\n\n• Şarkı ana ekranda görünmüyor (Android 5 veya daha yeni): yukarıdaki «Herhangi bir uygulamadan müzik»i etkinleştirin ve MiniLauncher'a bildirim erişimi verin.\n\n• Ayarlar → Kısayollar ve uygulamalar bölümünde «Bluetooth müziği»nin ekranınızın Bluetooth uygulaması olduğunu kontrol edin.
 Sin permiso	İzin yok
 GPS apagado	GPS kapalı
 Unidades	Birimler
 Automático: mph en EE. UU. y Reino Unido	Otomatik: ABD ve Birleşik Krallık'ta mph
 Permisos → Ubicación → Permitir	İzinler → Konum → İzin ver
-Activa la ubicación para StradaOS en los ajustes de la pantalla	Ekranın ayarlarında StradaOS için konumu açın
+Activa la ubicación para MiniLauncher en los ajustes de la pantalla	Ekranın ayarlarında MiniLauncher için konumu açın
 Activa la ubicación (GPS)	Konumu (GPS) aç
 Activa la ubicación (GPS) en los ajustes de la pantalla	Ekranın ayarlarında konumu (GPS) açın
 Sin permiso de ubicación · toca aquí	Konum izni yok · buraya dokunun
@@ -435,7 +435,7 @@ Corregir el kilometraje actual	Geçerli kilometreyi düzelt
 Cambiar cada cuánto se hace	Ne sıklıkla yapıldığını değiştir
 Desactivar el recordatorio	Hatırlatıcıyı kapat
 Recordatorio de cambio de aceite	Yağ değişimi hatırlatıcısı
-StradaOS no puede leer el kilometraje del tablero del carro. Escríbelo una vez y StradaOS le irá sumando lo que recorras con el GPS, para avisarte cuando toque el cambio.\n\nDe vez en cuando puedes corregirlo con el valor real del tablero.	StradaOS arabanın gösterge panelindeki kilometreyi okuyamaz. Bir kez girin; StradaOS GPS ile kat ettiğiniz mesafeyi ekleyerek değişim zamanı geldiğinde sizi uyarır.\n\nAra sıra gösterge panelindeki gerçek değerle düzeltebilirsiniz.
+MiniLauncher no puede leer el kilometraje del tablero del carro. Escríbelo una vez y MiniLauncher le irá sumando lo que recorras con el GPS, para avisarte cuando toque el cambio.\n\nDe vez en cuando puedes corregirlo con el valor real del tablero.	MiniLauncher arabanın gösterge panelindeki kilometreyi okuyamaz. Bir kez girin; MiniLauncher GPS ile kat ettiğiniz mesafeyi ekleyerek değişim zamanı geldiğinde sizi uyarır.\n\nAra sıra gösterge panelindeki gerçek değerle düzeltebilirsiniz.
 ¿A cuántos {} fue el último cambio de aceite?	Son yağ değişimi kaç {}de yapıldı?
 Kilometraje actual del tablero	Gösterge panelindeki geçerli kilometre
 ¿Cada cuántos {} cambias el aceite?	Yağı kaç {}de bir değiştiriyorsunuz?
@@ -455,7 +455,7 @@ El mapa apunta	Harita yönü
 Según tu dirección: gira con el carro mientras te mueves	Gidiş yönünüze göre: sürerken arabayla birlikte döner
 Norte arriba	Kuzey yukarı
 Según tu dirección	Gidiş yönü
-# 2.13: aceite (último cambio, unidad) y apps ocultas del cajón
+# aceite (último cambio, unidad) y apps ocultas del cajón
 Último cambio	Son değişim
 Corregir el último cambio	Son değişimi düzelt
 ¿Tu tablero marca kilómetros o millas?	Gösterge paneliniz kilometre mi mil mi gösteriyor?
@@ -477,24 +477,24 @@ Buscar app	Uygulama ara
 Apps ocultas en el cajón	Çekmecede gizlenen uygulamalar
 Se muestran todas las apps	Tüm uygulamalar gösteriliyor
 Apps ocultas: {}	Gizli uygulamalar: {}
-# 2.14: desinstalar desde el cajón
+# desinstalar desde el cajón
 Desinstalar	Kaldır
-# 2.14: salir de StradaOS (issue #9)
-Salir de StradaOS	StradaOS'tan çık
+# salir de MiniLauncher (issue #9)
+Salir de MiniLauncher	MiniLauncher'tan çık
 Abrir el launcher de fábrica	Fabrika başlatıcısını aç
-Sale de StradaOS sin desinstalarlo	StradaOS'u kaldırmadan ondan çıkar
-Desactivar StradaOS	StradaOS'u devre dışı bırak
-Si la pantalla quedó atrapada en StradaOS: se apaga solo, sin ventanas de Android	Ekran StradaOS'ta kilitli kaldıysa: Android pencereleri olmadan kendini kapatır
-Desinstalar StradaOS	StradaOS'u kaldır
+Sale de MiniLauncher sin desinstalarlo	MiniLauncher'u kaldırmadan ondan çıkar
+Desactivar MiniLauncher	MiniLauncher'u devre dışı bırak
+Si la pantalla quedó atrapada en MiniLauncher: se apaga solo, sin ventanas de Android	Ekran MiniLauncher'ta kilitli kaldıysa: Android pencereleri olmadan kendini kapatır
+Desinstalar MiniLauncher	MiniLauncher'u kaldır
 Android pide confirmar	Android onay ister
 No encontré otra pantalla de inicio en este equipo	Bu cihazda başka bir ana ekran bulamadım
 ¿Cuál es el launcher de fábrica?	Hangisi fabrika başlatıcısı?
 No se pudo abrir	Açılamadı
-No encontré otra pantalla de inicio: StradaOS no se puede desactivar en este equipo	Başka bir ana ekran bulamadım: StradaOS bu cihazda devre dışı bırakılamaz
-¿Desactivar StradaOS?	StradaOS devre dışı bırakılsın mı?
-StradaOS deja de ser la pantalla de inicio, ya no se abre al encender y vuelve el launcher de fábrica. No pide confirmaciones de Android, así que sirve aunque la pantalla haya quedado atrapada.\n\nPara volver a usarlo después: desinstálalo desde los ajustes de la pantalla e instálalo de nuevo.	StradaOS artık ana ekran olmaz, açılışta açılmaz ve fabrika başlatıcısı geri gelir. Android onayı istemez, bu yüzden ekran kilitli kalsa bile işe yarar.\n\nDaha sonra yeniden kullanmak için: ekranın ayarlarından kaldırın ve tekrar kurun.
+No encontré otra pantalla de inicio: MiniLauncher no se puede desactivar en este equipo	Başka bir ana ekran bulamadım: MiniLauncher bu cihazda devre dışı bırakılamaz
+¿Desactivar MiniLauncher?	MiniLauncher devre dışı bırakılsın mı?
+MiniLauncher deja de ser la pantalla de inicio, ya no se abre al encender y vuelve el launcher de fábrica. No pide confirmaciones de Android, así que sirve aunque la pantalla haya quedado atrapada.\n\nPara volver a usarlo después: desinstálalo desde los ajustes de la pantalla e instálalo de nuevo.	MiniLauncher artık ana ekran olmaz, açılışta açılmaz ve fabrika başlatıcısı geri gelir. Android onayı istemez, bu yüzden ekran kilitli kalsa bile işe yarar.\n\nDaha sonra yeniden kullanmak için: ekranın ayarlarından kaldırın ve tekrar kurun.
 Desactivar	Devre dışı bırak
-# 2.15: diseño del inicio
+# diseño del inicio
 Diseño del inicio	Ana ekran düzeni
 Reproductor de música	Müzik oynatıcı
 Ponlo del lado del conductor para tenerlo a la mano	Elinizin altında olsun diye sürücü tarafına koyun
@@ -556,7 +556,7 @@ Pausar	Duraklat
 Continuar	Devam et
 Cancelar descarga	İndirmeyi iptal et
 Descarga cancelada	İndirme iptal edildi
-Este mapa lo descargó StradaOS. Puedes dejar de usarlo o borrarlo para liberar espacio.	Bu haritayı StradaOS indirdi. Alan açmak için kullanmayı bırakabilir veya silebilirsin.
+Este mapa lo descargó MiniLauncher. Puedes dejar de usarlo o borrarlo para liberar espacio.	Bu haritayı MiniLauncher indirdi. Alan açmak için kullanmayı bırakabilir veya silebilirsin.
 Puedes dejar de usar este mapa (el archivo no se borra).	Bu haritayı kullanmayı bırakabilirsin (dosya silinmez).
 Dejar de usarlo	Kullanmayı bırak
 Borrar el archivo	Dosyayı sil
@@ -578,7 +578,7 @@ se cortó la descarga	indirme kesildi
 Sin señal GPS · mapa sin conexión	GPS sinyali yok • çevrimdışı harita
 Sin señal GPS ni internet	GPS sinyali yok veya internet yok
 Sin señal GPS · última posición	GPS sinyali yok • son konum
-# 2.17: tema por horario o del sistema, íconos de Wi-Fi y Bluetooth, barra, diagnóstico del mapa
+# tema por horario o del sistema, íconos de Wi-Fi y Bluetooth, barra, diagnóstico del mapa
 Auto: por horario. Sistema: sigue el modo oscuro de la pantalla (algunas lo cambian al encender las luces)	Otomatik: zamanlamaya göre. Sistem: ekranın koyu modunu izler (bazıları farları açınca değiştirir)
 Oscuro desde	Koyu mod başlangıcı
 Claro desde	Açık mod başlangıcı
@@ -609,7 +609,7 @@ apagado	kapalı
 encendida	açık
 apagada	kapalı
 Última señal: {}	Son sinyal: {}
-ninguna desde que abrió StradaOS	StradaOS açıldığından beri yok
+ninguna desde que abrió MiniLauncher	MiniLauncher açıldığından beri yok
 hace {} s	{} sn önce
 hace {} min	{} dk önce
 Buscando desde hace {} min	{} dk'dır arıyor
@@ -645,7 +645,7 @@ Tema según el modo oscuro del sistema	Sistemin koyu modunu izleyen tema
 Pantallas que lo cambian (p. ej. con las luces)	Onu değiştiren ekranlar (ör. farlarla)
 el sistema está en modo oscuro	sistem koyu modda
 el sistema está en modo claro	sistem açık modda
-# 2.18: botones de conexión, clima detallado, ocultar velocidad/aceite/reproductor, botón del navegador, foto tal cual
+# botones de conexión, clima detallado, ocultar velocidad/aceite/reproductor, botón del navegador, foto tal cual
 Cargando…	Yükleniyor…
 Esperando la ubicación…	Konum bekleniyor…
 Máx {} · Mín {}	En yüksek {} · En düşük {}
@@ -688,7 +688,7 @@ Usar la foto original, con fondo	Orijinal fotoğrafı arka planıyla kullan
 Quitar el fondo	Arka planı kaldır
 No se detectó un fondo liso: se usa la foto tal cual	Düz bir arka plan bulunamadı: fotoğraf olduğu gibi kullanılır
 Se usa tal cual; si quieres, le puedes quitar el fondo	Olduğu gibi kullanılır; isterseniz arka planını kaldırabilirsiniz
-# 2.19: cantidad y tamaño de los botones, íconos de apps, packs de íconos, barra oculta, tamaño de la letra
+# cantidad y tamaño de los botones, íconos de apps, packs de íconos, barra oculta, tamaño de la letra
 Cantidad de botones	Düğme sayısı
 «Apps» siempre queda al final	«Apps» her zaman sonda kalır
 Tamaño de los íconos	Simge boyutu
@@ -707,7 +707,7 @@ Lateral: los botones van al costado y todo se ve más grande en pantallas bajas 
 Oculta	Gizli
 Tamaño de la letra	Yazı boyutu
 Para leer mejor de lejos o que quepa más	Uzaktan daha iyi okumak veya daha fazlasını sığdırmak için
-# 2.20: velocímetro analógico, velocímetro sobre el mapa, mantenimientos a medida
+# velocímetro analógico, velocímetro sobre el mapa, mantenimientos a medida
 Velocímetro	Hız göstergesi
 En la tarjeta del vehículo. Toma el color de acento	Araç kartında. Vurgu rengini alır
 Digital	Dijital
@@ -740,7 +740,7 @@ Lo que llegue primero	Önce hangisi gelirse
 ¿A cuántos {} fue la última vez?	Son sefer kaç {}de yapıldı?
 ¿Cuándo fue la última vez?	Son sefer ne zaman yapıldı?
 Kilometraje del tablero	Gösterge paneli kilometresi
-StradaOS no puede leer el kilometraje del carro. Escríbelo una vez y StradaOS le suma lo que recorras con el GPS.	StradaOS arabanın kilometresini okuyamaz. Bir kez yazın, StradaOS GPS ile gittiğiniz mesafeyi ekler.
+MiniLauncher no puede leer el kilometraje del carro. Escríbelo una vez y MiniLauncher le suma lo que recorras con el GPS.	MiniLauncher arabanın kilometresini okuyamaz. Bir kez yazın, MiniLauncher GPS ile gittiğiniz mesafeyi ekler.
 Escribirlo	Yaz
 Última vez	Son sefer
 Cambiar cada cuánto	Sıklığı değiştir
@@ -765,7 +765,7 @@ cada {} semanas	her {} haftada bir
 {} meses	{} ay
 {} día	{} gün
 {} días	{} gün
-# 2.20: Ajustes reordenados, sección Mantenimientos, íconos, velocímetro del mapa
+# Ajustes reordenados, sección Mantenimientos, íconos, velocímetro del mapa
 Mantenimientos	Bakımlar
 Barra de apps	Uygulama çubuğu
 Tarjetas	Kartlar
@@ -774,7 +774,7 @@ Diseño de la barra	Çubuk düzeni
 Botones (déjalos presionados en el inicio para cambiarlos)	Düğmeler (değiştirmek için ana ekranda basılı tutun)
 Texto	Metin
 Kilometraje	Kilometre
-Escríbelo una vez y StradaOS le suma lo que recorras con el GPS	Bir kez yazın, StradaOS GPS ile gittiğiniz mesafeyi ekler
+Escríbelo una vez y MiniLauncher le suma lo que recorras con el GPS	Bir kez yazın, MiniLauncher GPS ile gittiğiniz mesafeyi ekler
 Avisa cuando toca el cambio	Değişim zamanı gelince uyarır
 En el inicio	Ana ekranda
 Mantenimiento en el inicio	Ana ekranda bakım

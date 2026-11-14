@@ -1,6 +1,6 @@
 name: Mapa sin conexión (emulador)
 
-# Manual: instala StradaOS Prueba, copia colombia.map (mapsforge) al emulador, corta el internet y toma capturas
+# Manual: instala MiniLauncher Prueba, copia colombia.map (mapsforge) al emulador, corta el internet y toma capturas
 # del mapa dibujado desde el archivo en Android 4.1 y Android 11. Quedan en las ramas «mapa-emulador-<api>».
 on:
   workflow_dispatch:
@@ -20,8 +20,8 @@ jobs:
           - { api: 30, arch: x86_64 }
     steps:
       - uses: actions/checkout@v4
-      - name: Descargar StradaOS Prueba
-        run: curl -fsSL --retry 5 -o prueba.apk "https://github.com/${GITHUB_REPOSITORY}/releases/download/prueba/StradaOS-prueba.apk"
+      - name: Descargar MiniLauncher Prueba
+        run: curl -fsSL --retry 5 -o prueba.apk "https://github.com/${GITHUB_REPOSITORY}/releases/download/prueba/MiniLauncher-prueba.apk"
       - name: Mapa de Colombia (con caché)
         id: cache
         uses: actions/cache@v4

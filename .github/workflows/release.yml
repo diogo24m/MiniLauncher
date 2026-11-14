@@ -2,7 +2,7 @@ name: Publicar versión
 
 # Se ejecuta cuando cambia versionName en app/build.gradle (rama main) o al subir una etiqueta vX.Y.Z.
 # Si esa versión aún no tiene Release: compila el APK firmado, crea la etiqueta y el Release con las
-# notas de changelogs/X.Y.Z.md y actualiza update.json (lo que StradaOS consulta para avisar).
+# notas de changelogs/X.Y.Z.md y actualiza update.json (lo que MiniLauncher consulta para avisar).
 on:
   push:
     branches: [ main ]
@@ -51,7 +51,7 @@ jobs:
             echo "::error::Falta el secreto KEYSTORE_BASE64 (Settings → Secrets and variables → Actions)."; exit 1
           fi
           echo "$KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/release.jks"
-          echo "STRADAOS_KEYSTORE=$RUNNER_TEMP/release.jks" >> "$GITHUB_ENV"
+          echo "MINILAUNCHER_KEYSTORE=$RUNNER_TEMP/release.jks" >> "$GITHUB_ENV"
 
       - name: Comprobar que la versión coincide con la etiqueta
         if: steps.check.outputs.skip != 'true'
@@ -63,9 +63,9 @@ jobs:
       - name: Compilar APK firmado
         if: steps.check.outputs.skip != 'true'
         env:
-          STRADAOS_KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
-          STRADAOS_KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
-          STRADAOS_KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+          MINILAUNCHER_KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          MINILAUNCHER_KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          MINILAUNCHER_KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
         run: ./gradlew --no-daemon assembleRelease
 
       - name: Notas de la versión
@@ -76,7 +76,7 @@ jobs:
           {
             echo ""
             echo "---"
-            echo "**Cómo instalar:** descarga \`StradaOS-$VERSION.apk\`, cópialo a una memoria USB, pásalo a la memoria interna de la pantalla e instálalo. Guía completa: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY#-instalación"
+            echo "**Cómo instalar:** descarga \`MiniLauncher-$VERSION.apk\`, cópialo a una memoria USB, pásalo a la memoria interna de la pantalla e instálalo. Guía completa: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY#-instalación"
           } >> "$RUNNER_TEMP/notes.md"
 
       - name: Crear el Release
@@ -85,9 +85,9 @@ jobs:
         with:
           tag_name: ${{ env.TAG }}
           target_commitish: ${{ github.sha }}
-          name: StradaOS ${{ env.VERSION }}
+          name: MiniLauncher ${{ env.VERSION }}
           body_path: ${{ runner.temp }}/notes.md
-          files: app/build/outputs/apk/release/StradaOS-*.apk
+          files: app/build/outputs/apk/release/MiniLauncher-*.apk
 
       - name: Actualizar update.json (aviso dentro de la app)
         if: steps.check.outputs.skip != 'true'
@@ -95,10 +95,10 @@ jobs:
           REPO_URL="https://github.com/${GITHUB_REPOSITORY}"
           jq -n --arg v "$VERSION" --rawfile n "changelogs/$VERSION.md" \
                 --arg url "$REPO_URL/releases/tag/$TAG" \
-                --arg apk "$REPO_URL/releases/download/$TAG/StradaOS-$VERSION.apk" \
+                --arg apk "$REPO_URL/releases/download/$TAG/MiniLauncher-$VERSION.apk" \
                 --arg donate "$(jq -r '.donate_url // empty' update.json 2>/dev/null)" \
                 '{version:$v, notes:$n, url:$url, apk:$apk} + (if $donate != "" then {donate_url:$donate} else {} end)' > "$RUNNER_TEMP/update.json" \
-            || jq -n --arg v "$VERSION" --arg url "$REPO_URL/releases/tag/$TAG" --arg apk "$REPO_URL/releases/download/$TAG/StradaOS-$VERSION.apk" \
+            || jq -n --arg v "$VERSION" --arg url "$REPO_URL/releases/tag/$TAG" --arg apk "$REPO_URL/releases/download/$TAG/MiniLauncher-$VERSION.apk" \
                 '{version:$v, notes:"", url:$url, apk:$apk}' > "$RUNNER_TEMP/update.json"
           git fetch origin main
           git checkout -B main origin/main

@@ -9,7 +9,7 @@ on:
     inputs:
       versiones:
         description: 'Versiones a probar (separadas por espacio; «prueba» = Release prueba)'
-        default: '2.12.0 2.11.1 prueba'
+        default: '0.1.0 prueba'
 
 permissions:
   contents: read
@@ -31,9 +31,9 @@ jobs:
           mkdir -p apks
           for v in ${{ inputs.versiones }}; do
             if [ "$v" = prueba ]; then
-              curl -fsSL -o apks/StradaOS-prueba.apk "https://github.com/${GITHUB_REPOSITORY}/releases/download/prueba/StradaOS-prueba.apk"
+              curl -fsSL -o apks/MiniLauncher-prueba.apk "https://github.com/${GITHUB_REPOSITORY}/releases/download/prueba/MiniLauncher-prueba.apk"
             else
-              curl -fsSL -o "apks/StradaOS-$v.apk" "https://github.com/${GITHUB_REPOSITORY}/releases/download/v$v/StradaOS-$v.apk"
+              curl -fsSL -o "apks/MiniLauncher-$v.apk" "https://github.com/${GITHUB_REPOSITORY}/releases/download/v$v/MiniLauncher-$v.apk"
             fi
           done
           ls -l apks
