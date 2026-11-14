@@ -1,1 +1,1 @@
-Primera versión de MiniLauncher, fork de StradaOS 2.20.1: datos CAN/SPD del BMW MINI, velocidad SPD con GPS de reserva, selector Bluetooth/Reproductor, controles ADB, identidad MINI, portugués de Portugal y texto del 85 al 150%.
+Primera versión de MiniLauncher, fork de StradaOS 2.20.1: datos CAN/SPD del BMW MINI, velocidad SPD con GPS de reserva, selector Bluetooth/Reproductor, controles ADB, identidad MINI, portugués de Portugal y texto del 85 al 150%. La manutención SPD comparte avisos, aplazamiento y confirmación local.

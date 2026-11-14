@@ -900,3 +900,21 @@ Android no permitió el cambio. Usa las opciones de desarrollador o concede el p
 Para usar estos interruptores sin root, conecta un ordenador con ADB y ejecuta una vez:	Para usar estes interruptores sem root, liga um computador com ADB e executa uma vez:
 El permiso permite cambiar la depuración USB y, desde Android 11, la depuración por Wi-Fi. En Android 4 a 10, Wi-Fi requiere root y depuración USB; al apagar cualquiera se desactivan ambas. Usa una red de confianza.	A permissão permite alterar a depuração USB e, a partir do Android 11, a depuração por Wi-Fi. No Android 4 a 10, o Wi-Fi requer root e depuração USB; ao desativar qualquer uma, ambas são desativadas. Usa uma rede de confiança.
 Si no tienes este permiso, MiniLauncher intenta usar root al tocar un interruptor. El emparejamiento y la autorización de ordenadores se gestionan en Android.	Sem esta permissão, o MiniLauncher tenta usar root ao tocar num interruptor. O emparelhamento e a autorização de computadores são geridos pelo Android.
+Mantenimiento del carro (SPD)	Manutenção do carro (SPD)
+Recordatorio desactivado	Lembrete desativado
+Hecho; esperando la próxima revisión del carro	Concluído; a aguardar a próxima manutenção indicada pelo carro
+Sin fecha ni distancia para avisar	Sem data nem distância para gerar um aviso
+Recordatorio pospuesto	Lembrete adiado
+Recordatorio activo	Lembrete ativo
+Sin recordatorios activos	Sem lembretes ativos
+Desactivar recordatorio	Desativar lembrete
+Activar recordatorio	Ativar lembrete
+Volver a avisar	Voltar a avisar
+Marcado como hecho. El próximo aviso seguirá los datos del carro.	Marcado como concluído. O próximo aviso seguirá os dados do carro.
+Aviso pospuesto durante 7 días	Aviso adiado durante 7 dias
+Aviso pospuesto: {} o 7 días, lo que ocurra primero	Aviso adiado: {} ou 7 dias, o que acontecer primeiro
+Los datos simulados no generan avisos ni modifican tus recordatorios	Os dados simulados não geram avisos nem alteram os teus lembretes
+Recordatorio de mantenimiento	Lembrete de manutenção
+Recordatorio de inspección del vehículo	Lembrete de inspeção do veículo
+Recordatorio de líquido de frenos	Lembrete do líquido dos travões
+Recordatorio	Lembrete

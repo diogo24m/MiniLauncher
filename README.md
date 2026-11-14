@@ -16,7 +16,7 @@ Los datos CAN/SPD del BMW MINI, la prioridad SPD con GPS de reserva en el veloc�
 
 ## Funciones
 
-- **Vehículo:** foto personalizable, que se usa tal cual (corrige la orientación de las fotos del celular) o con el fondo quitado, y recordatorio de cambio de aceite. En centrales SPD con perfil CAN «BMW MINI», lectura de combustible, autonomía, consumo, voltaje de la batería, puertas, kilometraje, neumáticos y mantenimientos. [Compatibilidad y documentación técnica](docs/carro/README.md).
+- **Vehículo:** foto personalizable, que se usa tal cual (corrige la orientación de las fotos del celular) o con el fondo quitado, y recordatorio de cambio de aceite. En centrales SPD con perfil CAN «BMW MINI», lectura de combustible, autonomía, consumo, voltaje de la batería, puertas, kilometraje, neumáticos y mantenimientos. Los servicios SPD se gestionan en Mantenimientos, cada uno con su interruptor y sus datos debajo, con avisos por fecha/distancia, aplazamiento y confirmación local. [Compatibilidad y documentación técnica](docs/carro/README.md).
 - **Velocímetro y mantenimiento:** conserva los modos digital, analógico y mixto de StradaOS 2.20.1, el velocímetro sobre el mapa y los recordatorios por distancia, días, semanas o meses. Los datos SPD conviven con estos modos; el velocímetro prioriza la velocidad SPD y usa el GPS cuando la lectura no está disponible o deja de actualizarse.
 - **Mapas:** posición y rumbo por GPS, orientación al norte o según la marcha, caché y mapas sin conexión en formato `.map`.
 - **Música:** selector Bluetooth/Reproductor, canción, carátula y controles para la entrada elegida, incluidas las sesiones de Android Auto. Solicita acceso a notificaciones para leer las sesiones y carga las carátulas que la app facilita mediante URI.

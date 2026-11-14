@@ -9,6 +9,9 @@ import android.widget.TextView;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.List;
 import java.util.Map;
 
 /** Verificações das funcionalidades do MiniLauncher. Executar num emulador sem SPD. */
@@ -63,7 +66,7 @@ public class LauncherIntegrationTest extends ActivityInstrumentationTestCase2<Ma
         onUi(new Runnable() { public void run() {
             call("showSettings", int.class, Main.C_VEHICLE);
             assertTrue(((Map<?, ?>) field("carViews")).size() > 10);
-            assertNotNull(field("carMaintenance"));
+            assertNull(field("carMaintenance"));
             call("showSettings", int.class, Main.C_SYS);
             call("refreshDebuggingSettings");
             assertEquals(Main.C_SYS, ((Integer) field("settingsCat")).intValue());
@@ -138,6 +141,226 @@ public class LauncherIntegrationTest extends ActivityInstrumentationTestCase2<Ma
             prefs.edit().putString("theme", "auto").putInt("dark_start", 0).putInt("dark_end", 0).commit();
             call("applyTheme");
             assertTrue(Main.LIGHT); // Intervalos iguais desativam o período escuro, mesmo durante a noite.
+        }});
+    }
+
+    public void testSpdMaintenanceAppearsInSettingsAndUsesSharedBadge() {
+        onUi(new Runnable() { public void run() {
+            final int year = Calendar.getInstance().get(Calendar.YEAR) + 2;
+            final Vehicle real = new Vehicle();
+            real.services = Arrays.asList(new Vehicle.Service(1, year, 4, 18000, true),
+                    new Vehicle.Service(2, year + 2, 4, 42000, true), new Vehicle.Service(3, year, 4, null, true));
+            withCar(real, new Runnable() { public void run() {
+                prefs.edit().putBoolean("oil_on", true).putFloat("oil_last_km", 0).putFloat("oil_interval_km", 100)
+                        .putString("maint", "[{\"t\":\"air\",\"km\":15000,\"lkm\":4567}]").commit();
+                call("rebuild");
+                assertTrue((Boolean) call("spdOilAvailable"));
+                assertFalse((Boolean) call("oilAlert")); // não duplica o aviso manual de óleo
+                List<?> tasks = (List<?>) call("maint");
+                assertEquals(4, tasks.size());
+                call("saveMaint", List.class, tasks);
+                try { assertEquals(1, new org.json.JSONArray(prefs.getString("maint", "")).length()); }
+                catch (Exception e) { throw new AssertionError(e); }
+                call("showSettings", int.class, Main.C_MAINT);
+                assertNotNull(field("carMaintenance"));
+                assertSingleOilSection();
+                assertTrue(((Map<?, ?>) field("carViews")).isEmpty());
+                List<?> rows = maintenanceRows();
+                assertEquals(3, rows.size());
+                Object oilRow = rows.get(0);
+                real.services = Arrays.asList(new Vehicle.Service(1, year, 4, 0, true), real.services.get(1), real.services.get(2));
+                call("refreshCarViews");
+                assertSame(oilRow, rows.get(0));
+                assertEquals("0 km", ((TextView) maintenanceField(0, "distance")).getText().toString());
+                assertEquals(I18n.t("¡Ya toca!"), ((TextView) maintenanceField(0, "reminder")).getText().toString());
+                call("closeSettings"); call("updateOilBadge");
+                assertEquals(I18n.t("Aceite del motor"), ((TextView) field("oilLblTv")).getText().toString());
+                assertEquals(I18n.t("¡Ya toca!"), ((TextView) field("oilValTv")).getText().toString());
+                assertEquals(View.GONE, ((View) field("oilBarBg")).getVisibility());
+            }});
+        }});
+    }
+
+    public void testSpdMaintenanceAlertSnoozesAndCompletesWithoutChangingCar() {
+        onUi(new Runnable() { public void run() {
+            final Vehicle real = new Vehicle(); real.services = Arrays.asList(new Vehicle.Service(1, null, null, 0, true));
+            withCar(real, new Runnable() { public void run() {
+                boolean oldMaint = (Boolean) field("maintLater"), oldOil = (Boolean) field("oilLater");
+                try {
+                    setMainField("maintLater", false); setMainField("oilLater", false);
+                    assertTrue((Boolean) call("maintAlert"));
+                    android.app.Dialog alert = (android.app.Dialog) field("oilDlg"); assertTrue(alert.isShowing()); alert.dismiss();
+                    org.json.JSONObject task = (org.json.JSONObject) call("spdTask", int.class, 1);
+                    call("snoozeSpdTask", org.json.JSONObject.class, task);
+                    assertFalse((Boolean) call("maintAlert"));
+                    SpdMaintenance.rearm(1, prefs);
+                    call("completeSpdTask", org.json.JSONObject.class, task);
+                    assertFalse((Boolean) call("maintAlert"));
+                    assertEquals(Integer.valueOf(0), real.services.get(0).remainingKm);
+                    real.services = Arrays.asList(new Vehicle.Service(1, null, null, 18000, true));
+                    task = (org.json.JSONObject) call("spdTask", int.class, 1);
+                    assertTrue(SpdMaintenance.active(task));
+                    call("updateOilBadge");
+                    assertEquals("18\u00a0000 km".replace('\u00a0', ' '), ((TextView) field("oilValTv")).getText().toString().replace('\u00a0', ' '));
+                } finally {
+                    android.app.Dialog alert = (android.app.Dialog) field("oilDlg"); if (alert != null) alert.dismiss();
+                    setMainField("oilDlg", null); setMainField("maintLater", oldMaint); setMainField("oilLater", oldOil);
+                }
+            }});
+        }});
+    }
+
+    public void testDemoMaintenanceNeverGeneratesReminders() {
+        onUi(new Runnable() { public void run() {
+            assertNotNull(field("demoCar"));
+            prefs.edit().putBoolean(SpdMaintenance.key(1) + "done", true).putLong(SpdMaintenance.key(1) + "done_date", 1).commit();
+            call("showSettings", int.class, Main.C_MAINT);
+            assertSingleOilSection();
+            assertFalse(((View) maintenanceField(0, "toggleRow")).isEnabled());
+            assertTrue(prefs.getBoolean(SpdMaintenance.key(1) + "done", false));
+            assertTrue(((List<?>) call("maint")).isEmpty());
+            assertFalse((Boolean) call("maintAlert"));
+            assertEquals("[]", prefs.getString("maint", "[]"));
+            Map<String, ?> saved = prefs.getAll();
+            android.app.AlertDialog overview = (android.app.AlertDialog) call("showMaintenanceDialog");
+            try {
+                View content = overview.getWindow().getDecorView();
+                assertEquals(1, countText(content, I18n.t("Cambio de aceite")));
+                assertTrue(containsText(content, I18n.t("Inspección del vehículo")));
+                assertTrue(containsText(content, I18n.t("Líquido de frenos")));
+                assertTrue(containsText(content, I18n.t("Datos simulados")));
+                java.util.ArrayList<View> oil = new java.util.ArrayList<View>();
+                content.findViewsWithText(oil, I18n.t("Cambio de aceite"), View.FIND_VIEWS_WITH_TEXT);
+                assertEquals(1, oil.size());
+                assertFalse(((View) oil.get(0).getParent().getParent()).performClick());
+                assertEquals(saved, prefs.getAll());
+            } finally { overview.dismiss(); }
+        }});
+    }
+
+    public void testMaintenanceDialogShowsAllServicesAndKeepsActionsLocal() {
+        onUi(new Runnable() { public void run() {
+            int year = Calendar.getInstance().get(Calendar.YEAR) + 2;
+            final Vehicle real = new Vehicle();
+            real.services = Arrays.asList(new Vehicle.Service(1, year, 4, 18000, true),
+                    new Vehicle.Service(2, year, 8, 42000, true), new Vehicle.Service(3, null, null, null, false));
+            withCar(real, new Runnable() { public void run() {
+                prefs.edit().putBoolean("oil_on", true).putBoolean(SpdMaintenance.key(2) + "enabled", false)
+                        .putString("maint", "[{\"n\":\"Filtro do ar\",\"km\":15000,\"lkm\":4567}]").commit();
+                Map<String, ?> saved = prefs.getAll();
+                android.app.AlertDialog overview = (android.app.AlertDialog) call("showMaintenanceDialog");
+                try {
+                    View content = overview.getWindow().getDecorView();
+                    assertEquals(1, countText(content, I18n.t("Cambio de aceite")));
+                    assertTrue(containsText(content, I18n.t("Inspección del vehículo")));
+                    assertTrue(containsText(content, I18n.t("Líquido de frenos")));
+                    assertTrue(containsText(content, "Filtro do ar"));
+                    assertTrue(containsText(content, I18n.t("Recordatorio desactivado")));
+                    assertTrue(containsText(content, I18n.t("No disponible")));
+                    assertEquals(saved, prefs.getAll());
+                } finally { overview.dismiss(); }
+                android.app.AlertDialog actions = (android.app.AlertDialog) call("spdTaskMenu", int.class, 2);
+                try {
+                    assertEquals(3, actions.getListView().getCount());
+                    actions.getListView().performItemClick(null, 0, actions.getListView().getItemIdAtPosition(0));
+                    assertTrue(prefs.getBoolean(SpdMaintenance.key(2) + "enabled", false));
+                    assertEquals(Integer.valueOf(42000), real.services.get(1).remainingKm);
+                } finally { actions.dismiss(); }
+            }});
+        }});
+    }
+
+    public void testMaintenanceTogglesKeepSpdDetailsBelowEachItem() {
+        onUi(new Runnable() { public void run() {
+            int year = Calendar.getInstance().get(Calendar.YEAR) + 2;
+            final Vehicle real = new Vehicle();
+            real.services = Arrays.asList(new Vehicle.Service(1, year, 4, 18000, true),
+                    new Vehicle.Service(2, year + 2, 4, 42000, true), new Vehicle.Service(3, year, 4, null, true));
+            withCar(real, new Runnable() { public void run() {
+                call("showSettings", int.class, Main.C_VEHICLE);
+                assertNull(field("carMaintenance"));
+                assertFalse(containsText((View) field("settingsScroll"), I18n.t("Aceite del motor")));
+                assertFalse(containsText((View) field("settingsScroll"), I18n.t("Mantenimientos")));
+                call("showSettings", int.class, Main.C_MAINT);
+                for (int i = 0; i < real.services.size(); i++) {
+                    int code = real.services.get(i).code;
+                    View toggle = (View) maintenanceField(i, "toggleRow");
+                    assertTrue(toggle.isEnabled());
+                    TextView date = (TextView) maintenanceField(i, "date");
+                    TextView distance = (TextView) maintenanceField(i, "distance");
+                    android.view.ViewGroup card = (android.view.ViewGroup) toggle.getParent();
+                    View details = (View) date.getParent().getParent().getParent();
+                    assertSame(card, details.getParent());
+                    assertEquals(card.indexOfChild(toggle) + 2, card.indexOfChild(details)); // divisor entre o cabeçalho e os dados
+                    String shownDate = date.getText().toString(), shownDistance = distance.getText().toString();
+                    toggle.performClick();
+                    assertFalse(prefs.getBoolean(SpdMaintenance.key(code) + "enabled", true));
+                    assertEquals(shownDate, ((TextView) maintenanceField(i, "date")).getText().toString());
+                    assertEquals(shownDistance, ((TextView) maintenanceField(i, "distance")).getText().toString());
+                    assertEquals(I18n.t("Recordatorio desactivado"), ((TextView) maintenanceField(i, "reminder")).getText().toString());
+                    ((View) maintenanceField(i, "toggleRow")).performClick();
+                    assertTrue(prefs.getBoolean(SpdMaintenance.key(code) + "enabled", false));
+                }
+                assertEquals(Integer.valueOf(18000), real.services.get(0).remainingKm);
+                assertEquals(Integer.valueOf(42000), real.services.get(1).remainingKm);
+                assertNull(real.services.get(2).remainingKm);
+            }});
+        }});
+    }
+
+    private Object maintenanceField(int index, String name) {
+        Object row = maintenanceRows().get(index);
+        return field("toggleRow".equals(name) ? row : field(row, "details"), name);
+    }
+
+    private List<?> maintenanceRows() { return (List<?>) field(field("carMaintenance"), "rows"); }
+
+    private static boolean containsText(View view, String text) {
+        return countText(view, text) > 0;
+    }
+
+    private static int countText(View view, String text) {
+        int count = view instanceof TextView && text.contentEquals(((TextView) view).getText()) ? 1 : 0;
+        if (view instanceof android.view.ViewGroup) {
+            android.view.ViewGroup group = (android.view.ViewGroup) view;
+            for (int i = 0; i < group.getChildCount(); i++) count += countText(group.getChildAt(i), text);
+        }
+        return count;
+    }
+
+    private void assertSingleOilSection() {
+        View settings = (View) field("settingsScroll");
+        assertEquals(1, countText(settings, I18n.t("Cambio de aceite").toUpperCase(I18n.loc)));
+        assertEquals(1, countText(settings, I18n.t("Recordatorio de cambio de aceite")));
+        assertFalse(containsText(settings, I18n.t("Aceite del motor")));
+    }
+
+    public void testMaintenanceSettingsSwitchToCarWhenSpdArrivesLater() {
+        onUi(new Runnable() { public void run() {
+            final Vehicle real = new Vehicle();
+            withCar(real, new Runnable() { public void run() {
+                prefs.edit().putBoolean("oil_on", true).putFloat("oil_last_km", 4000).putFloat("oil_interval_km", 7000).commit();
+                call("showSettings", int.class, Main.C_MAINT);
+                assertSingleOilSection();
+                assertTrue(containsText((View) field("settingsScroll"), I18n.t("Cada cuánto")));
+                real.services = Arrays.asList(new Vehicle.Service(1, null, null, null, false));
+                ((CarInfo.Listener) field("carListener")).onCarInfo();
+                assertSingleOilSection();
+                assertTrue(containsText((View) field("settingsScroll"), I18n.t("Cada cuánto")));
+                real.services = Arrays.asList(new Vehicle.Service(1, Calendar.getInstance().get(Calendar.YEAR) + 2, 4, 18000, true));
+                ((CarInfo.Listener) field("carListener")).onCarInfo();
+                assertSingleOilSection();
+                assertFalse(containsText((View) field("settingsScroll"), I18n.t("Cada cuánto")));
+                assertNotNull(field("carMaintenance"));
+                assertEquals("18 000 km", ((TextView) maintenanceField(0, "distance")).getText().toString().replace('\u00a0', ' '));
+                assertEquals(Main.C_MAINT, ((Integer) field("settingsCat")).intValue());
+                real.services = null;
+                ((CarInfo.Listener) field("carListener")).onCarInfo();
+                assertSingleOilSection();
+                assertTrue(containsText((View) field("settingsScroll"), I18n.t("Cada cuánto")));
+                assertEquals(4000f, prefs.getFloat("oil_last_km", -1), 0.001f);
+                assertEquals(7000f, prefs.getFloat("oil_interval_km", -1), 0.001f);
+            }});
         }});
     }
 
@@ -247,10 +470,17 @@ public class LauncherIntegrationTest extends ActivityInstrumentationTestCase2<Ma
     private void withCar(Vehicle vehicle, Runnable test) {
         CarInfo car = (CarInfo) field("car");
         Vehicle original = car.vehicle(); int state = car.state();
+        Object demo = field("demoCar");
         try {
+            setMainField("demoCar", null);
             setCarField("data", vehicle); setCarField("state", CarInfo.CONNECTED);
             test.run();
-        } finally { setCarField("data", original); setCarField("state", state); }
+        } finally { setCarField("data", original); setCarField("state", state); setMainField("demoCar", demo); }
+    }
+
+    private void setMainField(String name, Object value) {
+        try { Field f = Main.class.getDeclaredField(name); f.setAccessible(true); f.set(activity, value); }
+        catch (Exception e) { throw new AssertionError(e); }
     }
 
     private void onUi(final Runnable test) {
@@ -262,7 +492,11 @@ public class LauncherIntegrationTest extends ActivityInstrumentationTestCase2<Ma
     }
 
     private Object field(String name) {
-        try { Field f = Main.class.getDeclaredField(name); f.setAccessible(true); return f.get(activity); }
+        return field(activity, name);
+    }
+
+    private Object field(Object owner, String name) {
+        try { Field f = owner.getClass().getDeclaredField(name); f.setAccessible(true); return f.get(owner); }
         catch (Exception e) { throw new AssertionError(e); }
     }
 

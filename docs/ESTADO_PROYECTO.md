@@ -4,7 +4,7 @@
 
 As alterações do fork incluem CAN/SPD, telemetria e manutenção do BMW MINI, velocímetros com prioridade SPD e GPS de reserva, seletor de música Bluetooth/Reprodutor, controlos ADB, identidade MINI, português de Portugal e tamanho de texto de 85 a 150%.
 
-Os builds debug/release compilam e os 18 testes instrumentados passaram num emulador Android 11. As 14 evidências do carro mantêm os bytes e os hashes originais. A ligação e os comandos específicos da central, incluindo a escala da velocidade SPD em andamento, precisam de validação no equipamento.
+Os builds debug/release compilam e os 29 testes instrumentados passaram num emulador Android 11, incluindo os lembretes de manutenção SPD. As 14 evidências do carro mantêm os bytes e os hashes originais. A ligação e os comandos específicos da central, incluindo a escala da velocidade SPD em andamento, precisam de validação no equipamento.
 
 O lint executa com os diagnósticos de compatibilidade e permissões documentados em [MINILAUNCHER.md](MINILAUNCHER.md). Nesta máquina, o lint do AGP 8.7.3 não reconhece a plataforma adicional `android-37.0`; foi executado com uma vista local do SDK limitada à plataforma 35, sem alterar o SDK global.
 

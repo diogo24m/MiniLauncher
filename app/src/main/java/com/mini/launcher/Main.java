@@ -206,17 +206,24 @@ public class Main extends Activity {
     /** Textos de «Tu vehículo» que se actualizan solos mientras la página está abierta, con la clave de su valor. */
     private final Map<TextView, String> carViews = new HashMap<TextView, String>();
     private MaintenanceSection carMaintenance;
+    private List<Vehicle.Service> lastMaintenanceServices;
+    private long nextMaintenanceCheck;
     private final CarInfo.Listener carListener = new CarInfo.Listener() {
         public void onCarInfo() {
             updateCarData();
             syncOdo();
             refreshCarViews();
+            if (car.vehicle().services != lastMaintenanceServices) {
+                lastMaintenanceServices = car.vehicle().services;
+                updateOilBadge();
+                checkMaintenanceAlerts();
+            }
         }
     };
-    /** Mientras «Tu vehículo» está abierta: refresca los «hace X» aunque no lleguen datos nuevos. */
+    /** Refresca los datos y los recordatorios mientras sus páginas de Ajustes estén abiertas. */
     private final Runnable carTick = new Runnable() {
         public void run() {
-            if (carViews.isEmpty()) return;
+            if (carViews.isEmpty() && carMaintenance == null) return;
             refreshCarViews();
             h.postDelayed(this, 5000);
         }
@@ -682,7 +689,7 @@ public class Main extends Activity {
                     prefs.edit().putFloat("odo_base_km", 45100).putFloat("odo_gps_m", 0).putFloat("oil_snooze_km", 0).apply();
                     oilLater = false; rebuild(); oilAlert();
                 }
-                else if ("menu-aceite".equals(v)) oilMenu();
+                else if ("menu-aceite".equals(v)) showMaintenanceDialog();
                 else if ("demo-mant".equals(v)) {
                     long day = 86400000L, now2 = System.currentTimeMillis();
                     prefs.edit().putString("maint", "[{\"t\":\"air\",\"km\":15000,\"mo\":12,\"lkm\":31000,\"ld\":" + (now2 - 200 * day)
@@ -881,6 +888,11 @@ public class Main extends Activity {
             if (bt != null && bt.isConnected() && (++btPoll % 3 == 0 || curTitle == null)) bt.refresh();
             updatePlayIcon();
             updateStatusIcons();
+            if (SystemClock.elapsedRealtime() >= nextMaintenanceCheck) {
+                nextMaintenanceCheck = SystemClock.elapsedRealtime() + 60000;
+                updateOilBadge();
+                checkMaintenanceAlerts();
+            }
             if (++themeTick % 30 == 0) {
                 refreshTheme();
                 maybeWeather();
@@ -1034,7 +1046,7 @@ public class Main extends Activity {
             LinearLayout.LayoutParams olp = new LinearLayout.LayoutParams(-2, -2);
             olp.leftMargin = (int) (14 * s);
             row.addView(topOilTv, olp);
-            topOilTv.setOnClickListener(new View.OnClickListener() { public void onClick(View v) { badgeMenu(); } });
+            topOilTv.setOnClickListener(new View.OnClickListener() { public void onClick(View v) { showMaintenanceDialog(); } });
         }
         // La fecha cede espacio a la hora, la velocidad y el aceite cuando el texto es grande.
         top.addView(row, new LinearLayout.LayoutParams(0, -1, showCar ? 0.44f : 0.60f));
@@ -1509,7 +1521,7 @@ public class Main extends Activity {
         if (v != null && !text.contentEquals(v.getText())) v.setText(text);
     }
 
-    private boolean carDataAvailable() { return demoCar != null || car.available(); }
+    private boolean carDataAvailable() { return demoCar != null || car.available() || car.state() == CarInfo.CONNECTED; }
 
     private Vehicle displayCar() { return demoCar != null ? demoCar : car.vehicle(); }
 
@@ -1572,7 +1584,6 @@ public class Main extends Activity {
         summary.setLineSpacing((int) (4 * s), 1f);
         summary.setPadding(0, (int) (10 * s), 0, (int) (10 * s));
         data.addView(summary, new LinearLayout.LayoutParams(-1, -2));
-        new MaintenanceSection(body).update(vehicle.services);
         addSpdDiagnostics(body, vehicle, false);
         android.widget.ScrollView scroll = new android.widget.ScrollView(this);
         scroll.addView(body);
@@ -1675,7 +1686,7 @@ public class Main extends Activity {
         bar.addView(oilBar, new FrameLayout.LayoutParams(0, -1));
         col.addView(bar, new LinearLayout.LayoutParams(-1, (int) (4 * s)));
         place(box, col, 176 + ox, 44 + oy, 88 - ox, 58);
-        col.setOnClickListener(new View.OnClickListener() { public void onClick(View v) { badgeMenu(); } });
+        col.setOnClickListener(new View.OnClickListener() { public void onClick(View v) { showMaintenanceDialog(); } });
         updateOilBadge();
     }
 
@@ -1710,7 +1721,7 @@ public class Main extends Activity {
         blp.topMargin = (int) (2 * s);
         col.addView(bar, blp);
         place(box, col, x, y, w, h);
-        col.setOnClickListener(new View.OnClickListener() { public void onClick(View v) { badgeMenu(); } });
+        col.setOnClickListener(new View.OnClickListener() { public void onClick(View v) { showMaintenanceDialog(); } });
         updateOilBadge();
     }
 
@@ -1718,8 +1729,14 @@ public class Main extends Activity {
         startOdo();
         // con mantenimientos propios, el recuadro y la barra de arriba muestran el más próximo
         int ni = nearestMaint();
-        badgeTask = ni;
         if (ni >= 0) { showTaskBadge(ni); return; }
+        if (spdOilAvailable()) {
+            if (oilLblTv != null) { oilLblTv.setText(I18n.t("Mantenimiento")); oilIc.setImageBitmap(asset("ic/car_repair.png")); }
+            setTopIcon("car_repair");
+            if (topOilTv != null) { topOilTv.setText(I18n.t("Sin recordatorios activos")); topOilTv.setTextColor(MUTED); }
+            if (oilValTv != null) { oilValTv.setText(I18n.t("Configurar")); oilValTv.setTextColor(MUTED); oilBarBg.setVisibility(View.INVISIBLE); }
+            return;
+        }
         if (oilLblTv != null) { oilLblTv.setText(I18n.t("Aceite")); oilIc.setImageBitmap(asset("ic/water_drop.png")); }
         setTopIcon("water_drop");
         if (topOilTv != null) {
@@ -1755,8 +1772,87 @@ public class Main extends Activity {
         }});
     }
 
-    /** Toca el recuadro de aceite (o Ajustes → Tu vehículo). */
-    private void oilMenu() {
+    /** Resumen del recuadro de mantenimiento: todos los servicios, sin repetir el aceite manual y el SPD. */
+    private AlertDialog showMaintenanceDialog() {
+        float keep = s;
+        s = uiS;
+        try {
+            LinearLayout title = new LinearLayout(this);
+            title.setOrientation(LinearLayout.VERTICAL);
+            title.setPadding((int) (18 * s), (int) (14 * s), (int) (18 * s), (int) (6 * s));
+            title.addView(tv("Mantenimientos", 19, TEXT, true));
+            String note = demoCar != null ? I18n.t("Datos simulados") : carOdoLive() || prefs.contains("odo_base_km")
+                    ? I18n.t(carOdoLive() ? "Kilometraje" : "Kilometraje estimado") + ": "
+                        + (carOdoLive() ? "" : "≈ ") + fmtDist(odoKm()) : "";
+            if (note.length() > 0) {
+                TextView subtitle = tv(note, 12, SOFT, false);
+                subtitle.setSingleLine(false);
+                subtitle.setPadding(0, (int) (4 * s), 0, 0);
+                title.addView(subtitle);
+            }
+            LinearLayout body = new LinearLayout(this);
+            body.setOrientation(LinearLayout.VERTICAL);
+            body.setPadding((int) (18 * s), 0, (int) (18 * s), 0);
+            final AlertDialog dialog = new TB(this, dlg()).setCustomTitle(title).setView(maintenanceScroll(body))
+                    .setPositiveButton("Ajustes", new DialogInterface.OnClickListener() { public void onClick(DialogInterface d, int which) {
+                        showSettings(C_MAINT);
+                    }})
+                    .setNegativeButton("Cerrar", null).create();
+            List<Vehicle.Service> services = SpdMaintenance.displayServices(displayCar().services);
+            if (!SpdMaintenance.hasOilSchedule(services)) {
+                boolean distance = oilOn() && prefs.contains("odo_base_km");
+                float left = oilNextKm() - odoKm();
+                String state = !oilOn() ? "Desactivado" : !distance ? "Configurar" : Math.round(toUnit(left)) <= 0 ? "¡Ya toca!" : "Activado";
+                maintenanceSummary(body, "Cambio de aceite", "oil_barrel", "—", distance ? fmtDist(left) : "—", state, null,
+                        distance && left <= 0 ? RED : SOFT, new Runnable() { public void run() {
+                            dialog.dismiss(); manualOilMenu();
+                        }});
+            }
+            for (final Vehicle.Service service : services) {
+                final boolean demo = demoCar != null;
+                maintenanceSummary(body, maintenanceTitle(service), SpdMaintenance.icon(service.code),
+                        maintenanceDate(service), service.remainingKm != null ? fmtDist(service.remainingKm) : "—",
+                        service.ok ? "OK" : "No disponible", demo ? null : spdReminderStatus(SpdMaintenance.task(service, prefs)),
+                        service.ok ? maintenanceOkColor() : SOFT,
+                        demo ? null : new Runnable() { public void run() { dialog.dismiss(); spdTaskMenu(service.code); }});
+            }
+            List<org.json.JSONObject> tasks = maint();
+            for (int i = 0; i < tasks.size(); i++) {
+                final int idx = i;
+                org.json.JSONObject task = tasks.get(i);
+                if (SpdMaintenance.isSpd(task)) continue;
+                boolean distance = task.optDouble("km", 0) > 0 && prefs.contains("odo_base_km");
+                long due = taskDays(task) > 0 && task.optLong("ld", 0) > 0
+                        ? task.optLong("ld", 0) + Math.round(taskDays(task) * 86400000d) : 0;
+                boolean snoozed = SpdMaintenance.snoozed(task, odoKm(), prefs.contains("odo_base_km"), System.currentTimeMillis());
+                String state = snoozed ? "Recordatorio pospuesto" : taskFrac(task) <= 0 ? "¡Ya toca!" : "Recordatorio activo";
+                maintenanceSummary(body, taskName(task), taskIcon(task), due > 0 ? I18n.sdf("d MMM yyyy").format(new Date(due)) : "—",
+                        distance ? fmtDist((float) taskKmLeft(task)) : "—", state, null, !snoozed && taskFrac(task) <= 0 ? RED : SOFT,
+                        new Runnable() { public void run() { dialog.dismiss(); taskMenu(idx); }});
+            }
+            dialog.show();
+            int width = root.getWidth() > 0 ? root.getWidth() : getResources().getDisplayMetrics().widthPixels;
+            dialog.getWindow().setLayout(Math.min((int) (760 * s), width - (int) (32 * s)), -2);
+            return dialog;
+        } finally { s = keep; }
+    }
+
+    private android.widget.ScrollView maintenanceScroll(View body) {
+        int height = root.getHeight() > 0 ? root.getHeight() : getResources().getDisplayMetrics().heightPixels;
+        final int maxHeight = (int) (height * 0.58f);
+        android.widget.ScrollView scroll = new android.widget.ScrollView(this) {
+            @Override protected void onMeasure(int widthSpec, int heightSpec) {
+                int limit = View.MeasureSpec.getMode(heightSpec) == View.MeasureSpec.UNSPECIFIED ? maxHeight
+                        : Math.min(maxHeight, View.MeasureSpec.getSize(heightSpec));
+                super.onMeasure(widthSpec, View.MeasureSpec.makeMeasureSpec(limit, View.MeasureSpec.AT_MOST));
+            }
+        };
+        scroll.addView(body);
+        return scroll;
+    }
+
+    /** Detalle y acciones del aceite configurado a mano. */
+    private void manualOilMenu() {
         if (!oilOn()) { oilSetup(); return; }
         float left = oilNextKm() - odoKm();
         String head = (carOdoLive() ? I18n.t("Kilometraje") + ": " : I18n.t("Kilometraje estimado") + ": ≈ ") + fmtDist(odoKm()) + "\n"
@@ -1896,7 +1992,7 @@ public class Main extends Activity {
 
     private boolean oilAlert() {
         if (oilLater || (oilDlg != null && oilDlg.isShowing())) return false;
-        if (!oilOn() || !prefs.contains("odo_base_km")) return false;
+        if (spdOilAvailable() || !oilOn() || !prefs.contains("odo_base_km")) return false;
         float now = odoKm();
         if (now < oilNextKm() || now < prefs.getFloat("oil_snooze_km", 0)) return false;
         oilDlg = new TB(this, dlg())
@@ -1941,7 +2037,6 @@ public class Main extends Activity {
         "severe_cold", "thermostat", "settings", "autorenew", "tire_repair", "battery_charging_full", "ac_unit", "lightbulb",
         "local_gas_station", "local_car_wash", "cleaning_services", "handyman", "verified_user", "fact_check", "water_drop", "speed"};
     private static final double MONTH_MS = 30.44 * 86400000d;
-    private int badgeTask = -1;
     private static boolean maintLater;
 
     private List<org.json.JSONObject> maint() {
@@ -1950,12 +2045,13 @@ public class Main extends Activity {
             org.json.JSONArray a = new org.json.JSONArray(prefs.getString("maint", "[]"));
             for (int i = 0; i < a.length(); i++) out.add(a.getJSONObject(i));
         } catch (Throwable ignored) { }
+        out.addAll(SpdMaintenance.tasks(car != null ? car.vehicle() : null, prefs));
         return out;
     }
 
     private void saveMaint(List<org.json.JSONObject> l) {
         org.json.JSONArray a = new org.json.JSONArray();
-        for (org.json.JSONObject o : l) a.put(o);
+        for (org.json.JSONObject o : l) if (!SpdMaintenance.isSpd(o)) a.put(o);
         prefs.edit().putString("maint", a.toString()).apply();
         updateOilBadge();
     }
@@ -2003,7 +2099,7 @@ public class Main extends Activity {
 
     private String taskName(org.json.JSONObject o) {
         String n = o.optString("n", "");
-        if (n.length() > 0) return n;
+        if (n.length() > 0) return SpdMaintenance.isSpd(o) ? I18n.t(n) : n;
         String t = o.optString("t", "");
         for (String[] tp : MAINT_TEMPLATES) if (tp[0].equals(t)) return I18n.t(tp[1]);
         return I18n.t("Mantenimiento");
@@ -2058,6 +2154,7 @@ public class Main extends Activity {
 
     /** Qué tan cerca está (1 = recién hecho, 0 o menos = ya toca), por km o por fecha, lo que llegue primero. */
     private double taskFrac(org.json.JSONObject o) {
+        if (SpdMaintenance.isSpd(o)) return SpdMaintenance.fraction(o, System.currentTimeMillis());
         double f = 9;
         double km = o.optDouble("km", 0), days = taskDays(o);
         if (km > 0 && prefs.contains("odo_base_km")) f = Math.min(f, taskKmLeft(o) / km);
@@ -2066,6 +2163,12 @@ public class Main extends Activity {
     }
 
     private String taskLeftText(org.json.JSONObject o) {
+        if (SpdMaintenance.isSpd(o)) {
+            if (taskFrac(o) <= 0) return I18n.t("¡Ya toca!");
+            long due = o.optLong("due", 0);
+            if (SpdMaintenance.distanceFirst(o, System.currentTimeMillis())) return fmtDist((float) o.optDouble("left", 0));
+            return due > 0 ? I18n.sdf("MMM yyyy").format(new Date(due)) : "—";
+        }
         double km = o.optDouble("km", 0), days = taskDays(o);
         boolean byKm = km > 0 && prefs.contains("odo_base_km");
         boolean useKm = byKm && (days <= 0 || taskKmLeft(o) / km <= taskDaysLeft(o) / days);
@@ -2077,6 +2180,7 @@ public class Main extends Activity {
     }
 
     private String taskEvery(org.json.JSONObject o) {
+        if (SpdMaintenance.isSpd(o)) return spdScheduleText(o);
         double km = o.optDouble("km", 0);
         String a = km > 0 ? I18n.t("Cada " + fmtDist((float) km)) : "";
         long tn = taskTimeN(o);
@@ -2092,9 +2196,10 @@ public class Main extends Activity {
     private int nearestMaint() {
         List<org.json.JSONObject> l = maint();
         if (l.isEmpty()) return -1;
-        double best = oilOn() ? (oilNextKm() - odoKm()) / Math.max(1, prefs.getFloat("oil_interval_km", 5000)) : 99;
+        double best = oilOn() && !spdOilAvailable() ? (oilNextKm() - odoKm()) / Math.max(1, prefs.getFloat("oil_interval_km", 5000)) : 99;
         int bi = -1;
         for (int i = 0; i < l.size(); i++) {
+            if (SpdMaintenance.isSpd(l.get(i)) && !SpdMaintenance.active(l.get(i))) continue;
             double f = taskFrac(l.get(i));
             if (f < best) { best = f; bi = i; }
         }
@@ -2127,6 +2232,8 @@ public class Main extends Activity {
         oilIc.setImageBitmap(asset("ic/" + taskIcon(o) + ".png"));
         oilValTv.setText(left);
         oilValTv.setTextColor(warn ? RED : TEXT);
+        // SPD no informa del intervalo total: no inventar un porcentaje de vida del servicio.
+        if (SpdMaintenance.isSpd(o)) { oilBarBg.setVisibility(View.GONE); return; }
         oilBarBg.setVisibility(View.VISIBLE);
         final float used = (float) Math.max(0, Math.min(1, 1 - f));
         oilBarBg.post(new Runnable() { public void run() {
@@ -2137,12 +2244,6 @@ public class Main extends Activity {
         }});
     }
 
-    /** Toque en el recuadro del inicio: el aceite o el mantenimiento que se esté mostrando. */
-    private void badgeMenu() {
-        if (badgeTask >= 0 && badgeTask < maint().size()) taskMenu(badgeTask);
-        else oilMenu();
-    }
-
     /** Aviso en el inicio cuando toca una tarea. «Aún no»: otra vez en 100 km o en 7 días. */
     private boolean maintAlert() {
         if (maintLater || oilLater || (oilDlg != null && oilDlg.isShowing())) return false;
@@ -2150,14 +2251,18 @@ public class Main extends Activity {
         long now = System.currentTimeMillis();
         for (int i = 0; i < l.size(); i++) {
             final org.json.JSONObject o = l.get(i);
+            if (SpdMaintenance.isSpd(o) && !SpdMaintenance.active(o)) continue;
             if (taskFrac(o) > 0) continue;
-            if (o.optDouble("sz", 0) > odoKm() || o.optLong("sd", 0) > now) continue;
+            if (SpdMaintenance.snoozed(o, odoKm(), prefs.contains("odo_base_km"), now)) continue;
             final int idx = i;
             oilDlg = new TB(this, dlg())
                 .setTitle(I18n.t("Es hora de: " + taskName(o)))
                 .setMessage(I18n.t(taskEvery(o)) + "\n\n" + I18n.t("¿Ya lo hiciste?"))
-                .setPositiveButton("Ya lo hice", new DialogInterface.OnClickListener() { public void onClick(DialogInterface d, int w) { taskDone(idx, null); } })
+                .setPositiveButton("Ya lo hice", new DialogInterface.OnClickListener() { public void onClick(DialogInterface d, int w) {
+                    if (SpdMaintenance.isSpd(o)) completeSpdTask(o); else taskDone(idx, null);
+                } })
                 .setNegativeButton("Aún no", new DialogInterface.OnClickListener() { public void onClick(DialogInterface d, int w) {
+                    if (SpdMaintenance.isSpd(o)) { snoozeSpdTask(o); return; }
                     try {
                         List<org.json.JSONObject> l2 = maint();
                         org.json.JSONObject t = l2.get(idx);
@@ -2173,13 +2278,97 @@ public class Main extends Activity {
         return false;
     }
 
-    /** Ajustes → Tu vehículo → Otros mantenimientos. */
+    private void checkMaintenanceAlerts() {
+        if (!carUiActive || !hasWindowFocus() || settingsView != null || drawer != null
+                || !prefs.getBoolean("setup_done", false)) return;
+        if (!oilAlert()) maintAlert();
+    }
+
+    private boolean spdOilAvailable() {
+        return car != null && SpdMaintenance.hasOilSchedule(car.vehicle().services);
+    }
+
+    private org.json.JSONObject spdTask(int code) {
+        for (org.json.JSONObject task : maint())
+            if (SpdMaintenance.isSpd(task) && task.optInt("spd") == code) return task;
+        return null;
+    }
+
+    private String spdScheduleText(org.json.JSONObject task) {
+        long due = task.optLong("due", 0);
+        return I18n.t("Fecha prevista") + ": " + (due > 0 ? I18n.sdf("MMM yyyy").format(new Date(due)) : "—")
+                + "\n" + I18n.t("Distancia restante") + ": " + (task.has("left") ? fmtDist((float) task.optDouble("left", 0)) : "—");
+    }
+
+    private String spdReminderStatus(org.json.JSONObject task) {
+        if (!task.optBoolean("enabled", true)) return "Recordatorio desactivado";
+        if (task.optBoolean("done", false)) return "Hecho; esperando la próxima revisión del carro";
+        if (!SpdMaintenance.hasSchedule(task)) return "Sin fecha ni distancia para avisar";
+        if (SpdMaintenance.snoozed(task, odoKm(), prefs.contains("odo_base_km"), System.currentTimeMillis())) return "Recordatorio pospuesto";
+        return taskFrac(task) <= 0 ? "¡Ya toca!" : "Recordatorio activo";
+    }
+
+    private AlertDialog spdTaskMenu(final int code) {
+        final org.json.JSONObject task = spdTask(code);
+        if (task == null) return null;
+        float keep = s;
+        s = uiS;
+        try {
+            LinearLayout title = new LinearLayout(this);
+            title.setOrientation(LinearLayout.VERTICAL);
+            title.setPadding((int) (18 * s), (int) (8 * s), (int) (18 * s), 0);
+            long due = task.optLong("due", 0);
+            boolean ok = task.optBoolean("ok", false);
+            maintenanceSummary(title, code == SpdMaintenance.OIL ? "Cambio de aceite" : taskName(task), taskIcon(task),
+                    due > 0 ? I18n.sdf("MMM yyyy").format(new Date(due)) : "—", task.has("left") ? fmtDist((float) task.optDouble("left", 0)) : "—",
+                    ok ? "OK" : "No disponible", spdReminderStatus(task), ok ? maintenanceOkColor() : SOFT, null);
+            return new TB(this, dlg()).setCustomTitle(title)
+                .setItems(new String[]{I18n.t(task.optBoolean("enabled", true) ? "Desactivar recordatorio" : "Activar recordatorio"),
+                    I18n.t("Aún no"), I18n.t(task.optBoolean("done", false) ? "Volver a avisar" : "Ya lo hice")},
+                    new DialogInterface.OnClickListener() { public void onClick(DialogInterface d, int which) {
+                        if (which == 0) {
+                            setSpdReminderEnabled(code, !task.optBoolean("enabled", true));
+                        } else if (which == 1) snoozeSpdTask(task);
+                        else completeOrRearmSpdTask(task);
+                    }})
+                .setNegativeButton("Cerrar", null).show();
+        } finally { s = keep; }
+    }
+
+    private void setSpdReminderEnabled(int code, boolean enabled) {
+        prefs.edit().putBoolean(SpdMaintenance.key(code) + "enabled", enabled).apply();
+        refreshMaintenanceUi();
+    }
+
+    private void completeOrRearmSpdTask(org.json.JSONObject task) {
+        if (!task.optBoolean("done", false)) { completeSpdTask(task); return; }
+        SpdMaintenance.rearm(task.optInt("spd"), prefs);
+        refreshMaintenanceUi();
+    }
+
+    private void completeSpdTask(org.json.JSONObject task) {
+        SpdMaintenance.done(task, prefs);
+        toast("Marcado como hecho. El próximo aviso seguirá los datos del carro.");
+        refreshMaintenanceUi();
+    }
+
+    private void snoozeSpdTask(org.json.JSONObject task) {
+        SpdMaintenance.snooze(task, prefs, odoKm(), prefs.contains("odo_base_km"), useMph(), System.currentTimeMillis());
+        toast(!task.has("left") || !prefs.contains("odo_base_km") ? "Aviso pospuesto durante 7 días"
+                : I18n.t("Aviso pospuesto: {} o 7 días, lo que ocurra primero").replace("{}", fmtDist(useMph() ? 60 / 0.621371f : 100)));
+        refreshMaintenanceUi();
+    }
+
+    private void refreshMaintenanceUi() { updateOilBadge(); refreshCarViews(); }
+
+    /** Ajustes → Mantenimientos → Otros mantenimientos. */
     private void maintSection(LinearLayout body) {
         LinearLayout m = section(body, "Otros mantenimientos");
         List<org.json.JSONObject> l = maint();
         for (int i = 0; i < l.size(); i++) {
             final int idx = i;
             org.json.JSONObject o = l.get(i);
+            if (SpdMaintenance.isSpd(o)) continue;
             rowIc(m, taskIcon(o), taskName(o), taskEvery(o), taskLeftText(o), new Runnable() { public void run() { taskMenu(idx); } });
         }
         rowIc(m, "add_circle", "Agregar mantenimiento", "Filtros, bujías, frenos, correa, SOAT… Avisa por kilómetros, por tiempo o lo que llegue primero", null,
@@ -2303,6 +2492,7 @@ public class Main extends Activity {
         final List<org.json.JSONObject> l = maint();
         if (idx < 0 || idx >= l.size()) return;
         final org.json.JSONObject o = l.get(idx);
+        if (SpdMaintenance.isSpd(o)) { spdTaskMenu(o.optInt("spd")); return; }
         StringBuilder head = new StringBuilder(taskEvery(o));
         if (o.optDouble("km", 0) > 0) head.append("\n").append(I18n.t("Última vez")).append(": ").append(fmtDist((float) o.optDouble("lkm", 0)));
         if (taskDays(o) > 0 && o.optLong("ld", 0) > 0)
@@ -2360,6 +2550,7 @@ public class Main extends Activity {
         final List<org.json.JSONObject> l = maint();
         if (idx < 0 || idx >= l.size()) return;
         final org.json.JSONObject o = l.get(idx);
+        if (SpdMaintenance.isSpd(o)) { completeSpdTask(o); if (next != null) next.run(); return; }
         final Runnable save = new Runnable() { public void run() {
             try { o.put("ld", System.currentTimeMillis()); o.remove("sz"); o.remove("sd"); } catch (Throwable ignored) { }
             l.set(idx, o);
@@ -5117,7 +5308,7 @@ public class Main extends Activity {
         return card;
     }
 
-    private LinearLayout rowBase(LinearLayout card, String title, String sub) {
+    private LinearLayout rowContent(LinearLayout card) {
         if (card.getChildCount() > 0) {
             View d = new View(this);
             d.setBackgroundColor(BTN);
@@ -5126,6 +5317,12 @@ public class Main extends Activity {
         LinearLayout r = new LinearLayout(this);
         r.setGravity(Gravity.CENTER_VERTICAL);
         r.setPadding(0, (int) (12 * s), 0, (int) (12 * s));
+        card.addView(r, new LinearLayout.LayoutParams(-1, -2));
+        return r;
+    }
+
+    private LinearLayout rowBase(LinearLayout card, String title, String sub) {
+        LinearLayout r = rowContent(card);
         LinearLayout col = new LinearLayout(this);
         col.setOrientation(LinearLayout.VERTICAL);
         // separación con el control de la derecha: con letra grande el texto quedaba pegado a los botones
@@ -5140,7 +5337,6 @@ public class Main extends Activity {
             col.addView(st);
         }
         r.addView(col, new LinearLayout.LayoutParams(0, -2, 1f));
-        card.addView(r, new LinearLayout.LayoutParams(-1, -2));
         return r;
     }
 
@@ -5251,8 +5447,6 @@ public class Main extends Activity {
         }
         for (String[] field : CAR_FIELDS) carRow(c, field[0],
                 "tyres".equals(field[1]) ? "Presión en bar, en el orden que envía el carro" : null, field[1]);
-        carMaintenance = new MaintenanceSection(body);
-        carMaintenance.update(displayCar().services);
         addSpdDiagnostics(body, displayCar(), true);
     }
 
@@ -5307,7 +5501,7 @@ public class Main extends Activity {
     }
 
     private void refreshCarViews() {
-        if (carViews.isEmpty()) return;
+        if (carViews.isEmpty() && carMaintenance == null) return;
         Vehicle vehicle = displayCar();
         for (Map.Entry<TextView, String> field : carViews.entrySet())
             setIfChanged(field.getKey(), carValue(vehicle, field.getValue()));
@@ -5375,92 +5569,194 @@ public class Main extends Activity {
         return b.append(" bar").toString();
     }
 
-    /** La misma sección de mantenimiento en Ajustes (viva) y en el diagnóstico (lectura al abrir). */
+    /** Servicios SPD solo en Mantenimientos: una sección por servicio, con su interruptor y sus datos debajo. */
     private final class MaintenanceSection {
-        private final LinearLayout card;
+        private final LinearLayout container;
         private final List<MaintenanceRow> rows = new ArrayList<MaintenanceRow>();
         private final float scale = s;
+        private final boolean reminders;
 
-        MaintenanceSection(LinearLayout body) { card = section(body, "Mantenimiento"); }
+        MaintenanceSection(LinearLayout body, boolean reminders) {
+            this.reminders = reminders;
+            container = new LinearLayout(Main.this);
+            container.setOrientation(LinearLayout.VERTICAL);
+            body.addView(container, new LinearLayout.LayoutParams(-1, -2));
+        }
 
         void update(List<Vehicle.Service> items) {
             // Ajustes usa uiS; las actualizaciones llegan después de restaurar la escala del inicio.
             float keep = s;
             s = scale;
             try {
-                int count = items == null ? 0 : items.size();
-                if (count != rows.size() || card.getChildCount() == 0) {
-                    card.removeAllViews();
-                    rows.clear();
-                    if (count == 0) rowBase(card, "Sin datos de mantenimiento", null);
-                    for (int i = 0; i < count; i++) rows.add(new MaintenanceRow(card));
+                List<Vehicle.Service> services = SpdMaintenance.displayServices(items);
+                boolean hasOil = SpdMaintenance.hasOilSchedule(services);
+                int count = services.size();
+                boolean rebuild = count != rows.size() || container.getChildCount() == 0;
+                if (!rebuild) for (int i = 0; i < count; i++) {
+                    MaintenanceRow row = rows.get(i);
+                    if (row.code != services.get(i).code) { rebuild = true; break; }
+                    if (reminders) {
+                        org.json.JSONObject task = SpdMaintenance.task(services.get(i), prefs);
+                        if (row.enabled != task.optBoolean("enabled", true) || row.completed != task.optBoolean("done", false)) {
+                            rebuild = true; break;
+                        }
+                    }
                 }
-                for (int i = 0; i < count; i++) rows.get(i).update(items.get(i));
+                if (rebuild) {
+                    container.removeAllViews();
+                    rows.clear();
+                    if (!hasOil) manualOilSection(container);
+                    for (int i = 0; i < count; i++) rows.add(new MaintenanceRow(container, services.get(i), reminders));
+                }
+                for (int i = 0; i < count; i++) rows.get(i).update(services.get(i));
             } finally { s = keep; }
         }
     }
 
     private final class MaintenanceRow {
-        private final TextView name, status, date, distance;
-        private Vehicle.Service shown;
+        private final int code;
+        private final MaintenanceDetails details;
+        private final View toggleRow;
+        private final boolean enabled, completed;
 
-        MaintenanceRow(LinearLayout card) {
-            if (card.getChildCount() > 0) {
-                View divider = new View(Main.this);
-                divider.setBackgroundColor(BTN);
-                card.addView(divider, new LinearLayout.LayoutParams(-1, Math.max(1, (int) s)));
+        MaintenanceRow(LinearLayout body, Vehicle.Service service, final boolean reminders) {
+            code = service.code;
+            LinearLayout card = section(body, maintenanceTitle(service));
+            org.json.JSONObject task = reminders ? SpdMaintenance.task(service, prefs) : new org.json.JSONObject();
+            enabled = reminders && task.optBoolean("enabled", true);
+            completed = task.optBoolean("done", false);
+            String title = code == SpdMaintenance.OIL ? "Recordatorio de cambio de aceite"
+                    : code == SpdMaintenance.INSPECTION ? "Recordatorio de inspección del vehículo"
+                    : code == SpdMaintenance.BRAKE_FLUID ? "Recordatorio de líquido de frenos" : "Recordatorio de mantenimiento";
+            toggleRow = toggleState(card, title, "Se muestra al lado de la velocidad y avisa cuando toca", Boolean.valueOf(enabled),
+                    new IntCb() { public void on(int value) {
+                        if (!reminders) return;
+                        setSpdReminderEnabled(code, value == 1);
+                    }});
+            toggleRow.setContentDescription(I18n.t(service.label()) + " · " + I18n.t("Recordatorio") + ": " + I18n.t(enabled ? "Activado" : "Desactivado"));
+            if (!reminders) { toggleRow.setOnClickListener(null); toggleRow.setEnabled(false); toggleRow.setAlpha(0.6f); }
+            addIcon(card, 0, SpdMaintenance.icon(code));
+            LinearLayout content = rowContent(card);
+            content.setOrientation(LinearLayout.VERTICAL);
+            details = new MaintenanceDetails(false);
+            content.addView(details, new LinearLayout.LayoutParams(-1, -2));
+            if (enabled) {
+                LinearLayout actions = new LinearLayout(Main.this);
+                actions.setPadding(0, (int) (8 * s), 0, 0);
+                actions.addView(action(completed ? "Volver a avisar" : "Ya lo hice",
+                        new Runnable() { public void run() {
+                            org.json.JSONObject current = spdTask(code);
+                            if (current == null) return;
+                            completeOrRearmSpdTask(current);
+                        }}), new LinearLayout.LayoutParams(0, -2, 1f));
+                LinearLayout.LayoutParams laterLp = new LinearLayout.LayoutParams(0, -2, 1f);
+                laterLp.leftMargin = (int) (8 * getResources().getDisplayMetrics().density);
+                actions.addView(action("Aún no", new Runnable() { public void run() {
+                    org.json.JSONObject current = spdTask(code);
+                    if (current != null) snoozeSpdTask(current);
+                }}), laterLp);
+                content.addView(actions, new LinearLayout.LayoutParams(-1, -2));
             }
-            LinearLayout item = new LinearLayout(Main.this);
-            item.setOrientation(LinearLayout.VERTICAL);
-            item.setPadding(0, (int) (14 * s), 0, (int) (14 * s));
-            card.addView(item, new LinearLayout.LayoutParams(-1, -2));
-
-            LinearLayout header = new LinearLayout(Main.this);
-            header.setGravity(Gravity.CENTER_VERTICAL);
-            name = tv("", 16, TEXT, true);
-            name.setSingleLine(false);
-            name.setPadding(0, 0, (int) (12 * s), 0);
-            header.addView(name, new LinearLayout.LayoutParams(0, -2, 1f));
-            status = tv("", 11, TEXT, true);
-            status.setPadding((int) (9 * s), (int) (4 * s), (int) (9 * s), (int) (4 * s));
-            header.addView(status, new LinearLayout.LayoutParams(-2, -2));
-            item.addView(header, new LinearLayout.LayoutParams(-1, -2));
-
-            LinearLayout values = new LinearLayout(Main.this);
-            values.setPadding(0, (int) (12 * s), 0, 0);
-            date = metric(values, "Fecha prevista");
-            distance = metric(values, "Distancia restante");
-            item.addView(values, new LinearLayout.LayoutParams(-1, -2));
         }
 
-        private TextView metric(LinearLayout values, String label) {
-            LinearLayout column = new LinearLayout(Main.this);
-            column.setOrientation(LinearLayout.VERTICAL);
-            column.setPadding(0, 0, (int) (12 * s), 0);
-            TextView title = tv(label, 11, MUTED, false);
-            title.setSingleLine(false);
-            column.addView(title, new LinearLayout.LayoutParams(-1, -2));
-            TextView value = tv("—", 20, TEXT, true);
-            value.setPadding(0, (int) (4 * s), 0, 0);
-            column.addView(value, new LinearLayout.LayoutParams(-1, -2));
-            values.addView(column, new LinearLayout.LayoutParams(0, -2, 1f));
-            return value;
+        private TextView action(String label, final Runnable onClick) {
+            TextView button = tv(label, 13, SOFT, true);
+            button.setSingleLine(false);
+            button.setGravity(Gravity.CENTER);
+            button.setPadding((int) (8 * s), (int) (4 * s), (int) (8 * s), (int) (4 * s));
+            button.setMinimumHeight((int) (48 * getResources().getDisplayMetrics().density));
+            button.setBackground(round(BTN, 8));
+            button.setContentDescription(I18n.t(label));
+            button.setOnClickListener(new View.OnClickListener() { public void onClick(View view) { onClick.run(); } });
+            return button;
         }
 
         void update(Vehicle.Service service) {
-            if (shown == service) return;
-            setIfChanged(name, I18n.t(service.label()));
-            setIfChanged(date, maintenanceDate(service));
-            setIfChanged(distance, service.remainingKm != null ? fmtDist(service.remainingKm) : "—");
-            setIfChanged(status, I18n.t(service.ok ? "OK" : "No disponible"));
-            status.setContentDescription(I18n.t("Estado") + ": " + status.getText());
-            if (shown == null || shown.ok != service.ok) {
-                status.setTextColor(service.ok ? (LIGHT ? 0xFF176341 : 0xFF9AE6BC) : TEXT);
-                status.setBackground(round(service.ok ? (LIGHT ? 0xFFE0F2E8 : 0xFF173D2B) : BTN, 8));
-            }
-            shown = service;
+            details.update(maintenanceDate(service), service.remainingKm != null ? fmtDist(service.remainingKm) : "—",
+                    service.ok ? "OK" : "No disponible",
+                    demoCar != null ? "Datos simulados" : spdReminderStatus(SpdMaintenance.task(service, prefs)),
+                    service.ok ? maintenanceOkColor() : TEXT);
         }
     }
+
+    /** Las mismas tres columnas en Ajustes y en los diálogos; solo cambia la tipografía compacta. */
+    private final class MaintenanceDetails extends LinearLayout {
+        private final TextView date, distance, status, reminder;
+
+        MaintenanceDetails(boolean compact) {
+            super(Main.this);
+            setBaselineAligned(false);
+            int size = compact ? 14 : 15, labelColor = compact ? SOFT : MUTED;
+            date = metric("Fecha prevista", size, labelColor);
+            distance = metric("Distancia restante", size, labelColor);
+            status = metric("Estado", size, labelColor);
+            reminder = tv("", compact ? 11 : 12, SOFT, false);
+            reminder.setSingleLine(false);
+            reminder.setPadding(0, (int) (2 * s), 0, 0);
+            ((LinearLayout) status.getParent()).addView(reminder, new LinearLayout.LayoutParams(-1, -2));
+        }
+
+        private TextView metric(String label, int size, int labelColor) {
+            LinearLayout column = new LinearLayout(Main.this);
+            column.setOrientation(LinearLayout.VERTICAL);
+            column.setPadding(0, 0, (int) (8 * s), 0);
+            TextView title = tv(label, 11, labelColor, false);
+            title.setSingleLine(false);
+            column.addView(title, new LinearLayout.LayoutParams(-1, -2));
+            TextView value = tv("—", size, TEXT, true);
+            value.setSingleLine(false);
+            value.setPadding(0, (int) (2 * s), 0, 0);
+            column.addView(value, new LinearLayout.LayoutParams(-1, -2));
+            addView(column, new LinearLayout.LayoutParams(0, -2, 1f));
+            return value;
+        }
+
+        void update(String dateText, String distanceText, String state, String reminderText, int color) {
+            setIfChanged(date, dateText);
+            setIfChanged(distance, distanceText);
+            setIfChanged(status, I18n.t(state));
+            if (status.getCurrentTextColor() != color) status.setTextColor(color);
+            status.setContentDescription(I18n.t("Estado") + ": " + status.getText());
+            reminder.setVisibility(reminderText == null ? View.GONE : View.VISIBLE);
+            setIfChanged(reminder, reminderText == null ? "" : I18n.t(reminderText));
+            reminder.setContentDescription(I18n.t("Recordatorio") + ": " + reminder.getText());
+        }
+    }
+
+    private void maintenanceSummary(LinearLayout body, String name, String image, String date, String distance,
+                                    String state, String reminder, int color, final Runnable onClick) {
+        LinearLayout row = rowContent(body);
+        row.setOrientation(LinearLayout.VERTICAL);
+        row.setPadding(0, (int) (8 * s), 0, (int) (8 * s));
+        LinearLayout heading = new LinearLayout(this);
+        heading.setGravity(Gravity.CENTER_VERTICAL);
+        ImageView ic = icon(image, 18);
+        ic.setColorFilter(RED);
+        LinearLayout.LayoutParams iconLp = new LinearLayout.LayoutParams((int) (18 * s), (int) (18 * s));
+        iconLp.rightMargin = (int) (8 * s);
+        heading.addView(ic, iconLp);
+        TextView label = tv(name, 15, TEXT, true);
+        label.setSingleLine(false);
+        heading.addView(label, new LinearLayout.LayoutParams(0, -2, 1));
+        if (onClick != null) {
+            ImageView chevron = icon("chevron_right", 16);
+            chevron.setAlpha(0.6f);
+            heading.addView(chevron, new LinearLayout.LayoutParams((int) (16 * s), (int) (16 * s)));
+            row.setFocusable(true);
+            row.setOnClickListener(new View.OnClickListener() { public void onClick(View v) { onClick.run(); } });
+        }
+        row.addView(heading, new LinearLayout.LayoutParams(-1, -2));
+        MaintenanceDetails details = new MaintenanceDetails(true);
+        details.setPadding(0, (int) (6 * s), 0, 0);
+        row.addView(details, new LinearLayout.LayoutParams(-1, -2));
+        details.update(date, distance, state, reminder, color);
+    }
+
+    private static String maintenanceTitle(Vehicle.Service service) {
+        return service.code == SpdMaintenance.OIL ? "Cambio de aceite" : service.label();
+    }
+
+    private static int maintenanceOkColor() { return LIGHT ? 0xFF176341 : 0xFF9AE6BC; }
 
     private static String maintenanceDate(Vehicle.Service service) {
         if (service.year == null) return "—";
@@ -5486,11 +5782,25 @@ public class Main extends Activity {
                 prefs.edit().putString("speed_unit", i == 1 ? "kmh" : i == 2 ? "mph" : "auto").apply(); rebuild(); showSettings(settingsCat);
             }});
         catVehicleCar(body);
-        LinearLayout mt = section(body, "Mantenimientos");
-        row(mt, "Aceite, filtros, SOAT y más", "Ahora están en su propia sección", null, new Runnable() { public void run() { showSettings(C_MAINT); } });
     }
 
-    /** Mantenimientos: el kilometraje, el aceite de siempre (sin perder lo configurado) y los demás. */
+    private void manualOilSection(LinearLayout body) {
+        LinearLayout o = section(body, "Cambio de aceite");
+        toggle(o, "Recordatorio de cambio de aceite", "Se muestra al lado de la velocidad y avisa cuando toca", oilOn(), new IntCb() { public void on(int i) {
+            // el kilometraje puede venir del carro sin haber configurado el recordatorio: lo que falta es el último cambio
+            if (i == 1 && (!prefs.contains("odo_base_km") || !prefs.contains("oil_last_km"))) { oilSetup(); return; }
+            prefs.edit().putBoolean("oil_on", i == 1).apply(); updateOilBadge(); showSettings(settingsCat);
+        }});
+        if (oilOn()) {
+            row(o, "Cada cuánto", null, fmtDist(prefs.getFloat("oil_interval_km", 5000)), new Runnable() { public void run() { askInterval(null); } });
+            row(o, "Último cambio", "Kilometraje del tablero cuando se hizo", fmtDist(prefs.getFloat("oil_last_km", 0)), new Runnable() { public void run() { askLast(null); } });
+            row(o, "Próximo cambio", null, fmtDist(oilNextKm()), new Runnable() { public void run() { showMaintenanceDialog(); } });
+            row(o, "Ya hice el cambio de aceite", null, null, new Runnable() { public void run() { oilDone(); } });
+        }
+        addIcon(o, 0, "oil_barrel");
+    }
+
+    /** Mantenimientos: una sección de aceite, con datos SPD o la configuración manual de siempre. */
     private void catMaint(LinearLayout body) {
         LinearLayout k = section(body, "Kilometraje");
         if (carOdoLive())
@@ -5501,19 +5811,12 @@ public class Main extends Activity {
         else
             rowIc(k, "speed", "Kilometraje del tablero", "Escríbelo una vez y MiniLauncher le suma lo que recorras con el GPS", I18n.t("Configurar"),
                 new Runnable() { public void run() { askOilUnit(new Runnable() { public void run() { askOdo(null); } }); } });
-        LinearLayout o = section(body, "Cambio de aceite");
-        toggle(o, "Recordatorio de cambio de aceite", "Se muestra al lado de la velocidad y avisa cuando toca", oilOn(), new IntCb() { public void on(int i) {
-            // el kilometraje puede venir del carro sin haber configurado el recordatorio: lo que falta es el último cambio
-            if (i == 1 && (!prefs.contains("odo_base_km") || !prefs.contains("oil_last_km"))) { oilSetup(); return; }
-            prefs.edit().putBoolean("oil_on", i == 1).apply(); updateOilBadge(); showSettings(settingsCat);
-        }});
-        if (oilOn()) {
-            row(o, "Cada cuánto", null, fmtDist(prefs.getFloat("oil_interval_km", 5000)), new Runnable() { public void run() { askInterval(null); } });
-            row(o, "Último cambio", "Kilometraje del tablero cuando se hizo", fmtDist(prefs.getFloat("oil_last_km", 0)), new Runnable() { public void run() { askLast(null); } });
-            row(o, "Próximo cambio", null, fmtDist(oilNextKm()), new Runnable() { public void run() { oilMenu(); } });
-            row(o, "Ya hice el cambio de aceite", null, null, new Runnable() { public void run() { oilDone(); } });
-        }
-        addIcon(o, 0, "oil_barrel");
+        carMaintenance = new MaintenanceSection(body, demoCar == null);
+        carMaintenance.update(displayCar().services);
+        if (demoCar != null) row(section(body, "Datos simulados"), "Mantenimiento del carro (SPD)",
+                "Los datos simulados no generan avisos ni modifican tus recordatorios", null, null);
+        h.removeCallbacks(carTick);
+        h.postDelayed(carTick, 5000);
         maintSection(body);
         LinearLayout h = section(body, "En el inicio");
         if (carSpeed)

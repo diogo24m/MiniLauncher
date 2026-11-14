@@ -4,7 +4,21 @@ O MiniLauncher lê dados BMW MINI em centrais com o serviço SPD `com.spd.carinf
 
 Os dados aparecem no cartão do veículo e em **Ajustes → Tu vehículo → Diagnóstico del carro**. O cartão mostra combustível, autonomia e consumo numa primeira linha, com tensão da bateria e temperatura exterior numa segunda linha; a foto cede espaço a estes dados. Tocar em qualquer parte desta área abre um diagnóstico com os mesmos campos das definições. Quando disponível, o conta-quilómetros do carro também é usado pelo lembrete de mudança de óleo.
 
-A manutenção aparece numa secção própria, no diagnóstico e nas definições. Cada serviço tem o nome em destaque, um indicador de estado e duas colunas para a data prevista e a distância restante, respeitando o idioma e a unidade de distância escolhidos. Os dados em falta aparecem como `—`; só se mostra `OK` quando esse estado vem do carro. Nas definições, os valores continuam a atualizar-se sem reconstruir as linhas enquanto a quantidade de serviços não mudar.
+A manutenção é apresentada apenas em **Definições → Manutenção**, com secções no estilo original: título exterior, cabeçalho do lembrete com toggle e linha divisória antes dos dados. O óleo do motor SPD integra a secção **Mudança de óleo**, sem repetir a configuração manual, incluindo na demonstração. A inspeção e o líquido dos travões usam o mesmo estilo. As informações aparecem em três colunas: data prevista, distância restante e estado. A última coluna inclui o estado do carro e do lembrete; as ações partilham a mesma fila por baixo. Os dados em falta aparecem como `—`; só se mostra `OK` quando esse estado vem do carro. Os valores atualizam-se automaticamente. “O meu veículo” e o diagnóstico geral não repetem estes serviços.
+
+## Manutenção e lembretes do carro
+
+Em **Definições → Manutenção**, óleo do motor, inspeção e líquido dos travões enviados pelo serviço `120290` aparecem em secções individuais, cada uma com o seu toggle. Os lembretes estão ativos por omissão; desativar um mantém os dados do carro visíveis por baixo. As ações **Já fiz**, **Ainda não** e **Voltar a avisar** aparecem junto do respetivo serviço quando o lembrete está ativo. Os outros lembretes continuam disponíveis para serviços definidos pelo utilizador.
+
+Estes serviços participam no mesmo indicador do início e nos mesmos avisos dos lembretes manuais. O aviso vence quando a distância restante chega a zero ou começa o mês previsto, o que acontecer primeiro; o SPD indica apenas mês e ano. O indicador destaca serviços próximos a cerca de 1000 km ou 30 dias. Não se mostra uma percentagem de vida para os serviços SPD porque o carro não fornece o intervalo total. Dados de data/distância em falta não geram um vencimento, e o estado desconhecido não é interpretado como manutenção vencida.
+
+Tocar no indicador de óleo/manutenção do início abre um resumo compacto de todos os serviços SPD e dos lembretes manuais, incluindo serviços desativados ou sem prazo disponível. Cada item apresenta data prevista, distância restante e estado em três colunas. Tocar num serviço abre as suas ações; o botão **Definições** dá acesso à configuração completa. O óleo SPD ocupa o lugar do manual, e os dados simulados aparecem identificados e sem ações que alterem os lembretes.
+
+- **Ainda não:** adia até mais 100 km (60 mi) ou sete dias, o que acontecer primeiro. Serviços sem distância, ou sem conta-quilómetros disponível, usam apenas os sete dias.
+- **Já fiz:** regista a conclusão apenas no MiniLauncher e suspende esse lembrete até o carro informar uma data posterior ou uma distância restante maior em mais de 100 km. Não altera nem reinicia a manutenção no carro.
+- **Desativar/ativar lembrete:** conserva a escolha por serviço entre arranques. **Voltar a avisar** remove a conclusão e o adiamento locais.
+
+O óleo recebido do SPD substitui o aviso manual de óleo enquanto tiver uma data ou distância válida, evitando dois avisos para o mesmo serviço. Sem esse prazo, a mesma secção mostra a configuração manual guardada. Datas, distâncias e estado continuam a vir do carro; ativação, adiamento e conclusão são preferências locais guardadas por código de serviço. As leituras atualizam as linhas e o indicador automaticamente, incluindo quando chegam após abrir o launcher. Os dados simulados são apenas uma pré-visualização e não criam lembretes.
 
 ## Velocímetro: SPD com GPS de reserva
 

@@ -7,6 +7,7 @@ Fork do [StradaOS 2.20.1](https://github.com/lordnordic-debug/StradaOS), de lord
 Alterações relativamente à base:
 
 - Dados CAN/SPD do BMW MINI no launcher, com telemetria, avisos de portas, quilometragem real, manutenção e diagnóstico bruto.
+- Manutenção SPD integrada nos lembretes: óleo, inspeção e líquido dos travões com avisos por data/distância, ativação por serviço, adiamento e conclusão local até o próximo serviço informado pelo carro.
 - Velocímetros com prioridade à velocidade SPD e GPS de reserva quando a leitura está indisponível, antiga ou o serviço desliga.
 - Seletor Bluetooth/Reprodutor, sessões de música da fonte escolhida, capas por URI e acesso a notificações.
 - Controlos de depuração ADB USB/Wi-Fi com ajuda sobre permissões.

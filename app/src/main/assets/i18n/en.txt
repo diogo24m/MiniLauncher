@@ -900,3 +900,21 @@ Android no permitió el cambio. Usa las opciones de desarrollador o concede el p
 Para usar estos interruptores sin root, conecta un ordenador con ADB y ejecuta una vez:	To use these switches without root, connect a computer with ADB and run once:
 El permiso permite cambiar la depuración USB y, desde Android 11, la depuración por Wi-Fi. En Android 4 a 10, Wi-Fi requiere root y depuración USB; al apagar cualquiera se desactivan ambas. Usa una red de confianza.	The permission allows changing USB debugging and, on Android 11 or later, Wi-Fi debugging. On Android 4 to 10, Wi-Fi requires root and USB debugging; turning off either disables both. Use a trusted network.
 Si no tienes este permiso, MiniLauncher intenta usar root al tocar un interruptor. El emparejamiento y la autorización de ordenadores se gestionan en Android.	Without this permission, MiniLauncher attempts to use root when you tap a switch. Pairing and computer authorization are managed by Android.
+Mantenimiento del carro (SPD)	Vehicle maintenance (SPD)
+Recordatorio desactivado	Reminder off
+Hecho; esperando la próxima revisión del carro	Done; waiting for the next service from the car
+Sin fecha ni distancia para avisar	No date or distance for a reminder
+Recordatorio pospuesto	Reminder snoozed
+Recordatorio activo	Reminder active
+Sin recordatorios activos	No active reminders
+Desactivar recordatorio	Turn reminder off
+Activar recordatorio	Turn reminder on
+Volver a avisar	Enable reminders again
+Marcado como hecho. El próximo aviso seguirá los datos del carro.	Marked as done. The next reminder will follow the car data.
+Aviso pospuesto durante 7 días	Reminder snoozed for 7 days
+Aviso pospuesto: {} o 7 días, lo que ocurra primero	Reminder snoozed: {} or 7 days, whichever comes first
+Los datos simulados no generan avisos ni modifican tus recordatorios	Simulated data does not trigger alerts or change your reminders
+Recordatorio de mantenimiento	Maintenance reminder
+Recordatorio de inspección del vehículo	Vehicle inspection reminder
+Recordatorio de líquido de frenos	Brake fluid reminder
+Recordatorio	Reminder

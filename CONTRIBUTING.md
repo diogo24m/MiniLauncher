@@ -55,6 +55,7 @@ Usan las bibliotecas de pruebas del SDK; no añaden dependencias al APK del laun
 
 `CarInfo.java` y `Vehicle.java` implementan el contrato de [docs/carro/README.md](docs/carro/README.md).
 Los campos aún sin validar se mantienen como valores brutos. `Debugging.java` encapsula los controles de ADB.
+`SpdMaintenance.java` adapta los servicios del carro a los recordatorios sin escribir en el servicio SPD.
 
 ## Estructura
 
