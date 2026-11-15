@@ -12,7 +12,7 @@
 
 Paquete: **`com.mini.launcher`** (pruebas: **`com.mini.launcher.debug`**). Versión: **0.1.0**, código de versión **1**.
 
-Los datos CAN/SPD del BMW MINI, la prioridad SPD con GPS de reserva en el velocímetro, el selector Bluetooth/Reproductor, los controles ADB, la identidad MINI y los ajustes de texto y portugués de Portugal son cambios propios de este fork respecto a la base. La documentación técnica está en [docs/MINILAUNCHER.md](docs/MINILAUNCHER.md).
+Los datos CAN/SPD del BMW MINI, la prioridad SPD con GPS de reserva en el velocímetro, el selector Bluetooth/Reproductor, los controles ADB, la identidad MINI y el portugués de Portugal son cambios propios de este fork respecto a la base. La documentación técnica está en [docs/MINILAUNCHER.md](docs/MINILAUNCHER.md).
 
 ## Funciones
 
@@ -26,7 +26,10 @@ Los datos CAN/SPD del BMW MINI, la prioridad SPD con GPS de reserva en el veloc�
 - **Depuración:** interruptores de ADB por USB y Wi-Fi en Ajustes → Sistema. Requieren `WRITE_SECURE_SETTINGS` o root; en Android 4–10, Wi-Fi necesita root y depuración USB activa (puerto 5555); al apagar cualquiera se desactivan ambas. Desde Android 11 se usa la depuración inalámbrica nativa, con emparejamiento en las opciones de desarrollador. La ayuda de los interruptores muestra el comando para conceder el permiso a la edición instalada. Si Android no permite conocer el estado, el interruptor queda centrado y lo indica; no muestra un apagado ficticio.
 - **Información:** clima arriba o en el panel del mapa, con detalle al tocarlo (sensación térmica, humedad, viento y previsión por horas y para cinco días), reloj y velocidad en km/h o mph.
 - **Diagnóstico SPD:** lecturas brutas de Check Control, ACC, frenos, marcha, régimen del motor, velocidad CAN, luces y nivel de aceite, con sus IDs y la edad de la última consulta. Se muestran como datos pendientes de validar, separados de las mediciones confirmadas y del mantenimiento.
-- **Idiomas:** español, inglés, portugués de Portugal, italiano y alemán.
+- **Diseño vertical y ventanas:** el inicio se adapta a pantallas horizontales o verticales; los diálogos siguen el tema y conservan los encabezados de mantenimiento MINI. Tamaños de letra S, M, L y XL.
+- **Copia de seguridad:** guarda o restaura las preferencias, mantenimientos, kilometraje y foto del vehículo en un archivo local o USB, con copia automática opcional. Incluye la entrada de música, el tamaño de texto y el estado local de los recordatorios SPD.
+- **Sistema y velocidad:** abrir una app al encender y volver al inicio, ocultar la barra del sistema en Android 4.4+ y corrección de la velocidad GPS sin alterar el dato SPD.
+- **Idiomas:** español, inglés, portugués de Portugal, francés, italiano, alemán, malayo, árabe y turco. Los textos propios del fork que aún no están traducidos usan el español de respaldo.
 
 ## Capturas
 
@@ -53,9 +56,11 @@ Para probarlo en un celular o emulador, consulta la [guía de pruebas](docs/PRUE
 3. En MiniLauncher activa **Ajustes → Música → Carátula de Android Auto** si quieres mostrar la carátula.
 4. Conecta el celular por USB y toca **Android Auto**.
 
+Con Android Auto solo por cable, sin Bluetooth, la notificación de Open Headunit también puede aportar canción, artista, carátula, tiempo y estado de reproducción. Activa el servicio opcional **Carátula de Android Auto** para leer esa notificación.
+
 ## Compatibilidad
 
-Requiere **Android 4.1 (API 16)** o superior y una pantalla horizontal. Las funciones de Bluetooth, radio, cámara y datos CAN dependen del equipo. Consulta **Ajustes → Sistema → Compatibilidad** para ver qué está disponible.
+Requiere **Android 4.1 (API 16)** o superior y admite pantallas horizontales y verticales. Las funciones de Bluetooth, radio, cámara y datos CAN dependen del equipo. Consulta **Ajustes → Sistema → Compatibilidad** para ver qué está disponible.
 
 Comprueba la versión real de Android en **Ajustes → Acerca de**: algunas centrales anuncian una versión distinta de su nivel de API. Para reportar otra pantalla, abre un [issue](https://github.com/diogo24m/MiniLauncher/issues) con el modelo, API y diagnóstico.
 

@@ -918,3 +918,103 @@ Recordatorio de mantenimiento	Lembrete de manutenção
 Recordatorio de inspección del vehículo	Lembrete de inspeção do veículo
 Recordatorio de líquido de frenos	Lembrete do líquido dos travões
 Recordatorio	Lembrete
+
+# StradaOS 2.21.0-2.21.2: textos integrados no MiniLauncher
+Se guardó en:\n{}\n\nCopia la carpeta StradaDiag a una memoria USB y adjúntala en un «issue» del repositorio de MiniLauncher en GitHub.	Guardado em:\n{}\n\nCopia a pasta StradaDiag para uma pen USB e anexa-a a um «issue» do repositório do MiniLauncher no GitHub.
+Cuenta tu modelo de pantalla y su versión de Android. Puedes adjuntar la carpeta StradaDiag (Sistema → Exportar diagnóstico).	Indica o modelo da tua central e a versão do Android. Podes anexar a pasta StradaDiag (Sistema → Exportar diagnóstico).
+Fuente: {}	Fonte: {}
+Pista: {}	Faixa: {}
+Carátula: {}	Capa: {}
+Lector de notificaciones (accesibilidad): {}	Leitor de notificações (acessibilidade): {}
+ACTIVO	ATIVO
+Última notificación de Open Headunit: {}	Última notificação do Open Headunit: {}
+ninguna	nenhuma
+{} s, carátula {}, textos {}	{} s, capa {}, textos {}
+Open Headunit corriendo: {} · celular por USB en modo Android Auto: {}	Open Headunit em execução: {} · telemóvel por USB em modo Android Auto: {}
+no se sabe	desconhecido
+Android Auto conectado (para MiniLauncher): {}	Android Auto ligado (para o MiniLauncher): {}
+App Bluetooth conectada: {}	Aplicação Bluetooth ligada: {}
+Audio Bluetooth automático: {}	Áudio Bluetooth automático: {}
+desactivado	desativado
+no aplica (otra marca)	não se aplica (outra marca)
+App de música Bluetooth: {} · abrir al conectar: {}	Aplicação de música Bluetooth: {} · abrir ao ligar: {}
+no encontrada	não encontrada
+Sonido en Bluetooth (estimado): {} · app al frente: {}	Som por Bluetooth (estimado): {} · aplicação em primeiro plano: {}
+Activaciones: {}	Ativações: {}
+Eventos Bluetooth:	Eventos Bluetooth:
+(sin eventos)	(sem eventos)
+no	não
+conectado a la app Bluetooth	ligado à aplicação Bluetooth
+la app Bluetooth se cerró	a aplicação Bluetooth fechou
+se reinicia muy seguido: pausa de 15 min	reinicia com demasiada frequência: pausa de 15 min
+activar audio: el celular no está conectado por Bluetooth	ativar áudio: o telemóvel não está ligado por Bluetooth
+activar audio: el celular está en pausa	ativar áudio: o telemóvel está em pausa
+modo de audio Bluetooth solicitado	modo de áudio Bluetooth solicitado
+activar audio falló: {}	falha ao ativar o áudio: {}
+el celular empezó a sonar	o telemóvel começou a tocar
+revisión falló: {}	falha na verificação: {}
+otra fuente al frente: {}	outra fonte em primeiro plano: {}
+no se cambió: MiniLauncher acaba de arrancar	sem alteração: o MiniLauncher acabou de arrancar
+no se cambió: llamada en curso	sem alteração: chamada em curso
+no se cambió: Android Auto tiene el sonido	sem alteração: o Android Auto está a reproduzir o som
+el sonido ya es Bluetooth	o som já está no Bluetooth
+celular conectado por Bluetooth	telemóvel ligado por Bluetooth
+no se abrió la app BT: cámara de reversa al frente	a aplicação BT não abriu: câmara de marcha-atrás em primeiro plano
+no se abrió la app BT: no sé qué app está al frente	a aplicação BT não abriu: aplicação em primeiro plano desconhecida
+no se abrió la app BT: ajustes abiertos	a aplicação BT não abriu: definições abertas
+abierta {} para tomar el sonido (luego vuelve a {})	{} aberta para assumir o som (depois volta para {})
+abierta {} para tomar el sonido	{} aberta para assumir o som
+no se volvió: el usuario abrió {}	não voltou: o utilizador abriu {}
+Android Auto se desconectó	O Android Auto desligou
+Registro técnico para enviar al desarrollador (se guarda en español).	Registo técnico para enviar ao programador (guardado em espanhol).
+Preparando {}…	A preparar {}…
+Copia de seguridad	Cópia de segurança
+Guardar una copia	Guardar uma cópia
+Ajustes, mantenimientos, kilometraje y la foto del vehículo en un archivo, en la pantalla o en una USB. Nada se sube a internet	Definições, manutenção, quilometragem e foto do veículo num ficheiro, na central ou numa pen USB. Nada é enviado para a internet
+Restaurar una copia	Restaurar uma cópia
+Recupera todo después de restablecer la pantalla, o pásalo a otra pantalla	Recupera tudo depois de repor a central ou transfere para outra central
+Copia automática	Cópia automática
+Cada vez que cambias algo se actualiza una copia en la pantalla y en la USB que esté conectada	Sempre que alteras algo, a cópia é atualizada na central e na pen USB que estiver ligada
+Memoria de la pantalla	Memória da central
+Memoria USB	Pen USB
+Elegir otra carpeta…	Escolher outra pasta…
+¿Dónde guardar la copia?	Onde guardar a cópia?
+No se pudo abrir el selector de archivos	Não foi possível abrir o seletor de ficheiros
+No se pudo guardar la copia	Não foi possível guardar a cópia
+Esa memoria no dejó escribir el archivo. Prueba con otra memoria o con «Elegir otra carpeta…».	Não foi possível escrever o ficheiro nessa memória. Experimenta outra memória ou «Escolher outra pasta…».
+Copia guardada	Cópia guardada
+Se guardó en:	Guardado em:
+Al restablecer la pantalla de fábrica también se puede borrar su memoria: guarda otra copia en una USB para tenerla a salvo.	Ao repor as definições de fábrica, a memória da central também pode ser apagada: guarda outra cópia numa pen USB.
+No se pudo leer el archivo	Não foi possível ler o ficheiro
+Buscando copias…	A procurar cópias…
+No se encontró ninguna copia	Não foi encontrada nenhuma cópia
+No hay copias de MiniLauncher en la memoria de la pantalla ni en las USB conectadas. El archivo se llama «MiniLauncher-backup» y termina en .json.	Não há cópias do MiniLauncher na memória da central nem nas pens USB ligadas. O ficheiro chama-se «MiniLauncher-backup» e termina em .json.
+automática	automática
+Buscar el archivo…	Procurar o ficheiro…
+Elige la copia	Escolhe a cópia
+No se pudo restaurar	Não foi possível restaurar
+Este archivo no es una copia de seguridad de MiniLauncher	Este ficheiro não é uma cópia de segurança do MiniLauncher
+Copia del	Cópia de
+Pantalla:	Central:
+Ajustes guardados:	Definições guardadas:
+con la foto del vehículo	com a foto do veículo
+Se reemplaza toda la configuración actual de MiniLauncher por la de la copia.	Toda a configuração atual do MiniLauncher é substituída pela da cópia.
+¿Restaurar esta copia?	Restaurar esta cópia?
+Restaurar	Restaurar
+Copia restaurada	Cópia restaurada
+Esta copia se hizo con una versión más nueva de MiniLauncher. Actualiza MiniLauncher y vuelve a intentarlo	Esta cópia foi criada com uma versão mais recente do MiniLauncher. Atualiza o MiniLauncher e tenta novamente
+No se pudo guardar la configuración	Não foi possível guardar a configuração
+La copia está dañada o incompleta	A cópia está danificada ou incompleta
+Abrir una app al encender	Abrir uma aplicação ao ligar
+MiniLauncher la abre un momento al arrancar (por ejemplo la radio, para que empiece a sonar) y vuelve al inicio	O MiniLauncher abre a aplicação por um momento ao arrancar (por exemplo, o rádio, para começar a tocar) e volta ao início
+Copia de seguridad en un archivo (pantalla o USB)	Cópia de segurança num ficheiro (central ou USB)
+en Android 10+ la carpeta se elige con el selector de archivos	no Android 10+ a pasta é escolhida com o seletor de ficheiros
+Diseño vertical	Disposição vertical
+Pantallas en vertical (tipo Tesla)	Centrais na vertical (tipo Tesla)
+en uso	em uso
+esta pantalla es horizontal	esta central está na horizontal
+Pantalla completa	Ecrã inteiro
+Ocultar la barra del sistema	Ocultar a barra do sistema
+Esconde también la barra de navegación de tu pantalla (abajo o al costado). Desliza desde el borde para verla un momento	Oculta também a barra de navegação da central (em baixo ou de lado). Desliza a partir da margem para a veres por um momento
+Corrección del velocímetro	Correção do velocímetro
+Suma o resta a la velocidad del GPS para que coincida con el tablero de tu carro	Soma ou subtrai à velocidade do GPS para coincidir com o painel do carro

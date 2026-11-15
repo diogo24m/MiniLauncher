@@ -11,6 +11,7 @@ MiniLauncher **no tiene cuentas, anuncios, rastreadores ni analíticas**, y no e
 | Datos CAN/SPD del vehículo y tensión de la central | Combustible, autonomía, consumo, puertas, temperatura, neumáticos, kilometraje, mantenimiento y diagnóstico | No se envían automáticamente. El kilometraje real se guarda localmente para los recordatorios; una exportación manual del diagnóstico incluye las lecturas disponibles. |
 | Foto del vehículo | Mostrarla en la pantalla de inicio | No. Se procesa y se guarda en el equipo. |
 | Lista de apps instaladas | Accesos directos y cajón de apps | No. |
+| Copia de seguridad | Restaurar preferencias, mantenimientos, kilometraje y foto del vehículo | Se guarda en un archivo local o USB elegido por el usuario; la copia automática también es local. No se sube a internet. |
 
 ## Conexiones de red
 
@@ -21,9 +22,9 @@ MiniLauncher **no tiene cuentas, anuncios, rastreadores ni analíticas**, y no e
 
 ## Permisos
 
-- **Accesibilidad** («Carátula de Android Auto»): solo escucha las notificaciones de Open Headunit para leer la carátula. Es opcional.
+- **Accesibilidad** («Carátula de Android Auto»): solo escucha las notificaciones de Open Headunit para leer canción, artista, carátula, tiempo y estado de reproducción, también con Android Auto solo por cable. Es opcional.
 - **Acceso a notificaciones** (Android 5+): solo para leer la canción que suena. Es opcional.
 - **WRITE_SECURE_SETTINGS**: permiso especial para los controles de depuración ADB. La app no se lo concede a sí misma; muestra el comando para el paquete instalado. Los cambios que necesitan root solo se solicitan al usar esos controles.
-- **Almacenamiento:** solo para buscar o guardar el archivo del mapa sin conexión (`Download/MiniLauncher`). Es opcional.
+- **Almacenamiento:** para buscar o guardar el mapa sin conexión (`Download/MiniLauncher`) y las copias de seguridad locales o USB. Cuando Android lo permite, la carpeta o el archivo se eligen con el selector del sistema. Es opcional.
 
 El diagnóstico de *Ajustes → Sistema → Exportar diagnóstico* se guarda en la memoria del equipo y solo lo compartes tú, si quieres.

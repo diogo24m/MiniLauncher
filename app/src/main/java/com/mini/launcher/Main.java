@@ -75,10 +75,8 @@ public class Main extends Activity {
     static int ICON = 0xFFFFFFFF;
     static boolean LIGHT;
     static int RED_DARK = 0xFF2A1416;
-    /** Tamaño de la letra solo en MiniLauncher: 1 = normal. Lo aplican textPx(), field() y los diálogos TB. */
-    static float TS = 1f;
-    /** Tamaños que se pueden elegir, en %. */
-    static final int[] TEXT_SIZES = {85, 100, 115, 130, 150};
+    /** Tamaño de la letra de main: S, M, L y XL; multiplica todos los textos. 1 = normal. */
+    static float FONT = 1f;
 
     static final String PKG_HUR = "com.andrerinas.headunitrevived";
     static final String PKG_WEB = "org.bromite.bromite";
@@ -116,6 +114,16 @@ public class Main extends Activity {
     private int dockCount = 7;
     /** x donde empieza el área de tarjetas (con la barra lateral a la izquierda), alto de las tarjetas y arriba del dock. */
     private float ox, cardH = 380, dockTop = 456, boardH = 600;
+    /**
+     * Diseño vertical (2.21, issue #17): pantallas en retrato tipo Tesla. El lienzo mide 720 de ancho y el alto que
+     * tenga la pantalla: arriba el mapa grande, debajo la tarjeta del vehículo y el reproductor, y abajo la barra.
+     * En horizontal mapY = rowY = 64 y mapH = cardH, o sea, todo queda como siempre.
+     */
+    private boolean vertical;
+    private float mapY = 64, mapH = 380, rowY = 64;
+    /** Vertical con solo la tarjeta del vehículo: flota sobre una esquina del mapa y los botones del mapa le dejan sitio. */
+    private float insL, insR;
+    private View carCard;
     /** Columnas: x de la tarjeta del vehículo, del mapa y del reproductor, y anchos del mapa y del reproductor. */
     private float carX = 16, mapX = 328, mapW = 420, audX = 760, audW = 248;
     private TextView topSpeedTv, topOilTv;
@@ -127,8 +135,8 @@ public class Main extends Activity {
     /** Escala de 1024x600 para Ajustes, el cajón y sus ventanas: con la barra lateral el inicio se agranda, pero
      *  esas pantallas deben conservar su tamaño (en un S23 con barra lateral Ajustes quedaba cortado arriba). */
     private float uiS = 1f;
-    static final int[] SIM_W = {0, 1024, 1280, 1920, 2000, 1280};
-    static final int[] SIM_H = {0, 600, 720, 720, 1200, 480};
+    static final int[] SIM_W = {0, 1024, 1280, 1920, 2000, 1280, 768, 1080};
+    static final int[] SIM_H = {0, 600, 720, 720, 1200, 480, 1024, 1920};
 
     private TextView weatherTv, weatherCityTv;
     private ImageView weatherIc;
@@ -249,7 +257,7 @@ public class Main extends Activity {
         testHook(getIntent());
         applyTheme();
         applyAccent();
-        loadTextSize();
+        loadFontSize();
         // datos del carro: solo lectura del servicio del fabricante en pantallas SPD (se lee en onResume)
         car = CarInfo.get(this);
         if (getPackageName().endsWith(".debug") && !car.available()) demoCar = demoVehicle();
@@ -323,6 +331,13 @@ public class Main extends Activity {
             public void onBtState(NowPlaying.Track t) { showTrack(t); }
         });
         clwBt = BtBridge.available(this);
+        prefs.registerOnSharedPreferenceChangeListener(backupWatch);
+        try {
+            IntentFilter sf = new IntentFilter(Intent.ACTION_SCREEN_OFF);
+            sf.addAction(Intent.ACTION_SCREEN_ON);
+            registerReceiver(screenReceiver, sf);
+        } catch (Throwable ignored) { }
+        maybeBootApp();
         bt.onPhoneStarted = new Runnable() { public void run() { onPhoneStartedBt(); } };
         bt.onLost = new Runnable() { public void run() { btRouted = false; } };
         h.postDelayed(btTicker, 3000);
@@ -474,6 +489,8 @@ public class Main extends Activity {
         }
         h.removeCallbacks(statusRefresh);
         cancelDoorToast();
+        try { unregisterReceiver(screenReceiver); } catch (Throwable ignored) { }
+        try { prefs.unregisterOnSharedPreferenceChangeListener(backupWatch); } catch (Throwable ignored) { }
         try { unregisterReceiver(pkgReceiver); } catch (Exception ignored) { }
         try { unregisterReceiver(timeReceiver); } catch (Exception ignored) { }
         try { nowPlaying.stop(); } catch (Throwable ignored) { }
@@ -533,6 +550,8 @@ public class Main extends Activity {
             else toast("Sin permiso de almacenamiento no se pueden buscar mapas");
             return;
         }
+        if (req == REQ_BACKUP_W) { h.post(new Runnable() { public void run() { backupSave0(); } }); return; }   // con o sin permiso se sigue
+        if (req == REQ_BACKUP_R) { h.post(new Runnable() { public void run() { backupRestore0(); } }); return; }
         if (req != 77 && req != 78) return;
         try { lm.removeUpdates(odoListener); } catch (Throwable ignored) { }
         odoRunning = false;
@@ -590,7 +609,7 @@ public class Main extends Activity {
      * diseno:izq|der|sinauto|conauto|normal|compacta|lateral|plegar|base (diseño del inicio), sim:5 (1280x480),
      * diseno:sinvelocidad|sinaceite|sinreproductor|conexion-both|aa|cp|none|nav-0..3|navizq,
      * diseno:sinbarra|botones-4..10|iconos-0..2|estiloapps, pack:PAQUETE (pack de íconos), clima (detalle del clima),
-     * letra:85|100|115|130|150 (tamaño de la letra, en %), velocidad:N (muestra N km/h unos 6 s, como un dato del GPS).
+     * letra:0|1|2|3 (S, M, L, XL, como main), velocidad:N (muestra N km/h unos 6 s, como un dato del GPS).
      */
     private void testHook(Intent i) {
         if (i == null || !getPackageName().endsWith(".debug")) return;
@@ -644,7 +663,7 @@ public class Main extends Activity {
                     else if ("sinnombres".equals(d)) e.putBoolean("dock_labels", false);
                     else if ("railizq".equals(d) || "railder".equals(d)) e.putString("rail_side", "railizq".equals(d) ? "left" : "right");
                     else if ("siniconos".equals(d)) e.putBoolean("status_icons", false);
-                    else if (d.startsWith("letra-")) e.putInt("text_size", TEXT_SIZES[Math.max(0, Math.min(TEXT_SIZES.length - 1, Integer.parseInt(d.substring(6))))]);
+                    else if (d.startsWith("letra-")) e.putInt("font_size", Integer.parseInt(d.substring(6)));
                     else if ("sinvelocidad".equals(d)) e.putBoolean("car_speed", false);
                     else if ("sinaceite".equals(d)) e.putBoolean("oil_home", false);
                     else if ("sinreproductor".equals(d)) e.putBoolean("show_player", false);
@@ -665,7 +684,7 @@ public class Main extends Activity {
                             .remove("dock_count").remove("dock_icon_size").remove("dock_style").remove("font_size")
                             .remove("text_size").remove("speedo").remove("map_gauge").remove("map_gauge_corner").remove("map_gauge_size");
                     e.apply();
-                    loadTextSize();
+                    loadFontSize();
                     rebuild();
                 }
                 else if ("desactivar".equals(v) && !otherHomes().isEmpty()) disableSelf(otherHomes().get(0));   // solo instalador.yml
@@ -674,7 +693,7 @@ public class Main extends Activity {
                 else if (v.startsWith("idioma:")) setLanguage(v.substring(7));
                 else if ("fijar-inicio".equals(v)) makeDefaultHome();
                 else if (v.startsWith("sim:")) { prefs.edit().putInt("sim_screen", Integer.parseInt(v.substring(4))).apply(); rebuild(); }
-                else if (v.startsWith("letra:")) applyTextSize(Integer.parseInt(v.substring(6)));
+                else if (v.startsWith("letra:")) applyFontSize(Integer.parseInt(v.substring(6)));
                 else if (v.startsWith("velocidad:")) { lastFix = SystemClock.elapsedRealtime(); setGps(true, Float.parseFloat(v.substring(10))); }
                 else if ("diag-mapa".equals(v)) showMapDiag();
                 else if ("clima".equals(v)) showWeatherDetail();
@@ -775,6 +794,27 @@ public class Main extends Activity {
                     Guard.log("PRUEBA verificar-apk: propio=" + own + " otro=" + other);
                 }
                 else if ("aviso-inicio".equals(v)) askDefaultHome(null);
+                // 2.21: ventanas propias, copia de seguridad
+                else if ("diag-reproductor".equals(v)) showPlayerDiag();
+                else if ("compat".equals(v)) showCompat();
+                else if ("ayuda-bt".equals(v)) btHelp();
+                else if ("fecha".equals(v)) pickDate("¿Cuándo fue la última vez?", 0, new LongCb() { public void on(long w) { } });
+                else if ("hora".equals(v)) askDarkTime("dark_start", 18 * 60, "Oscuro desde");
+                else if ("copia-guardar".equals(v)) backupSave0();
+                else if ("copia-restaurar".equals(v)) backupRestore0();
+                else if ("copia-prueba".equals(v)) {
+                    // ida y vuelta: se guarda una copia, se cambian datos, se restaura y deben volver los de antes
+                    prefs.edit().putString("car_name", "Carro de prueba").putFloat("odo_base_km", 12345.5f).putInt("accent", 0xFF2D7FF9).apply();
+                    String json = Backup.build(Main.this);
+                    File f = Backup.save(Main.this, Backup.primary(), "MiniLauncher-backup-prueba.json", json);
+                    prefs.edit().putString("car_name", "Otro").putFloat("odo_base_km", 1f).remove("accent").putString("maint", "[]").apply();
+                    String err = Backup.apply(Main.this, new String(Backup.readAll(new java.io.FileInputStream(f)), "UTF-8"));
+                    boolean ok = err == null && "Carro de prueba".equals(prefs.getString("car_name", "")) && prefs.getFloat("odo_base_km", 0) == 12345.5f
+                        && prefs.getInt("accent", 0) == 0xFF2D7FF9 && Backup.apply(Main.this, "{\"app\":\"otra\"}") != null;
+                    int found = Backup.find(Main.this).size();
+                    Guard.log("PRUEBA copia: ok=" + ok + " error=" + err + " archivo=" + f + " encontradas=" + found + " usb=" + Backup.removable(Main.this));
+                    reloadAll();
+                }
                 else if ("demo-barra".equals(v) && !apps.isEmpty()) {
                     ResolveInfo r = apps.get(0);
                     prefs.edit().putString("dock_2", "fn:music")
@@ -816,12 +856,37 @@ public class Main extends Activity {
 
     private void immersive() {
         if (noImmersive) return;
+        // 2.21.1 (PR #26 de wsx79): «Ocultar la barra del sistema» esconde también la barra de navegación (abajo o
+        // al costado, como la del Ottocast P3), igual que Waze a pantalla completa; deslizando desde el borde vuelve
+        // un momento. Solo desde Android 4.4: antes no existe el modo inmersivo y la barra volvería encima al tocar.
+        int nav = SDK >= 19 && prefs != null && prefs.getBoolean("hide_navbar", false)
+                ? View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION : 0;
         try {
             getWindow().getDecorView().setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                | View.SYSTEM_UI_FLAG_FULLSCREEN | 0x00001000 /* IMMERSIVE_STICKY, API 19 */);
+                | View.SYSTEM_UI_FLAG_FULLSCREEN | nav | 0x00001000 /* IMMERSIVE_STICKY, API 19 */);
         } catch (Exception ignored) { }
+        // Android 11+: la barra de navegación y la barra de tareas se esconden (o vuelven) con el método nuevo
+        if (SDK >= 30) try { Bars.navigation(getWindow(), nav != 0); } catch (Throwable ignored) { }
     }
+
+    /**
+     * Corrección del velocímetro (2.21.1, PR #26 de wsx79): «+3» o «-2» en la unidad que se muestra, «+5%» en
+     * porcentaje, para que coincida con el tablero (que casi siempre marca un poco más que el GPS). Solo cambia el
+     * número que se ve: el kilometraje y los mantenimientos siguen con la distancia real del GPS.
+     */
+    private float speedFix(float v) {
+        if (v < 1) return v;
+        String o = prefs.getString("speed_offset", "0").trim();
+        try {
+            if (o.endsWith("%")) v *= 1f + Float.parseFloat(o.substring(0, o.length() - 1).replace("+", "")) / 100f;
+            else v += Float.parseFloat(o.replace("+", ""));
+        } catch (NumberFormatException ignored) { }
+        return Math.max(0, v);
+    }
+
+    static final String[] SPEED_OFFSETS = {"0", "+1", "+2", "+3", "+4", "+5", "+7", "+10", "-1", "-2", "-3",
+        "+3%", "+5%", "+7%", "+10%", "-5%"};
 
     /** Al conectar algo por USB: si aún no se eligió cómo conectar el celular y hay varias opciones, se pregunta. */
     private final BroadcastReceiver usbReceiver = new BroadcastReceiver() {
@@ -938,6 +1003,7 @@ public class Main extends Activity {
         compactDock = "compact".equals(dm);
         noDock = "none".equals(dm);   // sin barra; el botón Apps va arriba junto al engranaje
         dockCount = Math.max(4, Math.min(10, prefs.getInt("dock_count", 7)));
+        loadFontSize();
         playerLeft = "left".equals(prefs.getString("player_side", "right"));
         showCar = prefs.getBoolean("show_car", true);
         // ocultar el reproductor (el mapa gana espacio), la velocidad y el servicio (carros sin GPS) y el aceite
@@ -950,8 +1016,12 @@ public class Main extends Activity {
         dockLabels = prefs.getBoolean("dock_labels", true);
         // Lienzo virtual: 1024x600. Con la barra lateral los botones salen de abajo y el lienzo queda más bajo
         // (1128x460): en pantallas bajas y anchas como 1280x480 todo se ve ~30 % más grande.
+        vertical = H >= W * 1.2f;
+        if (vertical) sideDock = false;   // en vertical la barra va abajo (la lateral le quitaría ancho al mapa)
         float dw = 1024 + (sideDock ? RAIL + 8 : 0), dh = sideDock ? 460 : 600;
         s = Math.min(W / dw, H / dh);
+        if (vertical) buildVerticalMetrics(W, H);
+        else {
         // pantallas más anchas que el lienzo (p. ej. 12,3" 1920x720): el mapa del centro se queda con el espacio extra
         ex = Math.max(0f, W / s - dw);
         if (ex < 24) ex = 0;
@@ -964,6 +1034,11 @@ public class Main extends Activity {
         // compacta (Druids07): más baja que antes (500), con menos espacio arriba y abajo
         dockTop = sideDock ? dh : noDock ? 600 : compactDock ? 512 : 456;
         cardH = sideDock ? dh - 80 : dockTop - 76;
+        mapY = rowY = 64;
+        mapH = cardH;
+        insL = insR = 0;
+        }
+        if (vertical) dh = boardH;
         layoutColumns();
         getWindow().setBackgroundDrawable(new ColorDrawable(sim > 0 ? Color.BLACK : BG));
         board = new FrameLayout(this);
@@ -986,6 +1061,8 @@ public class Main extends Activity {
         buildAaCard();
         buildAudioCard();
         if (!noDock) buildDock();
+        // vertical con solo la tarjeta del vehículo: flota encima del mapa
+        if (vertical && showCar && !showPlayer && carCard != null) carCard.bringToFront();
 
         drawer = null;
         settingsView = null;
@@ -1001,7 +1078,62 @@ public class Main extends Activity {
      * Columnas del inicio: tarjeta del vehículo (300), mapa (lo que sobra) y reproductor (248; 300 si no hay tarjeta
      * del vehículo). «Reproductor a la izquierda» las intercambia para dejarlo del lado del conductor.
      */
+    /**
+     * Medidas del diseño vertical. Lienzo de 720 de ancho (los textos quedan del mismo tamaño físico que en una
+     * pantalla horizontal de 9") y tan alto como la pantalla. Se reparten así, de arriba abajo: barra de arriba (64),
+     * mapa (lo que sobra), fila de tarjetas y barra de botones.
+     */
+    private void buildVerticalMetrics(int W, int H) {
+        s = W / 720f;
+        float dh = H / s;
+        ex = 720 - 1024;   // negativo: lo que va pegado a la derecha se corre hacia adentro
+        uiS = s;
+        boardH = dh;
+        ox = 0;
+        float dockH = noDock ? 0 : compactDock ? 88 : 144;
+        dockTop = dh - dockH;
+        float avail = dockTop - 12 - 64;   // del borde de arriba del mapa al borde de abajo de las tarjetas
+        mapY = 64;
+        insL = insR = 0;
+        if (showCar && showPlayer) {
+            // mapa arriba, y debajo el vehículo y el reproductor lado a lado
+            cardH = Math.max(380, Math.min(470, avail * 0.38f));
+            if (avail - cardH - 12 < 170) cardH = Math.max(300, avail - 12 - 170);
+            mapH = avail - cardH - 12;
+            rowY = mapY + mapH + 12;
+        } else if (showPlayer) {
+            // solo el reproductor: una franja ancha debajo del mapa
+            cardH = 156;
+            mapH = avail - cardH - 12;
+            rowY = mapY + mapH + 12;
+        } else if (showCar) {
+            // solo el vehículo: el mapa ocupa todo y la tarjeta flota en una esquina de abajo
+            mapH = avail;
+            cardH = Math.min(380, avail - 24);
+            rowY = mapY + mapH - 12 - cardH;
+            if (playerLeft) insR = 312; else insL = 312;
+        } else {
+            mapH = avail;
+            cardH = 380;
+            rowY = mapY;
+        }
+    }
+
     private void layoutColumns() {
+        if (vertical) {
+            mapX = 16;
+            mapW = 688;
+            if (showCar && showPlayer) {
+                audW = 688 - 300 - 12;
+                carX = playerLeft ? 16 + audW + 12 : 16;
+                audX = playerLeft ? 16 : 16 + 300 + 12;
+            } else {
+                audW = 688;
+                audX = 16;
+                carX = playerLeft ? 16 + 688 - 12 - 300 : 16 + 12;
+            }
+            return;
+        }
         float content = 1024 + ex;
         audW = showCar ? 248 : 300;
         float carW = showCar ? 300 : 0;
@@ -1067,7 +1199,12 @@ public class Main extends Activity {
         View sep = new View(this);
         sep.setBackgroundColor(BTN);
         weatherBox.addView(sep, new LinearLayout.LayoutParams(Math.max(1, (int) s), (int) (18 * s)));
-        if (!showCar) sep.setVisibility(View.GONE);   // sin saludo, sin separador
+        if (!showCar || vertical) sep.setVisibility(View.GONE);   // sin saludo, sin separador
+        if (vertical) {
+            // en vertical no caben la ciudad ni el saludo: quedan la hora, la fecha corta, el clima y los íconos
+            weatherCityTv.setVisibility(View.GONE);
+            if (!showCar) dateTv.setVisibility(View.GONE);
+        }
         weatherBox.setVisibility(View.GONE);
         weatherBox.setFocusable(true);
         weatherBox.setOnClickListener(new View.OnClickListener() { public void onClick(View v) { showWeatherDetail(); } });
@@ -1090,7 +1227,7 @@ public class Main extends Activity {
         greetTv.setPadding((int) (14 * s), 0, 0, 0);
         right.addView(greetTv);
         // sin la tarjeta del vehículo, la velocidad y el aceite ocupan la barra de arriba: el saludo se oculta
-        if (!showCar) greetTv.setVisibility(View.GONE);
+        if (!showCar || vertical) greetTv.setVisibility(View.GONE);
         top.addView(right, new LinearLayout.LayoutParams(0, -1, showCar ? 0.56f : 0.40f));
         // barra oculta: el botón Apps va arriba, a la izquierda del engranaje, y la fila de arriba le cede su sitio
         place(board, top, ox + 24, 8, 928 + ex - (noDock ? 50 : 0), 48);
@@ -1275,7 +1412,8 @@ public class Main extends Activity {
     }
 
     private void buildCarCard() {
-        final FrameLayout card = card(carX, 64, 300, cardH, CARD);
+        final FrameLayout card = card(carX, rowY, 300, cardH, CARD);
+        carCard = card;
         // barra de abajo compacta: la foto crece y la velocidad baja; sin velocidad (carros sin GPS) la foto llena el resto
         // velocímetro analógico o mixto: el recuadro de la velocidad crece 70 y la foto se achica lo mismo
         final int speedo = carSpeed ? prefs.getInt("speedo", 0) : 0;
@@ -1307,22 +1445,39 @@ public class Main extends Activity {
         final float gx = speedo > 0 ? Math.min(70, Math.max(0,
                 160 + baseDy - cut - (photoY - 78) - 32)) : 0;
         final float dy = baseDy - gx;
-        // Sin foto propia, el espacio queda vacío y se puede tocar para elegir una imagen.
         Bitmap photo = CarPhoto.load(this);
         final float photoH = Math.max(0, 160 + dy - cut - (photoY - 78));
-        ImageView img = new ImageView(this);
-        // una foto con fondo (sin recortar) llena el recuadro con esquinas redondas; la recortada, como siempre
-        boolean cutout = true;
-        if (photo != null && photoH >= 1) { try { cutout = CarPhoto.hasTransparency(photo); } catch (Throwable ignored) { } }
-        img.setImageBitmap(cutout || photo == null ? photo : CarPhoto.cardCrop(photo, (int) (264 * s), (int) (photoH * s), 16 * s));
-        img.setContentDescription(I18n.t(photo != null ? "Foto del vehículo" : "Elegir foto"));
-        img.setScaleType(ImageView.ScaleType.FIT_CENTER);
-        place(card, img, 18, photoY, 264, photoH);
-        img.setOnLongClickListener(new View.OnLongClickListener() {
-            public boolean onLongClick(View v) { photoMenu(); return true; }
-        });
-        if (photo == null) {
-            img.setOnClickListener(new View.OnClickListener() {
+        if (photo != null) {
+            ImageView img = new ImageView(this);
+            // una foto con fondo llena el recuadro con esquinas redondas; la recortada se muestra tal cual
+            boolean cutout = true;
+            if (photoH >= 1) { try { cutout = CarPhoto.hasTransparency(photo); } catch (Throwable ignored) { } }
+            img.setImageBitmap(cutout ? photo : CarPhoto.cardCrop(photo, (int) (264 * s), (int) (photoH * s), 16 * s));
+            img.setContentDescription(I18n.t("Foto del vehículo"));
+            img.setScaleType(ImageView.ScaleType.FIT_CENTER);
+            place(card, img, 18, photoY, 264, photoH);
+            img.setOnLongClickListener(new View.OnLongClickListener() {
+                public boolean onLongClick(View v) { photoMenu(); return true; }
+            });
+        } else {
+            float placeholderH = Math.max(0, photoH - 8), iconSize = Math.min(72, placeholderH);
+            LinearLayout ph = new LinearLayout(this);
+            ph.setOrientation(LinearLayout.VERTICAL);
+            ph.setGravity(Gravity.CENTER);
+            ph.setBackground(round(INNER, 16));
+            ph.setContentDescription(I18n.t("Elegir foto"));
+            ImageView ic = icon("directions_car", iconSize);
+            ic.setAlpha(0.35f);
+            ph.addView(ic, new LinearLayout.LayoutParams((int) (iconSize * s), (int) (iconSize * s)));
+            TextView t = tv("Toca para poner la foto de tu vehículo", 12, MUTED, false);
+            t.setSingleLine(false);
+            t.setMaxLines(2);
+            t.setGravity(Gravity.CENTER);
+            t.setPadding((int) (12 * s), (int) (6 * s), (int) (12 * s), 0);
+            ph.addView(t, new LinearLayout.LayoutParams(-1, -2));
+            if (placeholderH < 110) t.setVisibility(View.GONE);
+            place(card, ph, 18, photoY + 4, 264, placeholderH);
+            ph.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) { pickPhoto(); }
             });
         }
@@ -1442,6 +1597,7 @@ public class Main extends Activity {
             // ancho «wrap»: con el ancho por defecto (toda la celda) el texto quedaba pegado a la izquierda, no centrado
             cell.addView(tv(labels[i], 10, MUTED, false), new LinearLayout.LayoutParams(-2, -2));
             TextView v = tv("—", 15, TEXT, true);
+            ((FitText) v).min = Math.min(((FitText) v).max, 15 * s); // solo los valores CAN se ajustan al ancho de su celda
             v.setMaxLines(1);
             v.setGravity(Gravity.CENTER);
             v.setPadding(0, (int) (4 * s), 0, 0);
@@ -2379,7 +2535,7 @@ public class Main extends Activity {
         final String[] names = new String[MAINT_TEMPLATES.length + 1];
         for (int i = 0; i < MAINT_TEMPLATES.length; i++) names[i] = I18n.t(MAINT_TEMPLATES[i][1]);
         names[MAINT_TEMPLATES.length] = I18n.t("Otro (escribe el nombre)");
-        new android.app.AlertDialog.Builder(this, dlg())
+        new TB(this, dlg()).raw()
             .setTitle(I18n.t("Agregar mantenimiento"))
             .setItems(names, new DialogInterface.OnClickListener() { public void onClick(DialogInterface d, int w) {
                 final org.json.JSONObject o = new org.json.JSONObject();
@@ -2415,7 +2571,7 @@ public class Main extends Activity {
         final char u0 = taskUnit(o);
         int sel = km0 > 0 && mo0 > 0 ? 2 : mo0 > 0 ? 1 : 0;
         String[] opts = {I18n.t("Por kilómetros"), I18n.t("Por tiempo"), I18n.t("Lo que llegue primero")};
-        new android.app.AlertDialog.Builder(this, dlg())
+        new TB(this, dlg()).raw()
             .setTitle(taskName(o))
             .setSingleChoiceItems(opts, sel, new DialogInterface.OnClickListener() { public void onClick(DialogInterface d, final int w) {
                 d.dismiss();
@@ -2465,19 +2621,10 @@ public class Main extends Activity {
         }};
         final Runnable askDate = new Runnable() { public void run() {
             if (taskDays(o) <= 0) { finish.run(); return; }
-            Calendar c = Calendar.getInstance();
-            long ld = o.optLong("ld", 0);
-            if (ld > 0) c.setTimeInMillis(ld);
-            android.app.DatePickerDialog dp = new android.app.DatePickerDialog(Main.this, dlg(), new android.app.DatePickerDialog.OnDateSetListener() {
-                public void onDateSet(android.widget.DatePicker v, int y, int mth, int day) {
-                    Calendar k = Calendar.getInstance();
-                    k.set(y, mth, day, 12, 0, 0);
-                    try { o.put("ld", Math.min(System.currentTimeMillis(), k.getTimeInMillis())); } catch (Throwable ignored) { }
-                    finish.run();
-                }
-            }, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
-            dp.setTitle(I18n.t("¿Cuándo fue la última vez?"));
-            dp.show();
+            pickDate("¿Cuándo fue la última vez?", o.optLong("ld", 0), new LongCb() { public void on(long when) {
+                try { o.put("ld", Math.min(System.currentTimeMillis(), when)); } catch (Throwable ignored) { }
+                finish.run();
+            }});
         }};
         if (o.optDouble("km", 0) > 0) {
             float def = o.has("lkm") ? toUnit((float) o.optDouble("lkm", 0)) : toUnit(odoKm());
@@ -2579,9 +2726,12 @@ public class Main extends Activity {
      */
     private android.widget.EditText field() {
         android.widget.EditText et = new android.widget.EditText(this);
-        et.setTextSize(TypedValue.COMPLEX_UNIT_PX, et.getTextSize() * TS);   // solo este campo de MiniLauncher
         et.setTextColor(LIGHT ? 0xFF1A1A1A : Color.WHITE);
         et.setHintTextColor(LIGHT ? 0xFF7A808A : 0xFFA0A6B0);
+        // 2.21: recuadro redondeado del color del tema (antes, la raya del sistema, distinta en cada Android)
+        et.setBackground(round(INNER, 14));
+        et.setPadding((int) (16 * s), (int) (12 * s), (int) (16 * s), (int) (12 * s));
+        et.setTextSize(TypedValue.COMPLEX_UNIT_PX, textPx(18));
         return et;
     }
 
@@ -2660,7 +2810,7 @@ public class Main extends Activity {
 
     private void buildAaCard() {
         FrameLayout card = new FrameLayout(this);
-        place(board, card, mapX, 64, mapW, cardH);
+        place(board, card, mapX, mapY, mapW, mapH);
         // fondo decorativo mientras no hay GPS; encima, el mapa en vivo
         card.addView(new MapView(this, s, 20 * s), new FrameLayout.LayoutParams(-1, -1));
         if (!prefs.getBoolean("map_live", true)) { liveMap = null; seedLastLocation(); buildAaCardRest(card); return; }
@@ -2701,10 +2851,10 @@ public class Main extends Activity {
         int nBtn = (showAa ? 1 : 0) + (showCp ? 1 : 0);
         boolean wx = nBtn < 2 && prefs.getBoolean("weather_on", true);
         boolean hasPanel = nBtn > 0 || wx;
-        final float panelY = hasPanel ? cardH - 96 : cardH, panelW = mapW - 24;
+        final float panelY = hasPanel ? mapH - 96 : mapH, panelW = mapW - 24 - insL - insR;
         final FrameLayout panel = new FrameLayout(this);
         panel.setBackground(round((CARD & 0x00FFFFFF) | 0xEB000000, 16));
-        place(card, panel, 12, panelY, panelW, 84);
+        place(card, panel, 12 + insL, panelY, panelW, 84);
         if (!hasPanel) panel.setVisibility(View.GONE);
 
         // botón redondo del navegador: normal (el de siempre), grande, muy grande u oculto, y de qué lado
@@ -2714,7 +2864,7 @@ public class Main extends Activity {
         boolean nbLeft = "left".equals(nbSide) || ("auto".equals(nbSide) && playerLeft);
         final View navBtn = circleIcon("map", nb, nb / 2, (CARD & 0x00FFFFFF) | 0xEB000000);
         navBtn.setContentDescription(I18n.t("Navegación"));
-        place(card, navBtn, nbLeft ? 12 : mapW - 12 - nb, panelY - 12 - nb, nb, nb);
+        place(card, navBtn, nbLeft ? 12 + insL : mapW - 12 - nb - insR, panelY - 12 - nb, nb, nb);
         if (nbSize == 3) navBtn.setVisibility(View.GONE);
         // Mini velocímetro sobre el mapa cuando la tarjeta del vehículo está oculta (Daniel).
         mapGauge = null;
@@ -2729,17 +2879,18 @@ public class Main extends Activity {
             // tamaño (pequeño/normal/grande) limitado para que en pantallas bajas no tape el mapa
             int gsz = prefs.getInt("map_gauge_size", 1);
             float gs = gsz == 0 ? 108 : gsz == 2 ? 160 : 132;
-            gs = Math.min(gs, Math.min(cardH * 0.45f, mapW * 0.42f));
+            gs = Math.min(gs, Math.min(mapH * 0.45f, mapW * 0.42f));
             gb.setBackground(round((CARD & 0x00FFFFFF) | 0xE0000000, gs / 2));
             // esquina: automático = arriba, en el lado contrario al botón del navegador (como antes)
             String corner = prefs.getString("map_gauge_corner", "auto");
             if ("auto".equals(corner)) corner = nbLeft ? "tr" : "tl";
             boolean gLeft = corner.endsWith("l"), gBottom = corner.startsWith("b");
             float gx = gLeft ? 12 : mapW - 12 - gs, gy = 52;
+            if (gBottom) gx = gLeft ? 12 + insL : mapW - 12 - gs - insR;
             if (gBottom) {
                 gy = Math.max(52, panelY - 12 - gs);
                 // abajo del mismo lado que el botón del navegador: se corre hacia adentro para no taparlo
-                if (nbSize != 3 && gLeft == nbLeft) gx = gLeft ? 12 + nb + 12 : mapW - 12 - gs - nb - 12;
+                if (nbSize != 3 && gLeft == nbLeft) gx = gLeft ? 12 + insL + nb + 12 : mapW - 12 - gs - insR - nb - 12;
                 mapGaugeBox = gb;
             } else mapGaugeBox = null;
             place(card, gb, gx, gy, gs, gs);
@@ -2781,7 +2932,7 @@ public class Main extends Activity {
         FrameLayout.LayoutParams clp = new FrameLayout.LayoutParams((int) (18 * s), (int) (18 * s));
         clp.gravity = Gravity.CENTER;
         handle.addView(chev, clp);
-        place(card, handle, (mapW - 64) / 2, panelY - 28, 64, 24);
+        place(card, handle, 12 + insL + (panelW - 64) / 2, panelY - 28, 64, 24);
         final float shift = 96 * s;
         final View[] moving = mapGaugeBox != null ? new View[]{panel, navBtn, handle, mapGaugeBox} : new View[]{panel, navBtn, handle};
         if (!hasPanel) handle.setVisibility(View.GONE);
@@ -3034,7 +3185,7 @@ public class Main extends Activity {
     }
 
     private void showMapDiag() {
-        new TB(this, dlg()).setTitle("Diagnóstico del mapa").setMessage(mapDiag()).setPositiveButton("OK", null).show();
+        new TB(this, dlg()).diag().setTitle("Diagnóstico del mapa").setMessage(mapDiag()).setPositiveButton("OK", null).show();
     }
 
     private void updateMapTag() {
@@ -3169,6 +3320,12 @@ public class Main extends Activity {
     private void setMusicInput(boolean btIn) {
         if (btIn == inputBt()) return;
         prefs.edit().putString("music_input", btIn ? "bt" : "player").apply();
+        refreshMusicInput();
+        if (SDK >= 21 && !notifAccess()) askNotifAccess();
+    }
+
+    private void refreshMusicInput() {
+        boolean btIn = inputBt();
         curOrigin = null;
         curTitle = curArtist = curSource = null;
         curArt = null;
@@ -3181,7 +3338,6 @@ public class Main extends Activity {
         renderTrack();
         if (mediaWatcher != null) mediaWatcher.setBtMode(btIn);
         if (btIn && bt != null && bt.isConnected()) bt.refresh();
-        if (SDK >= 21 && !notifAccess()) askNotifAccess();
     }
 
     /** Android 5+: «Acceso a notificaciones» activado para MiniLauncher (sin él no se leen las sesiones multimedia). */
@@ -3219,7 +3375,7 @@ public class Main extends Activity {
     }
 
     private void buildAudioCard() {
-        final FrameLayout card = card(audX, 64, audW, cardH, CARD);
+        final FrameLayout card = card(audX, rowY, audW, cardH, CARD);
         // contenido centrado: la tarjeta es más ancha sin la del vehículo y más alta con la barra compacta
         final float dx = (audW - 248) / 2, dy = (cardH - 380) / 2;
         // cabecera: desplegable de la entrada (Bluetooth / Reproductor) y, a la derecha, la app que suena
@@ -3237,7 +3393,28 @@ public class Main extends Activity {
         // Tarjeta alta (barra lateral): diseño vertical que llena el alto en vez de dejar espacio vacío (Andrés, Picanto)
         tallPlayer = cardH - 380 >= 60;
         final View prev, play, next;
-        if (tallPlayer) {
+        if (vertical && cardH < 240) {
+            // Franja ancha (vertical sin la tarjeta del vehículo): carátula a la izquierda, canción al centro y
+            // botones grandes a la derecha
+            tallPlayer = false;
+            float A = cardH - 28, tx = 14 + A + 18, bs = 60, ps = 78, gap = 10;
+            float bx = audW - 18 - (bs * 2 + ps + gap * 2), tw = bx - tx - 12;
+            place(card, playerArt, 14, 14, A, A);
+            card.removeView(head);
+            place(card, head, tx, 8, tw, 28);
+            trackTv = tv("Nada sonando", 20, TEXT, true);
+            place(card, trackTv, tx, 46, tw, 30);
+            artistTv = tv("Radio, Bluetooth o USB", 14, MUTED, false);
+            place(card, artistTv, tx, 80, tw, 22);
+            timePosTv = tv("", 13, MUTED, false);
+            place(card, timePosTv, tx, 108, tw, 20);
+            prev = circleIcon("skip_previous", bs, bs / 2, BTN);
+            play = circleIcon("play_arrow", ps, ps * 0.47f, RED);
+            next = circleIcon("skip_next", bs, bs / 2, BTN);
+            place(card, prev, bx, (cardH - bs) / 2, bs, bs);
+            place(card, play, bx + bs + gap, (cardH - ps) / 2, ps, ps);
+            place(card, next, bx + bs + gap + ps + gap, (cardH - bs) / 2, bs, bs);
+        } else if (tallPlayer) {
             boolean big = audW >= 290;
             float bs = big ? 66 : 60, ps = big ? 86 : 76, gap = big ? 12 : 10;
             // altos de canción, artista y tiempo (más con letra grande: la carátula, que llena lo que sobra, se achica)
@@ -3470,12 +3647,13 @@ public class Main extends Activity {
         final float railX = railLeft ? 16 : 1016 + ex, step = (boardH - 24) / (float) n;
         float cs0 = (sideDock ? (dockLabels ? 40 : 48) : compactDock ? 50 : 64) * ik;
         if (sideDock) cs0 = Math.min(cs0, step - (dockLabels ? 18 : 6));          // que quepan en la barra lateral
-        final float cs = cs0;          // círculo
         final float lblSize = sideDock ? 10 : compactDock ? 12 : 13, lblPad = sideDock ? 2 : compactDock ? 2 : 8;
         final boolean appStyle = "apps".equals(prefs.getString("dock_style", "circle"));
         // botones a lo ancho: con 7 se usan las posiciones de siempre; con otra cantidad se reparten parejo
-        final float slotW = n == 7 ? 138 + ex / 6 : (948 + ex) / (float) n, itemW = Math.min(120, slotW - 4);
-        final float x0 = n == 7 ? 38 : 38 + (slotW - itemW) / 2;
+        final float slotW = n == 7 && !vertical ? 138 + ex / 6 : (948 + ex) / (float) n, itemW = Math.min(120, slotW - 4);
+        final float x0 = n == 7 && !vertical ? 38 : 38 + (slotW - itemW) / 2;
+        if (vertical) cs0 = Math.min(cs0, slotW - 10);                            // con muchos botones, que no se monten
+        final float cs = cs0;          // círculo
         if (sideDock) {
             View rail = new View(this);
             rail.setBackground(round(DOCK, 20));
@@ -3518,8 +3696,8 @@ public class Main extends Activity {
                 b.setGravity(Gravity.CENTER);   // sin nombres: el círculo queda centrado en la franja
             }
             if (sideDock) { b.setGravity(Gravity.CENTER); place(board, b, railX, 12 + step * i, RAIL, step); }
-            else if (compactDock) { b.setGravity(Gravity.CENTER); place(board, b, x0 + slotW * i, dockTop + 4, itemW, 600 - dockTop - 8); }
-            else place(board, b, x0 + slotW * i, dockLabels ? 474 : 462, itemW, dockLabels ? 110 : 132);
+            else if (compactDock) { b.setGravity(Gravity.CENTER); place(board, b, x0 + slotW * i, dockTop + 4, itemW, boardH - dockTop - 8); }
+            else place(board, b, x0 + slotW * i, dockTop + (dockLabels ? 18 : 6), itemW, dockLabels ? 110 : 132);
             b.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) { runDock(idx); }
             });
@@ -3741,7 +3919,6 @@ public class Main extends Activity {
         v.setText(I18n.t(t));
         v.setTextColor(color);
         v.max = textPx(size);
-        v.min = Math.min(v.max, size * s);
         v.setTextSize(TypedValue.COMPLEX_UNIT_PX, v.max);
         v.setIncludeFontPadding(false);
         v.setSingleLine(true);
@@ -3752,25 +3929,21 @@ public class Main extends Activity {
 
     // ── tamaño de la letra ──
 
-    private void loadTextSize() {
-        TS = Math.max(0.8f, Math.min(1.6f, prefs.getInt("text_size", 100) / 100f));
+    private void loadFontSize() {
+        int fs = prefs.getInt("font_size", 1);
+        FONT = fs == 0 ? 0.9f : fs == 2 ? 1.12f : fs == 3 ? 1.25f : 1f;
     }
 
-    /** Guarda el tamaño de la letra (en %) y redibuja todo con él (Ajustes también, en el mismo lugar). */
-    private void applyTextSize(int pct) {
-        prefs.edit().putInt("text_size", pct).apply();
-        loadTextSize();
+    /** Guarda S/M/L/XL con la misma preferencia que main y redibuja la pantalla. */
+    private void applyFontSize(int size) {
+        prefs.edit().putInt("font_size", size).apply();
+        loadFontSize();
         rebuild();
     }
 
-    /**
-     * Tamaño en px de un texto de «size» (unidades del lienzo de 1024x600) con la letra elegida. Los textos de hasta
-     * 16 cambian del todo; los más grandes cada vez menos, y desde 40 ya no cambian (como el escalado no lineal de
-     * Android 14): la hora y la velocidad ya se leen bien, y así no se salen de su sitio.
-     */
+    /** Escalado uniforme de main, incluido el reloj y la velocidad digital. */
     private float textPx(float size) {
-        float w = Math.max(0f, Math.min(1f, (40f - size) / 24f));
-        return size * (1f + (TS - 1f) * w) * s;
+        return size * s * FONT;
     }
 
     private final android.graphics.Paint lineProbe = new android.graphics.Paint();
@@ -3787,7 +3960,7 @@ public class Main extends Activity {
      * Alto de un recuadro de alto fijo del inicio: el de siempre («base») o, con letra más grande que la normal, lo que
      * pida su texto («need», hecho con lineH()) para no cortarlo. Con letra normal o chica el diseño queda idéntico.
      */
-    private float fitH(float base, float need) { return TS > 1f ? Math.max(base, need) : base; }
+    private float fitH(float base, float need) { return FONT > 1f ? Math.max(base, need) : base; }
 
     /** Achica una sola vez (sin bajar del tamaño normal) un texto fijo de «size» para que quepa en «w» unidades. */
     private void fitOnce(TextView t, float size, float w) {
@@ -3803,9 +3976,9 @@ public class Main extends Activity {
     }
 
     /**
-     * Texto de tv(). Si es de una línea y con la letra agrandada no cabe en su espacio, se achica lo justo para caber,
+     * Ajuste de los valores de telemetría MINI. Si con la letra agrandada no caben, se achican lo justo para caber,
      * sin bajar nunca del tamaño normal; solo si ni así cabe se corta con «…», como siempre. Así agrandar la letra no
-     * desarma el diseño (p. ej. «Android Auto» en su botón o el nombre de un botón de la barra).
+     * corta las unidades de las lecturas. El resto de textos conserva el tamaño uniforme de main (min = 0).
      */
     static class FitText extends TextView {
         /** px: tamaño con la letra elegida y tamaño normal (100 %). Sin achicar si min es 0 o igual a max. */
@@ -3823,7 +3996,7 @@ public class Main extends Activity {
                 float w = probe.measureText(t, 0, t.length());
                 float size = w <= room ? max : room <= 0 ? min : Math.max(min, (float) Math.floor(max * room / w));
                 // El hinting de la fuente redondea cada glifo: la anchura no escala de forma exactamente lineal.
-                // Comprobar el tamaño elegido evita cortar las unidades del consumo con letra a 150 %.
+                // Comprobar el tamaño elegido evita cortar las unidades del consumo con letra XL.
                 probe.setTextSize(size);
                 while (size > min && probe.measureText(t, 0, t.length()) > room) {
                     size = Math.max(min, size - 0.5f);
@@ -3912,8 +4085,8 @@ public class Main extends Activity {
         Date now = new Date();
         String fmt = prefs.getString("clock", "auto");
         boolean h24 = "24".equals(fmt) || ("auto".equals(fmt) && android.text.format.DateFormat.is24HourFormat(this));
-        timeTv.setText(new SimpleDateFormat(h24 ? "HH:mm" : "h:mm a", I18n.loc).format(now));
-        String d = new SimpleDateFormat(I18n.datePattern(), I18n.loc).format(now);
+        timeTv.setText(I18n.sdf(h24 ? "HH:mm" : "h:mm a").format(now));
+        String d = I18n.sdf(vertical ? "EEE d MMM" : I18n.datePattern()).format(now);
         dateTv.setText(d.substring(0, 1).toUpperCase(I18n.loc) + d.substring(1));
         int hr = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
         String saludo = I18n.t(hr >= 5 && hr < 12 ? "Buenos días" : (hr >= 12 && hr < 19 ? "Buenas tardes" : "Buenas noches"));
@@ -3973,6 +4146,7 @@ public class Main extends Activity {
             speed = gpsSpeedKmh < 2 ? 0f : gpsSpeedKmh; // filtro de oscilación del GPS al estar parado
         boolean ok = speed != null;
         float v = ok ? (useMph() ? speed * 0.621371f : speed) : 0;
+        if (!spd) v = speedFix(v); // la corrección es para el GPS; SPD conserva el dato del carro
         speedTv.setText(ok ? String.valueOf(Math.round(v)) : "--");
         if (carGauge != null) carGauge.setSpeed(v, ok);
         if (mapGauge != null) mapGauge.setSpeed(v, ok);
@@ -4036,6 +4210,7 @@ public class Main extends Activity {
             h.postDelayed(new Runnable() { public void run() { if (bt != null) bt.refresh(); } }, 700);
             return true;
         }
+        if (!clwBt) return false; // sin la app de Clinkway (issue #30)
         String a = code == KeyEvent.KEYCODE_MEDIA_NEXT ? "com.clw.btmusic.next"
                 : code == KeyEvent.KEYCODE_MEDIA_PREVIOUS ? "com.clw.btmusic.previous" : "com.clw.btmusic.togglepause";
         try {
@@ -4087,6 +4262,15 @@ public class Main extends Activity {
         // tiempo y estado: nunca cambia la etiqueta ni borra la pista. Antes esos avisos sin título ponían
         // «Bluetooth» y la notificación de Open Headunit volvía a poner «Android Auto»: la etiqueta titilaba.
         boolean aaOwns = "rcc".equals(curOrigin) || ("Android Auto".equals(curSource) && aaRunning());
+        // La canción vino de la notificación de Open Headunit (celular solo por cable, sin Bluetooth): lo que mande
+        // Bluetooth con otro título es de otro celular o lo que la app Bluetooth recordaba. No lo reemplaza.
+        // Excepción: Android Auto en pausa y el Bluetooth sí está sonando otra cosa.
+        if ("aa".equals(curOrigin) && "bt".equals(t.origin) && aaRunning()
+                && (t.clear || (t.title != null && !sameTitle(t.title, NotifArt.lastTitle)
+                    && !textsMatch(NotifArt.lastTexts, t.title)))) {
+            boolean aaPaused = Boolean.FALSE.equals(NotifArt.lastPlaying) || now - NotifArt.lastAt > 60000;
+            if (t.clear || !aaPaused || !Boolean.TRUE.equals(t.playing)) return;
+        }
         if (aaOwns && "bt".equals(t.origin)) {
             if (t.clear) return;
             if (t.polled && Boolean.FALSE.equals(t.playing)) t.playing = null; // estado local del servicio, no el real
@@ -4201,16 +4385,13 @@ public class Main extends Activity {
         BtBridge.log("Android Auto se desconectó");
         aaWaitTitle = null;
         h.removeCallbacks(aaWait);
-        if (inputBt()) {
-            curSource = "Bluetooth";
-        } else {
-            // entrada «Reproductor»: la canción era de Android Auto y ya no suena (no pasa a Bluetooth)
+        if ("aa".equals(curOrigin) || !inputBt()) {
             curOrigin = null;
             curTitle = curArtist = curSource = null;
             durMs = -1;
             posKnown = false;
             playingState = false;
-        }
+        } else curSource = "Bluetooth";
         curArt = null;
         renderTrack();
         if (bt != null && bt.isConnected()) bt.refresh();
@@ -4252,19 +4433,52 @@ public class Main extends Activity {
         return false;
     }
 
-    /** Carátula de Android Auto leída de la notificación de Open Headunit. */
+    /**
+     * Notificación de Open Headunit. Si es la canción que ya se muestra, pone la carátula (y «Android Auto»).
+     * Si es otra canción y Android Auto está conectado, la notificación pasa a ser la fuente: es el caso del
+     * celular conectado solo por cable, sin Bluetooth, donde el título nunca llega por Bluetooth.
+     */
     private void applyAaNotif(Bitmap art, java.util.List<String> texts) {
-        if (art == null || curTitle == null) return;
-        if (!textsMatch(texts, curTitle)) return;
+        long now = SystemClock.elapsedRealtime();
+        String nt = NotifArt.lastTitle;
+        boolean fresh = nt != null && NotifArt.lastAt > 0 && now - NotifArt.lastAt < 15000;
+        boolean match = curTitle != null && (sameTitle(nt, curTitle) || textsMatch(texts, curTitle));
+        if (!match) {
+            if (!fresh || "rcc".equals(curOrigin) || "ms".equals(curOrigin) || !aaRunning()) return;
+            BtBridge.log("Android Auto: " + nt);
+            curOrigin = "aa";
+            curTitle = nt;
+            curArtist = NotifArt.lastArtist;
+            curSource = "Android Auto";
+            curArt = art;
+            durMs = NotifArt.lastDurMs > 0 ? NotifArt.lastDurMs : -1;
+            posBaseMs = Math.max(0, NotifArt.lastPosMs);
+            posBaseAt = now;
+            posKnown = NotifArt.lastPosMs >= 0;
+            if (NotifArt.lastPlaying != null) playingState = NotifArt.lastPlaying;
+            aaWaitTitle = null;
+            h.removeCallbacks(aaWait);
+            renderTrack();
+            return;
+        }
+        boolean own = "aa".equals(curOrigin);
+        if (art == null && !own) return;
         if (aaWaitTitle != null && sameTitle(aaWaitTitle, curTitle)) { aaWaitTitle = null; h.removeCallbacks(aaWait); }
-        curArt = art;
+        if (art != null) curArt = art;
         curSource = "Android Auto";
+        if (own && fresh) {
+            // Sin Bluetooth, el tiempo y el estado también salen de la notificación.
+            if (curArtist == null && NotifArt.lastArtist != null) curArtist = NotifArt.lastArtist;
+            if (NotifArt.lastDurMs > 0) durMs = NotifArt.lastDurMs;
+            if (NotifArt.lastPosMs >= 0) { posBaseMs = NotifArt.lastPosMs; posBaseAt = now; posKnown = true; }
+            if (NotifArt.lastPlaying != null) playingState = NotifArt.lastPlaying;
+        }
         renderTrack();
     }
 
     private void showPlayerDiag() {
         String msg = "Entrada: " + (inputBt() ? "Bluetooth" : "Reproductor")
-                + "\nFuente: " + curOrigin + " / " + curSource
+                + "\nFuente: " + (curOrigin != null ? curOrigin : "—") + " / " + (curSource != null ? curSource : "—")
                 + "\nPista: " + curTitle + " — " + curArtist
                 + (SDK >= 21 ? "\nAcceso a notificaciones: " + (notifAccess() ? "sí" : "NO") + (MediaListener.connected ? " (conectado)" : "")
                     + "\nSesiones multimedia:\n" + (mediaWatcher != null ? mediaWatcher.diag() : "no disponible") : "")
@@ -4272,7 +4486,10 @@ public class Main extends Activity {
                 + "\n\nLector de notificaciones (accesibilidad): " + (NotifArt.running ? "ACTIVO" : "apagado")
                 + "\nÚltima notificación de Open Headunit: " + (NotifArt.lastAt == 0 ? "ninguna"
                     : ((SystemClock.elapsedRealtime() - NotifArt.lastAt) / 1000) + " s, carátula "
-                    + (NotifArt.lastArt != null ? "sí" : "no") + ", textos " + NotifArt.lastTexts)
+                    + (NotifArt.lastArt != null ? "sí" : "no") + ", textos " + NotifArt.lastTexts
+                    + "\n  leída: «" + NotifArt.lastTitle + "» — " + NotifArt.lastArtist
+                    + " · " + (NotifArt.lastPosMs / 1000) + "/" + (NotifArt.lastDurMs / 1000) + " s · "
+                    + (NotifArt.lastPlaying == null ? "estado ?" : NotifArt.lastPlaying ? "sonando" : "en pausa"))
                 + "\nOpen Headunit corriendo: " + (processRunning(PKG_HUR) ? "sí" : "no")
                 + " · celular por USB en modo Android Auto: " + (aaUsbState() == 1 ? "sí" : aaUsbState() == 0 ? "no" : "no se sabe")
                 + "\nAndroid Auto conectado (para MiniLauncher): " + (aaRunning() ? "sí" : "no")
@@ -4283,7 +4500,7 @@ public class Main extends Activity {
                 + "\nSonido en Bluetooth (estimado): " + (btRouted ? "sí" : "no") + " · app al frente: " + topPackage()
                 + "\nActivaciones: " + BtBridge.activations
                 + "\n\nEventos Bluetooth:\n" + BtBridge.logText();
-        new TB(this, dlg())
+        new TB(this, dlg()).diag()
             .setTitle("Diagnóstico del reproductor")
             .setMessage(msg)
             .setPositiveButton("OK", null)
@@ -4512,8 +4729,8 @@ public class Main extends Activity {
     /** Primer paso del asistente: idioma (preseleccionado el del sistema). */
     private void wizard() {
         int sel = Math.max(0, java.util.Arrays.asList(I18n.CODES).indexOf(I18n.lang));
-        wizardDlg = new android.app.AlertDialog.Builder(this, dlg())
-            .setTitle("Idioma · Language · Lingua · Sprache · Bahasa · Dil · اللغة")
+        wizardDlg = new TB(this, dlg()).raw()
+            .setTitle("Idioma · Language · Langue · Lingua · Sprache · Bahasa · Dil · اللغة")
             .setSingleChoiceItems(I18n.NAMES, sel, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface d, int w) {
                     d.dismiss();
@@ -4536,7 +4753,7 @@ public class Main extends Activity {
                     ask("car_name", "Nombre del vehículo (ej.: Mazda 2, Spark GT)", "Mi vehículo", new Runnable() { public void run() {
                     ask("car_tag", "Etiqueta corta (versión o placa). Déjalo vacío si no quieres", "", new Runnable() { public void run() {
                     chooseAccent(new Runnable() { public void run() {
-                    chooseTextSize(new Runnable() { public void run() {
+                    chooseFontSize(new Runnable() { public void run() {
                         prefs.edit().putBoolean("setup_done", true).apply();
                         rebuild();
                         reviewShortcuts(new Runnable() { public void run() {
@@ -4618,18 +4835,13 @@ public class Main extends Activity {
     }
 
     /** Asistente: tamaño de la letra, con los mismos tamaños que Ajustes → Apariencia → Texto. */
-    private void chooseTextSize(final Runnable next) {
-        String[] o = new String[TEXT_SIZES.length];
-        int sel = 1;
-        for (int i = 0; i < TEXT_SIZES.length; i++) {
-            o[i] = TEXT_SIZES[i] + "%" + (TEXT_SIZES[i] == 100 ? " · " + I18n.t("Normal") : "");
-            if (Math.round(TS * 100) == TEXT_SIZES[i]) sel = i;
-        }
-        new TB(this, dlg())
-            .setTitle("Tamaño de la letra")
-            .setSingleChoiceItems(o, sel, new DialogInterface.OnClickListener() { public void onClick(DialogInterface d, int w) {
+    private void chooseFontSize(final Runnable next) {
+        String[] o = {I18n.t("Pequeña"), I18n.t("Normal"), I18n.t("Grande"), I18n.t("Muy grande")};
+        new TB(this, dlg()).raw()
+            .setTitle(I18n.t("Tamaño de la letra"))
+            .setSingleChoiceItems(o, prefs.getInt("font_size", 1), new DialogInterface.OnClickListener() { public void onClick(DialogInterface d, int w) {
                 d.dismiss();
-                applyTextSize(TEXT_SIZES[w]);
+                applyFontSize(w);
                 next.run();
             }})
             .setCancelable(false)
@@ -4711,6 +4923,10 @@ public class Main extends Activity {
     protected void onActivityResult(int req, int res, Intent data) {
         super.onActivityResult(req, res, data);
         if (req == REQ_HOME) { homeResult(); return; }
+        if (req == REQ_BACKUP_CREATE || req == REQ_BACKUP_OPEN) {
+            if (res == RESULT_OK && data != null && data.getData() != null) backupDocument(data.getData(), req == REQ_BACKUP_CREATE);
+            return;
+        }
         if (req != REQ_PHOTO || res != RESULT_OK || data == null || data.getData() == null) return;
         final Uri uri = data.getData();
         processPhoto(new CarPhoto.Opener() {
@@ -4988,21 +5204,120 @@ public class Main extends Activity {
         int cur = prefs.getInt(key, def);
         String fmt = prefs.getString("clock", "auto");
         boolean h24 = "24".equals(fmt) || ("auto".equals(fmt) && android.text.format.DateFormat.is24HourFormat(this));
-        try {
-            android.app.TimePickerDialog d = new android.app.TimePickerDialog(this, dlg(), new android.app.TimePickerDialog.OnTimeSetListener() {
-                public void onTimeSet(android.widget.TimePicker v, int hh, int mm) {
-                    prefs.edit().putInt(key, hh * 60 + mm).apply();
-                    boolean was = LIGHT;
-                    applyTheme();
-                    if (was != LIGHT) { applyAccent(); rebuild(); }
-                    showSettings(settingsCat);
+        pickTime(title, cur, h24, new IntCb() { public void on(int minutes) {
+            prefs.edit().putInt(key, minutes).apply();
+            boolean was = LIGHT;
+            applyTheme();
+            if (was != LIGHT) { applyAccent(); rebuild(); }
+            showSettings(settingsCat);
+        }});
+    }
+
+    interface LongCb { void on(long v); }
+
+    /**
+     * Columna «▲ valor ▼» para elegir un número con el dedo (ventanas de hora y fecha, 2.21). Mantener presionado
+     * repite. Reemplaza a los selectores del sistema, que cambian con cada versión de Android y no siguen el tema.
+     */
+    private LinearLayout stepper(final Runnable up, final Runnable down, TextView value, float w) {
+        LinearLayout col = new LinearLayout(this);
+        col.setOrientation(LinearLayout.VERTICAL);
+        col.setGravity(Gravity.CENTER_HORIZONTAL);
+        for (int k = 0; k < 2; k++) {
+            final Runnable act = k == 0 ? up : down;
+            final FrameLayout b = circleIcon("chevron_right", 50, 26, BTN);
+            b.getChildAt(0).setRotation(k == 0 ? -90 : 90);
+            b.setOnTouchListener(new View.OnTouchListener() {
+                final Runnable rep = new Runnable() { public void run() {
+                    if (b.getWindowToken() == null) return;   // la ventana se cerró con el dedo puesto
+                    act.run();
+                    h.postDelayed(this, 110);
+                }};
+                public boolean onTouch(View v, MotionEvent e) {
+                    int a = e.getActionMasked();
+                    if (a == MotionEvent.ACTION_DOWN) { act.run(); h.postDelayed(rep, 450); v.setAlpha(0.6f); }
+                    else if (a == MotionEvent.ACTION_UP || a == MotionEvent.ACTION_CANCEL) { h.removeCallbacks(rep); v.setAlpha(1f); }
+                    return true;
                 }
-            }, cur / 60, cur % 60, h24);
-            d.setTitle(I18n.t(title));
-            d.show();
-        } catch (Throwable e) {
-            Guard.log("Selector de hora: " + e);
+            });
+            if (k == 1) col.addView(value, new LinearLayout.LayoutParams((int) (w * s), (int) (58 * s)));
+            col.addView(b, new LinearLayout.LayoutParams((int) (50 * s), (int) (50 * s)));
         }
+        return col;
+    }
+
+    /** Ventana para elegir una hora del día (devuelve los minutos desde la medianoche). Los minutos van de 5 en 5. */
+    private void pickTime(String title, int minutes, final boolean h24, final IntCb cb) {
+        final int[] v = {Math.max(0, Math.min(23, minutes / 60)), Math.max(0, Math.min(55, (minutes % 60) / 5 * 5))};
+        final TextView hv = tv("", 34, TEXT, true), mv = tv("", 34, TEXT, true);
+        hv.setGravity(Gravity.CENTER);
+        mv.setGravity(Gravity.CENTER);
+        final Runnable show = new Runnable() { public void run() {
+            hv.setText(h24 ? String.format(Locale.US, "%02d", v[0]) : ((v[0] + 11) % 12 + 1) + (v[0] < 12 ? " AM" : " PM"));
+            mv.setText(String.format(Locale.US, "%02d", v[1]));
+        }};
+        show.run();
+        LinearLayout row = new LinearLayout(this);
+        row.setGravity(Gravity.CENTER);
+        row.setPadding(0, (int) (6 * s), 0, (int) (2 * s));
+        row.addView(stepper(new Runnable() { public void run() { v[0] = (v[0] + 1) % 24; show.run(); } },
+            new Runnable() { public void run() { v[0] = (v[0] + 23) % 24; show.run(); } }, hv, h24 ? 110 : 170));
+        TextView colon = tv(":", 34, MUTED, true);
+        colon.setGravity(Gravity.CENTER);
+        row.addView(colon, new LinearLayout.LayoutParams((int) (28 * s), -2));
+        row.addView(stepper(new Runnable() { public void run() { v[1] = (v[1] + 5) % 60; show.run(); } },
+            new Runnable() { public void run() { v[1] = (v[1] + 55) % 60; show.run(); } }, mv, 110));
+        new TB(this, dlg())
+            .setTitle(title)
+            .setView(row)
+            .setPositiveButton("Guardar", new DialogInterface.OnClickListener() { public void onClick(DialogInterface d, int w) { cb.on(v[0] * 60 + v[1]); } })
+            .setNegativeButton("Cancelar", null)
+            .show();
+    }
+
+    /** Ventana para elegir una fecha (día, mes y año) que no pase de hoy. */
+    private void pickDate(String title, long when, final LongCb cb) {
+        final Calendar c = Calendar.getInstance();
+        if (when > 0) c.setTimeInMillis(when);
+        c.set(Calendar.HOUR_OF_DAY, 12);
+        c.set(Calendar.MINUTE, 0);
+        c.set(Calendar.SECOND, 0);
+        String[] names;
+        try { names = new java.text.DateFormatSymbols(I18n.loc).getShortMonths(); } catch (Throwable e) { names = null; }
+        final String[] months = names;
+        final TextView dv = tv("", 32, TEXT, true), mv = tv("", 26, TEXT, true), yv = tv("", 32, TEXT, true);
+        final TextView[] tvs = {dv, mv, yv};
+        for (TextView t : tvs) t.setGravity(Gravity.CENTER);
+        final Runnable show = new Runnable() { public void run() {
+            long now = System.currentTimeMillis();
+            if (c.getTimeInMillis() > now) c.setTimeInMillis(now);
+            if (c.get(Calendar.YEAR) < 1990) c.set(Calendar.YEAR, 1990);
+            int m = c.get(Calendar.MONTH);
+            dv.setText(String.valueOf(c.get(Calendar.DAY_OF_MONTH)));
+            mv.setText(months != null && m < months.length && months[m].length() > 0 ? months[m].replace(".", "") : String.valueOf(m + 1));
+            yv.setText(String.valueOf(c.get(Calendar.YEAR)));
+        }};
+        show.run();
+        final int[] fields = {Calendar.DAY_OF_MONTH, Calendar.MONTH, Calendar.YEAR};
+        final float[] widths = {96, 120, 124};
+        LinearLayout row = new LinearLayout(this);
+        row.setGravity(Gravity.CENTER);
+        row.setPadding(0, (int) (6 * s), 0, (int) (2 * s));
+        // en inglés el mes va primero (Nov 14 2026); en los demás idiomas, el día
+        int[] order = "en".equals(I18n.lang) ? new int[]{1, 0, 2} : new int[]{0, 1, 2};
+        for (final int i : order) {
+            LinearLayout col = stepper(new Runnable() { public void run() { c.add(fields[i], 1); show.run(); } },
+                new Runnable() { public void run() { c.add(fields[i], -1); show.run(); } }, tvs[i], widths[i]);
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(-2, -2);
+            lp.leftMargin = lp.rightMargin = (int) (6 * s);
+            row.addView(col, lp);
+        }
+        new TB(this, dlg())
+            .setTitle(title)
+            .setView(row)
+            .setPositiveButton("Guardar", new DialogInterface.OnClickListener() { public void onClick(DialogInterface d, int w) { cb.on(c.getTimeInMillis()); } })
+            .setNegativeButton("Cancelar", null)
+            .show();
     }
 
     // ───────────────────────── clima ─────────────────────────
@@ -5200,10 +5515,12 @@ public class Main extends Activity {
         root.addView(settingsView, new FrameLayout.LayoutParams(-1, -1));
 
         FrameLayout panel = new FrameLayout(this);
-        FrameLayout.LayoutParams plp = new FrameLayout.LayoutParams((int) (1024 * s), (int) (600 * s));
+        FrameLayout.LayoutParams plp = new FrameLayout.LayoutParams((int) ((vertical ? 720 : 1024) * s), (int) ((vertical ? boardH : 600) * s));
         plp.gravity = Gravity.CENTER;
         settingsView.addView(panel, plp);
 
+        if (vertical) settingsTabs(panel, cat);
+        else {
         // barra lateral
         LinearLayout side = new LinearLayout(this);
         side.setOrientation(LinearLayout.VERTICAL);
@@ -5252,6 +5569,7 @@ public class Main extends Activity {
                 public void onClick(View v) { showSettings(idx); }
             });
         }
+        }
 
         // contenido
         // La posición anterior se pone durante el acomodo (onLayout), antes del primer dibujo: si se pusiera después
@@ -5268,7 +5586,8 @@ public class Main extends Activity {
             }
         };
         sc.setVerticalScrollBarEnabled(false);
-        place(panel, sc, 272, 16, 736, 568);
+        if (vertical) place(panel, sc, 16, 84, 688, boardH - 96);
+        else place(panel, sc, 272, 16, 736, 568);
         settingsScroll = sc; settingsScrollCat = cat;
         LinearLayout body = new LinearLayout(this);
         body.setOrientation(LinearLayout.VERTICAL);
@@ -5290,6 +5609,51 @@ public class Main extends Activity {
             case C_SYS: catSystem(body); break;
             case C_ABOUT: catAbout(body); break;
         }
+    }
+
+    /** Ajustes en vertical: las categorías van arriba, en una fila que se desliza, con la elegida a la vista. */
+    private void settingsTabs(FrameLayout panel, final int cat) {
+        final LinearLayout tabs = new LinearLayout(this);
+        tabs.setGravity(Gravity.CENTER_VERTICAL);
+        final View[] chosen = new View[1];
+        for (int i = 0; i < CAT_NAMES.length; i++) {
+            final int idx = i;
+            boolean sel = i == cat;
+            LinearLayout it = new LinearLayout(this);
+            it.setGravity(Gravity.CENTER_VERTICAL);
+            it.setPadding((int) (14 * s), 0, (int) (16 * s), 0);
+            it.setBackground(round(sel ? RED_DARK : CARD, 16));
+            ImageView ic = icon(CAT_ICONS[i], 20);
+            if (sel) ic.setColorFilter(RED);
+            else if (ICON == 0xFFFFFFFF) ic.setAlpha(0.7f);
+            it.addView(ic, new LinearLayout.LayoutParams((int) (20 * s), (int) (20 * s)));
+            if (i > 0) {   // «Volver al inicio» es solo la flecha
+                TextView lt = tv(CAT_NAMES[i], 14, sel ? RED : SOFT, sel);
+                lt.setPadding((int) (10 * s), 0, 0, 0);
+                it.addView(lt);
+            }
+            LinearLayout.LayoutParams ilp = new LinearLayout.LayoutParams(-2, (int) (48 * s));
+            ilp.rightMargin = (int) (8 * s);
+            tabs.addView(it, ilp);
+            if (sel) chosen[0] = it;
+            it.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) { showSettings(idx); }
+            });
+        }
+        // la categoría elegida se deja a la vista durante el acomodo, antes de dibujar (sin salto)
+        android.widget.HorizontalScrollView hs = new android.widget.HorizontalScrollView(this) {
+            private boolean placed;
+            @Override protected void onLayout(boolean changed, int l, int t, int r, int b) {
+                super.onLayout(changed, l, t, r, b);
+                if (!placed && chosen[0] != null && chosen[0].getWidth() > 0) {
+                    placed = true;
+                    scrollTo(Math.max(0, chosen[0].getLeft() - (getWidth() - chosen[0].getWidth()) / 2), 0);
+                }
+            }
+        };
+        hs.setHorizontalScrollBarEnabled(false);
+        hs.addView(tabs, new FrameLayout.LayoutParams(-2, -1));
+        place(panel, hs, 16, 18, 688, 52);
     }
 
     // ── piezas de diseño ──
@@ -5356,6 +5720,21 @@ public class Main extends Activity {
         }
     }
 
+    /** Fila que muestra la opción elegida y abre una lista para cambiarla (cuando las opciones no caben en botones). */
+    private void choice(LinearLayout card, final String title, String sub, final String[] opts, final int sel, final IntCb cb) {
+        row(card, title, sub, I18n.t(opts[Math.max(0, Math.min(opts.length - 1, sel))]), new Runnable() { public void run() {
+            String[] tr = new String[opts.length];
+            for (int i = 0; i < opts.length; i++) tr[i] = I18n.t(opts[i]);
+            new TB(Main.this, dlg()).raw()
+                .setTitle(I18n.t(title))
+                .setSingleChoiceItems(tr, sel, new DialogInterface.OnClickListener() { public void onClick(DialogInterface d, int w) {
+                    d.dismiss();
+                    cb.on(w);
+                }})
+                .show();
+        }});
+    }
+
     private void segmented(LinearLayout card, String title, String sub, String[] opts, int sel, final IntCb cb) {
         LinearLayout r = rowBase(card, title, sub);
         LinearLayout g = new LinearLayout(this);
@@ -5372,19 +5751,6 @@ public class Main extends Activity {
             g.addView(o);
         }
         r.addView(g);   // la separación con el subtítulo la pone rowBase()
-    }
-
-    /** Fila que muestra la opción elegida y abre una lista para cambiarla (cuando las opciones no caben en botones). */
-    private void choice(LinearLayout card, final String title, String sub, final String[] opts, final int sel, final IntCb cb) {
-        row(card, title, sub, opts[Math.max(0, Math.min(opts.length - 1, sel))], new Runnable() { public void run() {
-            new TB(Main.this, dlg())
-                .setTitle(title)
-                .setSingleChoiceItems(opts, sel, new DialogInterface.OnClickListener() { public void onClick(DialogInterface d, int w) {
-                    d.dismiss();
-                    cb.on(w);
-                }})
-                .show();
-        }});
     }
 
     private void toggle(LinearLayout card, String title, String sub, final boolean on, final IntCb cb) {
@@ -5781,6 +6147,14 @@ public class Main extends Activity {
             new IntCb() { public void on(int i) {
                 prefs.edit().putString("speed_unit", i == 1 ? "kmh" : i == 2 ? "mph" : "auto").apply(); rebuild(); showSettings(settingsCat);
             }});
+        final String unitLbl = useMph() ? " mph" : " km/h";
+        String[] offLbl = new String[SPEED_OFFSETS.length];
+        for (int i = 0; i < offLbl.length; i++)
+            offLbl[i] = i == 0 ? I18n.t("Ninguna") : SPEED_OFFSETS[i].endsWith("%") ? SPEED_OFFSETS[i].replace("%", " %") : SPEED_OFFSETS[i] + unitLbl;
+        choice(un, "Corrección del velocímetro", "Suma o resta a la velocidad del GPS para que coincida con el tablero de tu carro",
+            offLbl, Math.max(0, java.util.Arrays.asList(SPEED_OFFSETS).indexOf(prefs.getString("speed_offset", "0"))), new IntCb() { public void on(int i) {
+                prefs.edit().putString("speed_offset", SPEED_OFFSETS[i]).apply(); rebuild(); showSettings(settingsCat);
+            }});
         catVehicleCar(body);
     }
 
@@ -5893,14 +6267,8 @@ public class Main extends Activity {
         }
         r.addView(dots);
         LinearLayout tx = section(body, "Texto");
-        String[] sizes = new String[TEXT_SIZES.length];
-        int selectedSize = 1;
-        for (int i = 0; i < TEXT_SIZES.length; i++) {
-            sizes[i] = TEXT_SIZES[i] + "%";
-            if (Math.round(TS * 100) == TEXT_SIZES[i]) selectedSize = i;
-        }
-        segmented(tx, "Tamaño de la letra", "Solo en MiniLauncher. No cambia el tamaño de letra de Android ni de otras apps",
-            sizes, selectedSize, new IntCb() { public void on(int i) { applyTextSize(TEXT_SIZES[i]); }});
+        segmented(tx, "Tamaño de la letra", "Para leer mejor de lejos o que quepa más", new String[]{"S", "M", "L", "XL"},
+            prefs.getInt("font_size", 1), new IntCb() { public void on(int i) { applyFontSize(i); }});
         LinearLayout ic = section(body, "Íconos");
         boolean appStyle = "apps".equals(prefs.getString("dock_style", "circle"));
         segmented(ic, "Íconos de la barra", "Apps: el ícono de la app que abre cada botón (radio, cámara…)", new String[]{"MiniLauncher", "Apps"}, appStyle ? 1 : 0, new IntCb() { public void on(int i) {
@@ -5918,7 +6286,7 @@ public class Main extends Activity {
                 int sel = 0;
                 String cp = prefs.getString("icon_pack", "");
                 for (int i = 0; i < packs.size(); i++) { names[i + 1] = packs.get(i)[1]; if (packs.get(i)[0].equals(cp)) sel = i + 1; }
-                new android.app.AlertDialog.Builder(Main.this, dlg())
+                new TB(Main.this, dlg()).raw()
                     .setTitle(I18n.t("Pack de íconos"))
                     .setSingleChoiceItems(names, sel, new DialogInterface.OnClickListener() { public void onClick(DialogInterface d, int w) {
                         d.dismiss();
@@ -6009,6 +6377,15 @@ public class Main extends Activity {
             new IntCb() { public void on(int i) {
                 prefs.edit().putString("clock", i == 1 ? "12" : i == 2 ? "24" : "auto").apply(); updateClock(); showSettings(settingsCat);
             }});
+        if (SDK >= 19) {
+            LinearLayout scr = section(body, "Pantalla completa");
+            toggle(scr, "Ocultar la barra del sistema", "Esconde también la barra de navegación de tu pantalla (abajo o al costado). Desliza desde el borde para verla un momento",
+                prefs.getBoolean("hide_navbar", false), new IntCb() { public void on(int i) {
+                    prefs.edit().putBoolean("hide_navbar", i == 1).apply();
+                    noImmersive = false; stormCount = 0;
+                    immersive(); rebuild(); showSettings(settingsCat);
+                }});
+        }
     }
 
     private void catConnection(LinearLayout body) {
@@ -6468,7 +6845,7 @@ public class Main extends Activity {
             opts[0] = I18n.t("Automático");
             System.arraycopy(I18n.NAMES, 0, opts, 1, I18n.NAMES.length);
             int sel = java.util.Arrays.asList(I18n.CODES).indexOf(I18n.pref(prefs)) + 1;
-            new android.app.AlertDialog.Builder(Main.this, dlg())
+            new TB(Main.this, dlg()).raw()
                 .setTitle(I18n.t("Idioma"))
                 .setSingleChoiceItems(opts, sel, new DialogInterface.OnClickListener() { public void onClick(DialogInterface d, int w) {
                     d.dismiss();
@@ -6476,6 +6853,16 @@ public class Main extends Activity {
                     showSettings(settingsCat);
                 }})
                 .show();
+        }});
+        LinearLayout bk = section(body, "Copia de seguridad");
+        long lastBk = prefs.getLong("backup_last", 0);
+        row(bk, "Guardar una copia", "Ajustes, mantenimientos, kilometraje y la foto del vehículo en un archivo, en la pantalla o en una USB. Nada se sube a internet",
+            lastBk > 0 ? I18n.sdf("d MMM, HH:mm").format(new Date(lastBk)) : null, new Runnable() { public void run() { backupSave(); } });
+        row(bk, "Restaurar una copia", "Recupera todo después de restablecer la pantalla, o pásalo a otra pantalla", null, new Runnable() { public void run() { backupRestore(); } });
+        toggle(bk, "Copia automática", "Cada vez que cambias algo se actualiza una copia en la pantalla y en la USB que esté conectada", prefs.getBoolean("backup_auto", false), new IntCb() { public void on(int i) {
+            prefs.edit().putBoolean("backup_auto", i == 1).apply();
+            if (i == 1) { h.removeCallbacks(autoBackup); h.postDelayed(autoBackup, 500); }
+            showSettings(settingsCat);
         }});
         LinearLayout hm = section(body, "Al encender");
         final boolean def = isDefaultHome();
@@ -6485,6 +6872,18 @@ public class Main extends Activity {
         toggle(hm, "Abrir MiniLauncher al encender", "Para pantallas que siempre arrancan en su menú de fábrica (Android 4 a 9)", prefs.getBoolean("boot_open", false), new IntCb() { public void on(int i) {
             prefs.edit().putBoolean("boot_open", i == 1).apply(); showSettings(settingsCat);
         }});
+        // 2.21 (rvilonen-spec, #15): abrir una app al encender (la radio, para que empiece a sonar) y volver al inicio
+        String bootApp = prefs.getString("boot_app", "");
+        row(hm, "Abrir una app al encender", "MiniLauncher la abre un momento al arrancar (por ejemplo la radio, para que empiece a sonar) y vuelve al inicio",
+            bootApp.length() > 0 ? labelOf(bootApp) : I18n.t("Ninguna"), new Runnable() { public void run() {
+                List<String[]> extra = new ArrayList<String[]>();
+                extra.add(new String[]{"none", "Ninguna", null});
+                pickApp("Abrir una app al encender", extra, null, true, new TargetCb() { public void on(String t) {
+                    if (t.startsWith("app:")) prefs.edit().putString("boot_app", t.substring(4)).apply();
+                    else prefs.edit().remove("boot_app").apply();
+                    showSettings(settingsCat);
+                }});
+            }});
         // Salidas (issue #9): una pantalla Android 11 quedó atrapada en MiniLauncher tras elegirlo como launcher desde su
         // modo fábrica (toda app, incluso la ventana de desinstalar, se abría y volvía a MiniLauncher).
         LinearLayout out = section(body, "Salir de MiniLauncher");
@@ -6493,7 +6892,7 @@ public class Main extends Activity {
         row(out, "Desinstalar MiniLauncher", "Android pide confirmar", null, new Runnable() { public void run() { uninstallSelf(); } });
         if (getPackageName().endsWith(".debug")) {
             LinearLayout sm = section(body, "Versión de prueba");
-            segmented(sm, "Simular pantalla", "Para probar otros tamaños en una tablet o celular", new String[]{"Real", "1024×600", "1280×720", "1920×720", "2000×1200", "1280×480"},
+            choice(sm, "Simular pantalla", "Para probar otros tamaños en una tablet o celular", new String[]{"Real", "1024×600", "1280×720", "1920×720", "2000×1200", "1280×480", "768×1024", "1080×1920"},
                 prefs.getInt("sim_screen", 0), new IntCb() { public void on(int i) {
                     prefs.edit().putInt("sim_screen", i).apply(); rebuild(); showSettings(settingsCat);
                 }});
@@ -6619,6 +7018,269 @@ public class Main extends Activity {
         if (text != null) text.setTextIsSelectable(true);
     }
 
+    // ───────────────────────── copia de seguridad (2.21) ─────────────────────────
+    // Idea de ashoksoft (Reddit): su pantalla hay que restablecerla de fábrica cada tanto y perdía el cambio de aceite,
+    // el seguro y los mantenimientos. Todo va a un archivo en la memoria de la pantalla o en una USB; nada a la nube.
+
+    private static final int REQ_BACKUP_W = 81, REQ_BACKUP_R = 82, REQ_BACKUP_CREATE = 83, REQ_BACKUP_OPEN = 84;
+    private boolean askedBackupRead;
+
+    /** Selector de archivos de Android (4.4+), para guardar o abrir la copia en cualquier carpeta o memoria. */
+    private Intent backupDocIntent(boolean create) {
+        if (SDK < 19) return null;
+        Intent i = new Intent(create ? "android.intent.action.CREATE_DOCUMENT" : "android.intent.action.OPEN_DOCUMENT");
+        i.addCategory(Intent.CATEGORY_OPENABLE);
+        i.setType(create ? "application/json" : "*/*");
+        if (create) i.putExtra(Intent.EXTRA_TITLE, Backup.name());
+        try { return getPackageManager().resolveActivity(i, 0) != null ? i : null; } catch (Throwable e) { return null; }
+    }
+
+    private void backupSave() {
+        // Android 6 a 9: permiso para escribir en la memoria (en Android 10+ se usa el selector de archivos)
+        if (SDK >= 23 && SDK <= 28 && checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQ_BACKUP_W);
+            return;
+        }
+        backupSave0();
+    }
+
+    private void backupSave0() {
+        if (isFinishing()) return;
+        final List<File> roots = new ArrayList<File>();
+        final List<String> items = new ArrayList<String>();
+        roots.add(Backup.primary());
+        items.add(I18n.t("Memoria de la pantalla") + "\n" + new File(Backup.primary(), "MiniLauncher").getAbsolutePath());
+        for (File u : Backup.removable(this)) {
+            roots.add(u);
+            items.add(I18n.t("Memoria USB") + "  ·  " + u.getName() + "\n" + u.getAbsolutePath());
+        }
+        final Intent doc = backupDocIntent(true);
+        if (doc != null) items.add(I18n.t("Elegir otra carpeta…"));
+        if (items.size() == 1) { backupWrite(roots.get(0)); return; }
+        new TB(this, dlg()).raw().wide()
+            .setTitle(I18n.t("¿Dónde guardar la copia?"))
+            .setItems(items.toArray(new String[0]), new DialogInterface.OnClickListener() { public void onClick(DialogInterface d, int w) {
+                if (w < roots.size()) backupWrite(roots.get(w));
+                else try { startActivityForResult(doc, REQ_BACKUP_CREATE); } catch (Throwable e) { toast("No se pudo abrir el selector de archivos"); }
+            }})
+            .setNegativeButton(I18n.t("Cancelar"), null)
+            .show();
+    }
+
+    private void backupWrite(final File root) {
+        new Thread(new Runnable() { public void run() {
+            File f = null;
+            String err = null;
+            try { f = Backup.save(Main.this, root, Backup.name(), Backup.build(Main.this)); }
+            catch (Throwable e) { err = String.valueOf(e.getMessage() != null ? e.getMessage() : e); }
+            final File ff = f;
+            final String fe = err;
+            h.post(new Runnable() { public void run() { backupSaved(ff != null ? ff.getAbsolutePath() : null, fe, root.equals(Backup.primary())); } });
+        }}).start();
+    }
+
+    private void backupSaved(String where, String err, boolean onScreen) {
+        if (isFinishing()) return;
+        if (where == null) {
+            new TB(this, dlg()).raw()
+                .setTitle(I18n.t("No se pudo guardar la copia"))
+                .setMessage(I18n.t("Esa memoria no dejó escribir el archivo. Prueba con otra memoria o con «Elegir otra carpeta…».") + "\n\n" + err)
+                .setPositiveButton("OK", null).show();
+            return;
+        }
+        prefs.edit().putLong("backup_last", System.currentTimeMillis()).apply();
+        new TB(this, dlg()).raw()
+            .setTitle(I18n.t("Copia guardada"))
+            .setMessage(I18n.t("Se guardó en:") + "\n" + where + (onScreen
+                ? "\n\n" + I18n.t("Al restablecer la pantalla de fábrica también se puede borrar su memoria: guarda otra copia en una USB para tenerla a salvo.")
+                : ""))
+            .setPositiveButton("OK", null).show();
+        if (settingsView != null) showSettings(settingsCat);
+    }
+
+    /** Guardar o abrir la copia con el selector de archivos de Android. */
+    private void backupDocument(final Uri uri, final boolean create) {
+        new Thread(new Runnable() { public void run() {
+            String text = null, err = null;
+            try {
+                if (create) Backup.write(getContentResolver().openOutputStream(uri), Backup.build(Main.this));
+                else text = new String(Backup.readAll(getContentResolver().openInputStream(uri)), "UTF-8");
+            } catch (Throwable e) { err = String.valueOf(e.getMessage() != null ? e.getMessage() : e); }
+            final String ft = text, fe = err;
+            h.post(new Runnable() { public void run() {
+                if (isFinishing()) return;
+                if (fe != null) {
+                    new TB(Main.this, dlg()).raw().setTitle(I18n.t(create ? "No se pudo guardar la copia" : "No se pudo leer el archivo"))
+                        .setMessage(fe).setPositiveButton("OK", null).show();
+                } else if (create) {
+                    prefs.edit().putLong("backup_last", System.currentTimeMillis()).apply();
+                    toast("Copia guardada");
+                    if (settingsView != null) showSettings(settingsCat);
+                } else confirmRestore(ft);
+            }});
+        }}).start();
+    }
+
+    private void backupRestore() {
+        if (SDK >= 23 && !askedBackupRead && checkSelfPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            askedBackupRead = true;
+            requestPermissions(new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE}, REQ_BACKUP_R);
+            return;
+        }
+        backupRestore0();
+    }
+
+    private void backupRestore0() {
+        if (isFinishing()) return;
+        toast("Buscando copias…");
+        new Thread(new Runnable() { public void run() {
+            final List<Backup.Info> found = Backup.find(Main.this);
+            h.post(new Runnable() { public void run() { showBackups(found); } });
+        }}).start();
+    }
+
+    private void showBackups(final List<Backup.Info> found) {
+        if (isFinishing()) return;
+        final Intent doc = backupDocIntent(false);
+        if (found.isEmpty() && doc == null) {
+            new TB(this, dlg())
+                .setTitle("No se encontró ninguna copia")
+                .setMessage("No hay copias de MiniLauncher en la memoria de la pantalla ni en las USB conectadas. El archivo se llama «MiniLauncher-backup» y termina en .json.")
+                .setPositiveButton("OK", null).show();
+            return;
+        }
+        List<String> items = new ArrayList<String>();
+        java.text.DateFormat df = I18n.sdf("d MMM yyyy, HH:mm");
+        for (Backup.Info i : found) {
+            items.add(df.format(new Date(i.created)) + "  ·  MiniLauncher " + i.version
+                + (Backup.AUTO.equals(i.file.getName()) ? "  ·  " + I18n.t("automática") : "") + "\n" + i.file.getParent());
+        }
+        if (doc != null) items.add(I18n.t("Buscar el archivo…"));
+        new TB(this, dlg()).raw().wide()
+            .setTitle(I18n.t(found.isEmpty() ? "No se encontró ninguna copia" : "Elige la copia"))
+            .setItems(items.toArray(new String[0]), new DialogInterface.OnClickListener() { public void onClick(DialogInterface d, int w) {
+                if (w >= found.size()) {
+                    try { startActivityForResult(doc, REQ_BACKUP_OPEN); } catch (Throwable e) { toast("No se pudo abrir el selector de archivos"); }
+                    return;
+                }
+                try { confirmRestore(new String(Backup.readAll(new java.io.FileInputStream(found.get(w).file)), "UTF-8")); }
+                catch (Throwable e) { toast("No se pudo leer el archivo"); }
+            }})
+            .setNegativeButton(I18n.t("Cancelar"), null)
+            .show();
+    }
+
+    private void confirmRestore(final String json) {
+        Backup.Info i = json == null ? null : Backup.peek(json);
+        if (i == null) {
+            new TB(this, dlg()).setTitle("No se pudo restaurar")
+                .setMessage("Este archivo no es una copia de seguridad de MiniLauncher").setPositiveButton("OK", null).show();
+            return;
+        }
+        String when = i.created > 0 ? I18n.sdf("d MMM yyyy, HH:mm").format(new Date(i.created)) : "—";
+        String msg = I18n.t("Copia del") + " " + when + "  ·  MiniLauncher " + i.version
+            + (i.device.length() > 0 ? "\n" + I18n.t("Pantalla:") + " " + i.device : "")
+            + "\n" + I18n.t("Ajustes guardados:") + " " + i.settings + (i.photo ? "  ·  " + I18n.t("con la foto del vehículo") : "")
+            + "\n\n" + I18n.t("Se reemplaza toda la configuración actual de MiniLauncher por la de la copia.");
+        new TB(this, dlg()).raw()
+            .setTitle(I18n.t("¿Restaurar esta copia?"))
+            .setMessage(msg)
+            .setPositiveButton(I18n.t("Restaurar"), new DialogInterface.OnClickListener() { public void onClick(DialogInterface d, int w) {
+                String err = Backup.apply(Main.this, json);
+                if (err != null) {
+                    new TB(Main.this, dlg()).setTitle("No se pudo restaurar").setMessage(err).setPositiveButton("OK", null).show();
+                    return;
+                }
+                reloadAll();
+                toast("Copia restaurada");
+            }})
+            .setNegativeButton(I18n.t("Cancelar"), null)
+            .show();
+    }
+
+    /** Después de restaurar: idioma, tema, color, odómetro y pantalla se vuelven a armar con lo restaurado. */
+    private void reloadAll() {
+        I18n.init(this, prefs);
+        loadFontSize();
+        refreshMusicInput();
+        LiveMapView.headingUp = prefs.getBoolean("map_heading", false);
+        applyTheme();
+        applyAccent();
+        try { lm.removeUpdates(odoListener); } catch (Throwable ignored) { }
+        odoRunning = false;
+        startOdo();
+        weatherAt = 0;
+        rebuild();
+        maybeWeather();
+    }
+
+    /** Copia automática: se actualiza poco después de cada cambio (y cada media hora si solo avanzó el kilometraje). */
+    private long backupDue;
+    private final Runnable autoBackup = new Runnable() { public void run() {
+        backupDue = 0;
+        if (!prefs.getBoolean("backup_auto", false)) return;
+        new Thread(new Runnable() { public void run() {
+            if (Backup.auto(Main.this) > 0) prefs.edit().putLong("backup_last", System.currentTimeMillis()).apply();
+        }}).start();
+    }};
+    private final SharedPreferences.OnSharedPreferenceChangeListener backupWatch = new SharedPreferences.OnSharedPreferenceChangeListener() {
+        public void onSharedPreferenceChanged(SharedPreferences sp, String key) {
+            if (key == null || Backup.skip(key) || !sp.getBoolean("backup_auto", false)) return;
+            long delay = "odo_gps_m".equals(key) ? 30 * 60000L : 8000L, due = SystemClock.uptimeMillis() + delay;
+            if (backupDue != 0 && backupDue <= due) return;   // ya hay una programada para antes
+            backupDue = due;
+            h.removeCallbacks(autoBackup);
+            h.postDelayed(autoBackup, delay);
+        }
+    };
+
+    // ───────────────────────── app al encender (2.21, #15) ─────────────────────────
+
+    private static boolean bootAppDone;
+
+    /**
+     * Abre la app elegida un momento y vuelve al inicio. Solo al encender la pantalla (los primeros minutos desde
+     * que arrancó Android): si MiniLauncher se reinicia más tarde (una actualización, un cierre) no se abre nada.
+     */
+    private void maybeBootApp() {
+        if (bootAppDone) return;
+        bootAppDone = true;
+        if (SystemClock.elapsedRealtime() > 4 * 60000L) return;
+        runBootApp(2000);
+    }
+
+    /**
+     * Muchas pantallas no se apagan del todo con el carro: se duermen. Al despertar después de un buen rato
+     * (el carro estuvo apagado) también cuenta como «encender», si MiniLauncher es lo que está a la vista.
+     */
+    private long screenOffAt;
+    private final BroadcastReceiver screenReceiver = new BroadcastReceiver() {
+        public void onReceive(Context c, Intent i) {
+            if (Intent.ACTION_SCREEN_OFF.equals(i.getAction())) { screenOffAt = SystemClock.elapsedRealtime(); return; }
+            if (screenOffAt > 0 && SystemClock.elapsedRealtime() - screenOffAt > 5 * 60000L && hasWindowFocus()) runBootApp(1500);
+            screenOffAt = 0;
+        }
+    };
+
+    private void runBootApp(long delay) {
+        final String comp = prefs.getString("boot_app", "");
+        if (comp.length() == 0 || !prefs.getBoolean("setup_done", false)) return;
+        h.postDelayed(new Runnable() { public void run() {
+            if (isFinishing()) return;
+            final ComponentName cn = ComponentName.unflattenFromString(comp);
+            if (cn == null || !launchComponent(cn)) return;
+            h.postDelayed(new Runnable() { public void run() {
+                // si el usuario ya abrió otra cosa, no se le quita
+                String now = topPackage();
+                if (now != null && !now.equals(cn.getPackageName()) && !now.equals(getPackageName())) return;
+                try {
+                    startActivity(new Intent(Main.this, Main.class)
+                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
+                } catch (Throwable ignored) { }
+            }}, 3500);
+        }}, delay);
+    }
+
     /** Tabla de compatibilidad: qué función sirve desde qué Android o marca de pantalla, y cómo está aquí. */
     private void showCompat() {
         StringBuilder b = new StringBuilder();
@@ -6641,7 +7303,9 @@ public class Main extends Activity {
         compatLine(b, "Íconos de Wi-Fi y Bluetooth arriba", "Android 4.1+", true, clwBt ? "Bluetooth: estado del celular desde la app de fábrica; toca para abrirla" : null);
         compatLine(b, "Tema según el modo oscuro del sistema", "Pantallas que lo cambian (p. ej. con las luces)", true,
             systemNight() ? "el sistema está en modo oscuro" : "el sistema está en modo claro");
-        new TB(this, dlg()).setTitle("Compatibilidad").setMessage(b.toString().trim()).setPositiveButton("OK", null).show();
+        compatLine(b, "Copia de seguridad en un archivo (pantalla o USB)", "Android 4.1+", true, SDK >= 29 ? "en Android 10+ la carpeta se elige con el selector de archivos" : null);
+        compatLine(b, "Diseño vertical", "Pantallas en vertical (tipo Tesla)", true, vertical ? "en uso" : "esta pantalla es horizontal");
+        new TB(this, dlg()).diag().setTitle("Compatibilidad").setMessage(b.toString().trim()).setPositiveButton("OK", null).show();
     }
 
     private static void compatLine(StringBuilder b, String name, String needs, boolean ok, String note) {
@@ -6668,7 +7332,9 @@ public class Main extends Activity {
         String t = Guard.read(this);
         if (t == null) { toast("No hay fallos registrados"); return; }
         if (t.length() > 6000) t = "…" + t.substring(t.length() - 6000);
-        TextView v = tv(t, 12, TEXT, false);
+        // el registro es para quien desarrolla MiniLauncher: los avisos se guardan en español, sea cual sea el idioma elegido
+        TextView v = tv(I18n.t("Registro técnico para enviar al desarrollador (se guarda en español).") + "\n\n" + t, 12, TEXT, false);
+        v.setSingleLine(false);
         v.setTextIsSelectable(true);
         v.setPadding((int) (16 * s), (int) (8 * s), (int) (16 * s), (int) (8 * s));
         android.widget.ScrollView sv = new android.widget.ScrollView(this);
@@ -7568,7 +8234,7 @@ public class Main extends Activity {
 
         final PackageManager pm = getPackageManager();
         GridView grid = new GridView(this);
-        grid.setNumColumns(6);
+        grid.setNumColumns(vertical ? 4 : 6);
         grid.setVerticalSpacing((int) (18 * s));
         grid.setSelector(new ColorDrawable(Color.TRANSPARENT));
         grid.setAdapter(new BaseAdapter() {

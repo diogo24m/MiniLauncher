@@ -12,7 +12,7 @@ Alterações relativamente à base:
 - Seletor Bluetooth/Reprodutor, sessões de música da fonte escolhida, capas por URI e acesso a notificações.
 - Controlos de depuração ADB USB/Wi-Fi com ajuda sobre permissões.
 - Nome MiniLauncher, pacote `com.mini.launcher`, ícone e logótipo MINI.
-- Português de Portugal, tamanho de texto de 85 a 150% e disposição ajustada para a telemetria.
+- Português de Portugal e disposição ajustada para a telemetria.
 - Dados simulados identificados na edição de teste sem SPD, documentação do carro e 14 evidências originais.
 
 As notas completas estão em [changelogs/0.1.0.md](changelogs/0.1.0.md).

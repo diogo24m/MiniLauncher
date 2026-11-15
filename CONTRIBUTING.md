@@ -44,7 +44,7 @@ Requisitos: JDK 17 y el SDK de Android.
 - **Compatibilidad con Android 4.1 (API 16):** cualquier API más nueva va detrás de `if (Build.VERSION.SDK_INT >= …)`.
 - Java 8 **sin lambdas** ni `java.util.Objects`/`StandardCharsets` (no existen en API 16–18).
 - Sin dependencias de Google Play Services, para poder estar en F-Droid.
-- La interfaz se dibuja por código en una «mesa» de 1024×600 que se escala (ver `Main.place()`).
+- La interfaz se dibuja por código sobre un lienzo horizontal de 1024×600 o vertical de 720 de ancho, que se escala (ver `Main.place()` y `buildVerticalMetrics()`).
 
 ## Verificar MiniLauncher
 
@@ -71,6 +71,9 @@ app/src/main/java/com/mini/launcher/
   Updates.java       avisos de versiones nuevas (GitHub Releases)
   CarPhoto.java      quitar fondo y ajustar la foto del vehículo
   Net.java           HTTPS con TLS 1.2 y certificados actuales en Android 4.x
+  Backup.java        copia y restauro local/USB de preferencias, mantenimiento y foto
+  TB.java, Dlg.java  diálogos del launcher, traducciones, títulos MINI y tamaño de texto
+  Bars.java          barras del sistema en Android 11+ (solo se carga desde API 30)
 app/src/hiddenapi/   stub de API oculta de Android 4.x (solo para compilar, no entra al APK)
 app/src/legacy/      RcDisplay: única clase que extiende la API oculta (se carga por reflexión)
 ```

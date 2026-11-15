@@ -2,7 +2,7 @@
 
 Este documento é um rascunho para a primeira versão, **MiniLauncher 0.1.0** (código **1**, pacote `com.mini.launcher`). O projeto é um fork GPL-3.0 do [StradaOS 2.20.1](https://github.com/lordnordic-debug/StradaOS), de lordnordic-debug.
 
-As alterações do fork incluem dados CAN/SPD do BMW MINI, velocidade SPD com GPS de reserva, seletor Bluetooth/Reprodutor, controlos ADB, identidade MINI, português de Portugal e tamanho de texto de 85 a 150%.
+As alterações do fork incluem dados CAN/SPD do BMW MINI, velocidade SPD com GPS de reserva, seletor Bluetooth/Reprodutor, controlos ADB, identidade MINI e português de Portugal.
 
 ## Ficheiros e referências
 

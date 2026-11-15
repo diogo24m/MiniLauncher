@@ -28,7 +28,7 @@ Cada push a `main` publica **«MiniLauncher Prueba»** en el Release [`prueba`](
 - No avisa actualizaciones: para la siguiente prueba se vuelve a abrir el enlace.
 - No es una versión oficial: no aparece como «última versión» ni en la página ni en el aviso de la app.
 
-**En el celular:** descargar el APK, instalar (permitir «Instalar apps desconocidas» para el navegador), abrir «MiniLauncher Prueba» y **girar el celular en horizontal** (activar la rotación automática). Si Android pregunta qué launcher usar al tocar Inicio, elegir el de siempre con «Siempre»: MiniLauncher Prueba se abre desde su ícono.
+**En el celular:** descargar el APK, instalar (permitir «Instalar apps desconocidas» para el navegador) y abrir «MiniLauncher Prueba». Se pueden probar tanto el diseño horizontal como el vertical; la versión de prueba permite simular 768×1024 y 1080×1920 en Ajustes → Sistema. Si Android pregunta qué launcher usar al tocar Inicio, elegir el de siempre con «Siempre»: MiniLauncher Prueba se abre desde su ícono.
 
 Sirve para todo lo que no depende del carro: barra inferior, apps preferidas (Spotify, Waze, Maps del celular), ajustes, asistente, mapa y clima. No sirve para radio, cámara de reversa, Bluetooth de la pantalla ni Android Auto por USB.
 

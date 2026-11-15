@@ -78,11 +78,11 @@ public class LauncherIntegrationTest extends ActivityInstrumentationTestCase2<Ma
     }
 
     public void testTelemetryFitsWithEveryGaugeAndLargeText() {
-        for (final int font : new int[]{100, 150}) {
+        for (final int font : new int[]{0, 1, 2, 3}) {
             for (final int gauge : new int[]{0, 1, 2}) {
                 onUi(new Runnable() { public void run() {
-                    prefs.edit().putInt("text_size", font).putInt("speedo", gauge).commit();
-                    call("loadTextSize");
+                    prefs.edit().putInt("font_size", font).putInt("speedo", gauge).commit();
+                    call("loadFontSize");
                     call("rebuild");
                 }});
                 getInstrumentation().waitForIdleSync();
@@ -96,7 +96,7 @@ public class LauncherIntegrationTest extends ActivityInstrumentationTestCase2<Ma
                             stripAt[1] >= chipAt[1] + chip.getHeight());
                     assertTrue(strip.getHeight() > 0);
                     TextView consumption = (TextView) field("carConsTv");
-                    assertTrue("Consumption unit is clipped at " + font + "%: text="
+                    assertTrue("Consumption unit is clipped at font option " + font + ": text="
                                     + consumption.getPaint().measureText(consumption.getText().toString())
                                     + " width=" + consumption.getWidth() + " size=" + consumption.getTextSize()
                                     + " max=" + ((Main.FitText) consumption).max + " min=" + ((Main.FitText) consumption).min
@@ -440,6 +440,123 @@ public class LauncherIntegrationTest extends ActivityInstrumentationTestCase2<Ma
                 setGps(true, Float.NaN);
                 assertEquals("--", ((TextView) field("speedTv")).getText().toString());
             } finally { demo.speedKmh = null; demo.speedAt = 0; }
+        }});
+    }
+
+    public void testGpsCorrectionKeepsSpdSpeedUnchanged() {
+        onUi(new Runnable() { public void run() {
+            final Vehicle real = new Vehicle(); real.speedKmh = 72f; real.speedAt = SystemClock.elapsedRealtime();
+            withCar(real, new Runnable() { public void run() {
+                prefs.edit().putString("speed_offset", "+10%").putInt("speedo", 2).commit();
+                call("rebuild");
+                setGps(true, 40);
+                assertSpeed("72", "SPD");
+                assertGauge("carGauge", 72f);
+                real.speedKmh = null;
+                call("refreshSpeed");
+                assertSpeed("44", "GPS");
+                assertGauge("carGauge", 44f);
+                prefs.edit().putString("speed_unit", "mph").commit();
+                call("refreshSpeed");
+                assertSpeed("27", "GPS");
+            }});
+        }});
+    }
+
+    public void testBackupRestoresMiniSettingsAndMaintenance() {
+        onUi(new Runnable() { public void run() {
+            String task = SpdMaintenance.key(1);
+            prefs.edit().putInt("font_size", 3).putString("music_input", "player")
+                    .putBoolean(task + "enabled", false).putBoolean(task + "done", true)
+                    .putLong(task + "snooze", 123456789L).putString("maint", "[{\"n\":\"Filtro MINI\",\"km\":15000}]").commit();
+            try {
+                String json = Backup.build(activity);
+                assertEquals("MiniLauncher", new org.json.JSONObject(json).getString("app"));
+                assertNotNull(Backup.peek(json));
+                prefs.edit().putInt("font_size", 1).putString("music_input", "bt")
+                        .putBoolean(task + "enabled", true).putBoolean(task + "done", false)
+                        .putLong(task + "snooze", 0).putString("maint", "[]").putInt("sim_screen", 6).commit();
+                assertNull(Backup.apply(activity, json));
+                call("reloadAll");
+                assertEquals(3, prefs.getInt("font_size", 0));
+                assertEquals(1.25f, Main.FONT, 0.001f);
+                assertEquals("player", prefs.getString("music_input", ""));
+                assertFalse((Boolean) field(field("mediaWatcher"), "btMode"));
+                assertFalse(prefs.getBoolean(task + "enabled", true));
+                assertTrue(prefs.getBoolean(task + "done", false));
+                assertEquals(123456789L, prefs.getLong(task + "snooze", 0));
+                assertTrue(prefs.getString("maint", "").contains("Filtro MINI"));
+                assertEquals(4567f, prefs.getFloat("odo_base_km", 0), 0.001f);
+                assertEquals(6, prefs.getInt("sim_screen", 0)); // a simulação pertence ao equipamento, não à cópia
+            } catch (Exception e) { throw new AssertionError(e); }
+        }});
+    }
+
+    public void testPortraitKeepsMusicInputWithAndWithoutVehicleCard() {
+        onUi(new Runnable() { public void run() {
+            prefs.edit().putInt("font_size", 3).putString("music_input", "player").commit();
+            call("loadFontSize");
+            for (int screen : new int[]{6, 7}) {
+                for (boolean showCar : new boolean[]{true, false}) {
+                    prefs.edit().putInt("sim_screen", screen).putBoolean("show_car", showCar).commit();
+                    call("rebuild");
+                    assertTrue((Boolean) field("vertical"));
+                    assertNotNull(((View) field("sourceTv")).getParent());
+                    assertNotNull(((View) field("inputTv")).getParent());
+                    assertEquals(I18n.t("Reproductor"), ((TextView) field("inputTv")).getText().toString());
+                    assertFalse((Boolean) call("inputBt"));
+                }
+            }
+        }});
+    }
+
+    public void testNewDialogsKeepMiniCustomTitlesAndTextScale() {
+        onUi(new Runnable() { public void run() {
+            android.app.AlertDialog baseline = new TB(activity, (Integer) call("dlg"))
+                    .setMessage("Copia de seguridad").show();
+            float normalSize = ((TextView) baseline.findViewById(android.R.id.message)).getTextSize();
+            baseline.dismiss();
+            prefs.edit().putInt("font_size", 3).commit(); call("loadFontSize");
+            TextView title = new TextView(activity); title.setText("MINI service"); title.setTextSize(22);
+            android.app.AlertDialog dialog = new TB(activity, (Integer) call("dlg"))
+                    .setCustomTitle(title).setMessage("Copia de seguridad")
+                    .setItems(new String[]{"MINI", "BMW"}, null).show();
+            try {
+                assertTrue(dialog instanceof Dlg);
+                assertNotNull(title.getParent());
+                assertEquals(2, dialog.getListView().getCount());
+                TextView message = (TextView) dialog.findViewById(android.R.id.message);
+                assertNotNull(message);
+                assertEquals(I18n.t("Copia de seguridad"), message.getText().toString());
+                assertEquals(normalSize * 1.25f, message.getTextSize(), 0.1f);
+            } finally { dialog.dismiss(); }
+        }});
+    }
+
+    public void testFontSizeUsesMainOptionsAndUniformScale() {
+        onUi(new Runnable() { public void run() {
+            prefs.edit().putInt("text_size", 150).commit(); // a preferência antiga não altera o padrão M da main
+            call("loadFontSize");
+            assertEquals(1f, Main.FONT, 0.001f);
+            float[] scales = {0.9f, 1f, 1.12f, 1.25f};
+            for (int option = 0; option < scales.length; option++) {
+                call("applyFontSize", int.class, option);
+                assertEquals(option, prefs.getInt("font_size", -1));
+                assertEquals(scales[option], Main.FONT, 0.001f);
+                float s = (Float) field("s");
+                assertEquals(30 * s * scales[option], ((TextView) field("timeTv")).getTextSize(), 0.01f);
+                assertEquals(56 * s * scales[option], ((TextView) field("speedTv")).getTextSize(), 0.01f);
+                assertEquals(18 * s * scales[option], ((TextView) call("field")).getTextSize(), 0.01f);
+                TextView label = (TextView) invoke("tv", new Class<?>[]{String.class, float.class, int.class, boolean.class},
+                        new Object[]{"A long label", 14f, Main.TEXT, false});
+                label.measure(View.MeasureSpec.makeMeasureSpec(20, View.MeasureSpec.EXACTLY),
+                        View.MeasureSpec.makeMeasureSpec(100, View.MeasureSpec.AT_MOST));
+                assertEquals(14 * s * scales[option], label.getTextSize(), 0.01f);
+            }
+            call("showSettings", int.class, Main.C_LOOK);
+            for (String size : new String[]{"S", "M", "L", "XL"})
+                assertTrue(containsText((View) field("settingsScroll"), size));
+            assertFalse(containsText((View) field("settingsScroll"), "150%"));
         }});
     }
 

@@ -3,90 +3,58 @@ package com.mini.launcher;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.util.TypedValue;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
-import android.widget.TextView;
-
-import java.util.Map;
-import java.util.WeakHashMap;
+import android.widget.ListAdapter;
 
 /**
- * AlertDialog.Builder que traduce títulos, mensajes, botones y listas al idioma elegido (ver I18n) y usa el tamaño
- * de letra elegido en Ajustes → Apariencia → Texto, solo en sus propias vistas.
+ * Constructor de las ventanas de MiniLauncher. Se usa igual que AlertDialog.Builder (por eso lo extiende: el resto del
+ * código no cambia), pero no arma la ventana del sistema: guarda lo pedido y lo dibuja {@link Dlg} con el estilo
+ * del launcher (tarjeta redondeada, colores del tema y botones con el acento). Además traduce títulos, mensajes,
+ * botones y listas al idioma elegido (ver I18n).
  */
 public class TB extends AlertDialog.Builder {
-    private View customView;
-    private View customTitle;
+    final Context ctx;
+    final int theme;
+    CharSequence title, message, posT, negT, neuT;
+    DialogInterface.OnClickListener posL, negL, neuL, itemsL;
+    CharSequence[] items;
+    int checked = -1;
+    boolean single;
+    ListAdapter adapter;
+    View view, customTitle;
+    boolean cancelable = true, translate = true, diag, wide;
+    DialogInterface.OnCancelListener onCancel;
 
-    public TB(Context c, int theme) { super(c, theme); }
+    public TB(Context c, int theme) { super(c, theme); ctx = c; this.theme = theme; }
 
-    /**
-     * Ajusta los TextView del diálogo sin modificar Configuration ni los Resources del contexto de Android.
-     * El contenido personalizado ya usa textPx() o field(): se excluye para no aplicar la escala dos veces.
-     */
-    @Override public AlertDialog create() {
-        final AlertDialog dialog = super.create();
-        final float scale = Main.TS;
-        if (scale == 1f) return dialog;
-        final View custom = customView;
-        final View title = customTitle;
-        // Conserva el tamaño original también al reciclar filas de listas o volver a mostrar el mismo diálogo.
-        final Map<TextView, Float> sizes = new WeakHashMap<TextView, Float>();
-        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
-            public void onShow(DialogInterface d) {
-                final View decor = dialog.getWindow().getDecorView();
-                final ViewTreeObserver.OnGlobalLayoutListener layout = new ViewTreeObserver.OnGlobalLayoutListener() {
-                    public void onGlobalLayout() { scaleText(decor, custom, title, scale, sizes); }
-                };
-                decor.getViewTreeObserver().addOnGlobalLayoutListener(layout);
-                decor.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
-                    public void onViewAttachedToWindow(View v) { }
-                    public void onViewDetachedFromWindow(View v) {
-                        if (v.getViewTreeObserver().isAlive()) v.getViewTreeObserver().removeOnGlobalLayoutListener(layout);
-                        v.removeOnAttachStateChangeListener(this);
-                    }
-                });
-                layout.onGlobalLayout();
-            }
-        });
-        return dialog;
+    /** Los textos ya vienen en el idioma del usuario (nombres propios o textos traducidos antes): no se traducen. */
+    public TB raw() { translate = false; return this; }
+    /** Ventana de diagnóstico: el mensaje se traduce línea por línea y se muestra como «dato: valor». */
+    public TB diag() { diag = true; wide = true; return this; }
+    /** Ventana más ancha (listas con íconos, textos largos). */
+    public TB wide() { wide = true; return this; }
+
+    CharSequence t(CharSequence s) { return translate && s != null ? I18n.t(s) : s; }
+
+    @Override public TB setTitle(CharSequence t) { title = t; return this; }
+    @Override public TB setMessage(CharSequence m) { message = m; return this; }
+    @Override public TB setPositiveButton(CharSequence t, DialogInterface.OnClickListener l) { posT = t; posL = l; return this; }
+    @Override public TB setNegativeButton(CharSequence t, DialogInterface.OnClickListener l) { negT = t; negL = l; return this; }
+    @Override public TB setNeutralButton(CharSequence t, DialogInterface.OnClickListener l) { neuT = t; neuL = l; return this; }
+    @Override public TB setItems(CharSequence[] it, DialogInterface.OnClickListener l) { items = it; itemsL = l; single = false; return this; }
+    @Override public TB setSingleChoiceItems(CharSequence[] it, int sel, DialogInterface.OnClickListener l) {
+        items = it; checked = sel; itemsL = l; single = true; return this;
     }
+    @Override public TB setAdapter(ListAdapter a, DialogInterface.OnClickListener l) { adapter = a; itemsL = l; wide = true; return this; }
+    @Override public TB setView(View v) { view = v; return this; }
+    @Override public TB setCustomTitle(View v) { customTitle = v; return this; }
+    @Override public TB setCancelable(boolean c) { cancelable = c; return this; }
+    @Override public TB setOnCancelListener(DialogInterface.OnCancelListener l) { onCancel = l; return this; }
 
-    private static void scaleText(View view, View custom, View title, float scale, Map<TextView, Float> sizes) {
-        if (view == custom || view == title || view instanceof Main.FitText) return;
-        if (view instanceof TextView) {
-            TextView text = (TextView) view;
-            Float base = sizes.get(text);
-            if (base == null) { base = text.getTextSize(); sizes.put(text, base); }
-            float target = base * scale;
-            if (Math.abs(text.getTextSize() - target) > 0.1f) text.setTextSize(TypedValue.COMPLEX_UNIT_PX, target);
-        }
-        if (view instanceof ViewGroup) {
-            ViewGroup group = (ViewGroup) view;
-            for (int i = 0; i < group.getChildCount(); i++) scaleText(group.getChildAt(i), custom, title, scale, sizes);
-        }
-    }
-
-    @Override public AlertDialog.Builder setView(View view) { customView = view; return super.setView(view); }
-    @Override public AlertDialog.Builder setCustomTitle(View view) { customTitle = view; return super.setCustomTitle(view); }
-
-    @Override public AlertDialog.Builder setTitle(CharSequence t) { return super.setTitle(I18n.t(t)); }
-    @Override public AlertDialog.Builder setMessage(CharSequence m) { return super.setMessage(I18n.t(m)); }
-    @Override public AlertDialog.Builder setPositiveButton(CharSequence t, DialogInterface.OnClickListener l) { return super.setPositiveButton(I18n.t(t), l); }
-    @Override public AlertDialog.Builder setNegativeButton(CharSequence t, DialogInterface.OnClickListener l) { return super.setNegativeButton(I18n.t(t), l); }
-    @Override public AlertDialog.Builder setNeutralButton(CharSequence t, DialogInterface.OnClickListener l) { return super.setNeutralButton(I18n.t(t), l); }
-    @Override public AlertDialog.Builder setItems(CharSequence[] items, DialogInterface.OnClickListener l) {
-        return super.setItems(translateItems(items), l);
-    }
-    @Override public AlertDialog.Builder setSingleChoiceItems(CharSequence[] items, int checked, DialogInterface.OnClickListener l) {
-        return super.setSingleChoiceItems(translateItems(items), checked, l);
-    }
-
-    private static CharSequence[] translateItems(CharSequence[] items) {
-        CharSequence[] out = new CharSequence[items.length];
-        for (int i = 0; i < items.length; i++) out[i] = I18n.t(items[i]);
-        return out;
+    @Override public AlertDialog create() { return new Dlg(this); }
+    @Override public AlertDialog show() {
+        AlertDialog d = create();
+        d.show();
+        return d;
     }
 }
