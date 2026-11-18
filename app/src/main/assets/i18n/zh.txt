@@ -1085,3 +1085,75 @@ En 150 metros	150 米后
 En 500 pies	500 英尺后
 En un cuarto de milla	四分之一英里后
 Parada intermedia	途经点
+# 2.24: Personalización (temas)
+Personalización	个性化
+Cambia el aspecto de la pantalla de inicio con un toque. Puedes seguir ajustando cada detalle en las demás secciones.	轻点一下即可更改主屏幕的外观。你仍可在其他部分调整每个细节。
+Temas gratis	免费主题
+Temas premium	高级主题
+Próximamente	即将推出
+Temas exclusivos para quienes apoyan MiniLauncher con una donación. Todas las funciones siguen siendo gratis.	为通过捐赠支持 MiniLauncher 的用户提供的专属主题。所有功能仍然免费。
+En uso	使用中
+Tema aplicado:	已应用主题：
+Clásico	经典
+Música a la izquierda	音乐在左侧
+Mapa amplio	宽地图
+Minimalista	极简
+Vehículo a la izquierda, mapa en el centro y música a la derecha	车辆在左、地图居中、音乐在右
+Mapa arriba; debajo, vehículo a la izquierda y música a la derecha	地图在上；下方车辆在左、音乐在右
+Música a la izquierda, mapa en el centro y vehículo a la derecha	音乐在左、地图居中、车辆在右
+Mapa arriba; debajo, música a la izquierda y vehículo a la derecha	地图在上；下方音乐在左、车辆在右
+Sin tarjeta del vehículo: mapa más ancho, velocímetro abajo a la izquierda y música a la derecha	不显示车辆卡片：地图更宽，车速表在左下角，音乐在右
+Sin tarjeta del vehículo: mapa más alto con el velocímetro abajo a la izquierda y la música a lo ancho	不显示车辆卡片：地图更高，车速表在左下角，音乐占满宽度
+Música a la izquierda, velocímetro abajo a la derecha, panel de conexión plegado y barra compacta	音乐在左，车速表在右下角，连接面板收起，紧凑栏
+Mapa casi completo: velocímetro abajo a la derecha, panel de conexión plegado, música a lo ancho y barra compacta	几乎全屏地图：车速表在右下角，连接面板收起，音乐占满宽度，紧凑栏
+Cada tema se adapta solo a la orientación de la pantalla.	每个主题都会自动适应屏幕方向。
+Tema premium	高级主题
+Aurora en uso	Aurora 使用中
+El tema arma la pantalla de inicio. Las tarjetas, la barra y el velocímetro de aquí se usan otra vez al quitarlo en Personalización.	该主题会排布主屏幕。移除它（在个性化中）后，这里的卡片、栏和车速表会重新生效。
+Tema premium quitado	已移除高级主题
+Premium	高级
+Fondo con un arco de color difuminado y granulado, tarjetas translúcidas, la hora en grande con música, vehículo y clima arriba, el mapa a lo ancho y una barra tipo píldora. El botón «Solo mapa» agranda el mapa.	柔和带颗粒的彩色弧形背景、半透明卡片、大号时钟，顶部有音乐、车辆和天气，全宽地图和胶囊形栏。「仅地图」按钮可放大地图。
+Sigue el modo claro u oscuro de Apariencia.	跟随外观中的浅色或深色模式。
+Quitar el tema premium	移除高级主题
+Aplicar	应用
+Versión de prueba: se puede aplicar sin código.	测试版：无需代码即可应用。
+Disponible pronto con una donación. Todas las funciones siguen siendo gratis.	即将通过捐赠提供。所有功能仍然免费。
+Cobalto	钴蓝
+Azul noche en tres columnas: el mapa se difumina hasta el reproductor de carátula redonda, y tu vehículo muestra el velocímetro arriba, su foto en el medio y el mantenimiento abajo. La temperatura va sobre el mapa.	三栏夜蓝风格：地图渐隐到圆形封面的播放器，车辆卡片上方是车速表、中间是车辆照片、下方是保养。温度显示在地图上方。
+Gratis	免费
+Gratis para todos. Los próximos temas premium se desbloquearán con una donación.	对所有人免费。之后的高级主题将通过捐赠解锁。
+Radar	测速摄像头
++ Añadir parada intermedia	+ 添加途经点
+incidente	事件
+incidentes	事件
+incidente en la ruta	路线上的事件
+incidentes en la ruta	路线上的事件
+Incidentes en la ruta	路线事件
+Consulta cierres o accidentes una sola vez al calcular ruta (TomTom)	计算路线时查询一次封路或事故（TomTom）
+Límite y alerta de velocidad	限速与提醒
+Muestra la señal de límite en el mapa y avisa al excederlo	在地图上显示限速标志，超速时提醒
+Tolerancia de exceso	超速容差
+Margen sobre el límite antes de activar alerta	触发提醒前允许超出限速的幅度
+Sonido al exceder límite	超速提示音
+Pitido de alerta cuando superas la tolerancia	超出容差时发出提示音
+Alertas de radares sin conexión	离线测速摄像头提醒
+Avisa al acercarse a radares del mapa local .map	接近本地 .map 地图中的测速摄像头时提醒
+Vía cerrada	道路封闭
+Carril cerrado	车道封闭
+Accidente	事故
+Obras en la vía	道路施工
+Tráfico detenido	交通停滞
+Incidente en la vía	道路事件
+Radar de velocidad adelante	前方测速摄像头
+Brillo de la pantalla	屏幕亮度
+Amanecer y atardecer: se calcula con el GPS, sin internet. Brillo: para pantallas que bajan el brillo al encender las luces	日出和日落：用 GPS 计算，无需联网。亮度：适用于开车灯时会调暗的屏幕
+Brillo actual	当前亮度
+Prende y apaga las luces del carro para ver cuánto cambia	开关车灯，看看亮度变化多少
+Oscuro con brillo menor a	亮度低于此值时为深色
+Elige un nivel entre el brillo de día y el de noche	在白天和夜间亮度之间选一个值
+Esta pantalla no informa su brillo	此屏幕不提供亮度信息
+Países del Golfo	海湾国家
+Irlanda del Norte	北爱尔兰
+Islas Canarias	加那利群岛
+Tiempo en MiniLauncher: {}	MiniLauncher 中的时间：{}
+Último tiempo por Bluetooth: {}	蓝牙最后一次的时间：{}

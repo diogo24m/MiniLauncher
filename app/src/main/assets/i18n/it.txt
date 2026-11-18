@@ -1188,3 +1188,75 @@ En 150 metros	Tra 150 metri
 En 500 pies	Tra 500 piedi
 En un cuarto de milla	Tra un quarto di miglio
 Parada intermedia	Tappa intermedia
+# 2.24: Personalización (temas)
+Personalización	Personalizzazione
+Cambia el aspecto de la pantalla de inicio con un toque. Puedes seguir ajustando cada detalle en las demás secciones.	Cambia l'aspetto della schermata iniziale con un tocco. Puoi regolare ogni dettaglio nelle altre sezioni.
+Temas gratis	Temi gratuiti
+Temas premium	Temi premium
+Próximamente	Prossimamente
+Temas exclusivos para quienes apoyan MiniLauncher con una donación. Todas las funciones siguen siendo gratis.	Temi esclusivi per chi sostiene MiniLauncher con una donazione. Tutte le funzioni restano gratuite.
+En uso	In uso
+Tema aplicado:	Tema applicato:
+Clásico	Classico
+Música a la izquierda	Musica a sinistra
+Mapa amplio	Mappa ampia
+Minimalista	Minimalista
+Vehículo a la izquierda, mapa en el centro y música a la derecha	Veicolo a sinistra, mappa al centro e musica a destra
+Mapa arriba; debajo, vehículo a la izquierda y música a la derecha	Mappa in alto; sotto, veicolo a sinistra e musica a destra
+Música a la izquierda, mapa en el centro y vehículo a la derecha	Musica a sinistra, mappa al centro e veicolo a destra
+Mapa arriba; debajo, música a la izquierda y vehículo a la derecha	Mappa in alto; sotto, musica a sinistra e veicolo a destra
+Sin tarjeta del vehículo: mapa más ancho, velocímetro abajo a la izquierda y música a la derecha	Senza scheda del veicolo: mappa più larga, tachimetro in basso a sinistra e musica a destra
+Sin tarjeta del vehículo: mapa más alto con el velocímetro abajo a la izquierda y la música a lo ancho	Senza scheda del veicolo: mappa più alta con il tachimetro in basso a sinistra e la musica a tutta larghezza
+Música a la izquierda, velocímetro abajo a la derecha, panel de conexión plegado y barra compacta	Musica a sinistra, tachimetro in basso a destra, pannello di connessione chiuso e barra compatta
+Mapa casi completo: velocímetro abajo a la derecha, panel de conexión plegado, música a lo ancho y barra compacta	Mappa quasi intera: tachimetro in basso a destra, pannello di connessione chiuso, musica a tutta larghezza e barra compatta
+Cada tema se adapta solo a la orientación de la pantalla.	Ogni tema si adatta da solo all'orientamento dello schermo.
+Tema premium	Tema premium
+Aurora en uso	Aurora in uso
+El tema arma la pantalla de inicio. Las tarjetas, la barra y el velocímetro de aquí se usan otra vez al quitarlo en Personalización.	Il tema organizza la schermata iniziale. Le schede, la barra e il tachimetro di qui tornano in uso quando lo rimuovi in Personalizzazione.
+Tema premium quitado	Tema premium rimosso
+Premium	Premium
+Fondo con un arco de color difuminado y granulado, tarjetas translúcidas, la hora en grande con música, vehículo y clima arriba, el mapa a lo ancho y una barra tipo píldora. El botón «Solo mapa» agranda el mapa.	Sfondo con un arco di colore sfumato e granuloso, schede traslucide, l'ora in grande con musica, veicolo e meteo in alto, la mappa a tutta larghezza e una barra a pillola. Il pulsante «Solo mappa» ingrandisce la mappa.
+Sigue el modo claro u oscuro de Apariencia.	Segue la modalità chiara o scura di Aspetto.
+Quitar el tema premium	Rimuovi il tema premium
+Aplicar	Applica
+Versión de prueba: se puede aplicar sin código.	Versione di prova: si può applicare senza codice.
+Disponible pronto con una donación. Todas las funciones siguen siendo gratis.	Presto disponibile con una donazione. Tutte le funzioni restano gratuite.
+Cobalto	Cobalto
+Azul noche en tres columnas: el mapa se difumina hasta el reproductor de carátula redonda, y tu vehículo muestra el velocímetro arriba, su foto en el medio y el mantenimiento abajo. La temperatura va sobre el mapa.	Blu notte su tre colonne: la mappa sfuma fino al lettore con la copertina rotonda, e il tuo veicolo mostra il tachimetro in alto, la sua foto al centro e la manutenzione in basso. La temperatura sta sopra la mappa.
+Gratis	Gratis
+Gratis para todos. Los próximos temas premium se desbloquearán con una donación.	Gratis per tutti. I prossimi temi premium si sbloccheranno con una donazione.
+Radar	Autovelox
++ Añadir parada intermedia	+ Aggiungi tappa intermedia
+incidente	incidente
+incidentes	incidenti
+incidente en la ruta	incidente sul percorso
+incidentes en la ruta	incidenti sul percorso
+Incidentes en la ruta	Incidenti sul percorso
+Consulta cierres o accidentes una sola vez al calcular ruta (TomTom)	Controlla chiusure o incidenti una sola volta al calcolo del percorso (TomTom)
+Límite y alerta de velocidad	Limite e avviso di velocità
+Muestra la señal de límite en el mapa y avisa al excederlo	Mostra il cartello del limite sulla mappa e avvisa quando lo superi
+Tolerancia de exceso	Tolleranza di superamento
+Margen sobre el límite antes de activar alerta	Margine oltre il limite prima dell'avviso
+Sonido al exceder límite	Suono al superamento del limite
+Pitido de alerta cuando superas la tolerancia	Segnale acustico quando superi la tolleranza
+Alertas de radares sin conexión	Avvisi autovelox offline
+Avisa al acercarse a radares del mapa local .map	Avvisa quando ti avvicini agli autovelox della mappa locale .map
+Vía cerrada	Strada chiusa
+Carril cerrado	Corsia chiusa
+Accidente	Incidente
+Obras en la vía	Lavori in corso
+Tráfico detenido	Traffico fermo
+Incidente en la vía	Evento sulla strada
+Radar de velocidad adelante	Autovelox più avanti
+Brillo de la pantalla	Luminosità dello schermo
+Amanecer y atardecer: se calcula con el GPS, sin internet. Brillo: para pantallas que bajan el brillo al encender las luces	Alba e tramonto: calcolati con il GPS, senza internet. Luminosità: per gli schermi che si abbassano quando accendi i fari
+Brillo actual	Luminosità attuale
+Prende y apaga las luces del carro para ver cuánto cambia	Accendi e spegni i fari dell'auto per vedere quanto cambia
+Oscuro con brillo menor a	Scuro con luminosità sotto
+Elige un nivel entre el brillo de día y el de noche	Scegli un livello tra la luminosità di giorno e quella di notte
+Esta pantalla no informa su brillo	Questo schermo non comunica la sua luminosità
+Países del Golfo	Paesi del Golfo
+Irlanda del Norte	Irlanda del Nord
+Islas Canarias	Isole Canarie
+Tiempo en MiniLauncher: {}	Tempo in MiniLauncher: {}
+Último tiempo por Bluetooth: {}	Ultimo tempo via Bluetooth: {}

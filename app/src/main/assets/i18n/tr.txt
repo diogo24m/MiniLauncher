@@ -1056,11 +1056,13 @@ Compatibilidad TLS en rutas	Rotalar için TLS uyumluluğu
 Para radios antiguas donde falle el HTTPS de rutas o búsqueda	Rota veya arama HTTPS'inin çalışmadığı eski teypler için
 Mostrando hora de llegada	Varış saati gösteriliyor
 Mostrando tiempo restante	Kalan süre gösteriliyor
+Radar	Radar
 Ir a Casa	Eve git
 Ir a Trabajo	İşe git
 Configura «{}» primero en Navegación	Önce Navigasyon bölümünde «{}» ayarlayın
 PARADAS	DURAKLAR
 Limpiar	Temizle
++ Añadir parada intermedia	+ Ara durak ekle
 Modo parada activo: elige una parada	Durak modu açık: bir durak seçin
 Buscar parada intermedia	Ara durak ara
 Añadir parada en ruta	Rotaya durak ekle
@@ -1071,6 +1073,11 @@ Elegir parada	Durak seç
 Elegir ruta	Rota seç
 Ruta	Rota
 Más rápida	En hızlı
+incidente	olay
+incidentes	olaylar
+incidente en la ruta	rotada olay
+incidentes en la ruta	rotada olaylar
+Incidentes en la ruta	Rotadaki olaylar
 Mostrar tiempo restante	Kalan süreyi göster
 Mostrar hora de llegada	Varış saatini göster
 Evitar peajes	Ücretli yollardan kaçın
@@ -1080,8 +1087,73 @@ Intenta evitar autopistas o vías rápidas	Otoyol ve ekspres yollardan kaçınma
 Rutas alternativas	Alternatif rotalar
 Muestra 2 o 3 opciones de ruta antes de iniciar	Başlamadan önce 2 veya 3 rota seçeneği gösterir
 Muestra la hora estimada en lugar del tiempo restante	Kalan süre yerine tahmini varış saatini gösterir
+Consulta cierres o accidentes una sola vez al calcular ruta (TomTom)	Rota hesaplarken kapanışları veya kazaları bir kez sorgular (TomTom)
+Límite y alerta de velocidad	Hız limiti ve uyarısı
+Muestra la señal de límite en el mapa y avisa al excederlo	Haritada hız limiti levhasını gösterir ve aşınca uyarır
+Tolerancia de exceso	Aşım toleransı
+Margen sobre el límite antes de activar alerta	Uyarı devreye girmeden önceki limit üstü pay
+Sonido al exceder límite	Hız aşımında ses
+Pitido de alerta cuando superas la tolerancia	Toleransı aştığında uyarı bipi çalar
+Alertas de radares sin conexión	Çevrimdışı radar uyarıları
+Avisa al acercarse a radares del mapa local .map	Yerel .map haritasındaki radarlara yaklaşınca uyarır
+Vía cerrada	Yol kapalı
+Carril cerrado	Şerit kapalı
+Accidente	Kaza
+Obras en la vía	Yolda çalışma
+Tráfico detenido	Trafik durdu
+Incidente en la vía	Yolda olay
+Radar de velocidad adelante	İleride hız radarı
 En 500 metros	500 metre sonra
 En 150 metros	150 metre sonra
 En 500 pies	500 fit sonra
 En un cuarto de milla	Çeyrek mil sonra
 Parada intermedia	Ara durak
+# 2.24: Personalización (temas)
+Personalización	Kişiselleştirme
+Cambia el aspecto de la pantalla de inicio con un toque. Puedes seguir ajustando cada detalle en las demás secciones.	Ana ekranın görünümünü tek dokunuşla değiştirin. Her ayrıntıyı diğer bölümlerde ayarlamaya devam edebilirsiniz.
+Temas gratis	Ücretsiz temalar
+Temas premium	Premium temalar
+Próximamente	Yakında
+Temas exclusivos para quienes apoyan MiniLauncher con una donación. Todas las funciones siguen siendo gratis.	MiniLauncher'u bağışla destekleyenlere özel temalar. Tüm özellikler ücretsiz kalır.
+En uso	Kullanımda
+Tema aplicado:	Tema uygulandı:
+Clásico	Klasik
+Música a la izquierda	Müzik solda
+Mapa amplio	Geniş harita
+Minimalista	Sade
+Vehículo a la izquierda, mapa en el centro y música a la derecha	Araç solda, harita ortada ve müzik sağda
+Mapa arriba; debajo, vehículo a la izquierda y música a la derecha	Harita üstte; altta araç solda ve müzik sağda
+Música a la izquierda, mapa en el centro y vehículo a la derecha	Müzik solda, harita ortada ve araç sağda
+Mapa arriba; debajo, música a la izquierda y vehículo a la derecha	Harita üstte; altta müzik solda ve araç sağda
+Sin tarjeta del vehículo: mapa más ancho, velocímetro abajo a la izquierda y música a la derecha	Araç kartı yok: daha geniş harita, hız göstergesi sol altta ve müzik sağda
+Sin tarjeta del vehículo: mapa más alto con el velocímetro abajo a la izquierda y la música a lo ancho	Araç kartı yok: hız göstergesi sol altta olan daha uzun harita ve tam genişlikte müzik
+Música a la izquierda, velocímetro abajo a la derecha, panel de conexión plegado y barra compacta	Müzik solda, hız göstergesi sağ altta, bağlantı paneli kapalı ve kompakt çubuk
+Mapa casi completo: velocímetro abajo a la derecha, panel de conexión plegado, música a lo ancho y barra compacta	Neredeyse tam harita: hız göstergesi sağ altta, bağlantı paneli kapalı, tam genişlikte müzik ve kompakt çubuk
+Cada tema se adapta solo a la orientación de la pantalla.	Her tema ekran yönüne kendiliğinden uyum sağlar.
+Tema premium	Premium tema
+Aurora en uso	Aurora kullanımda
+El tema arma la pantalla de inicio. Las tarjetas, la barra y el velocímetro de aquí se usan otra vez al quitarlo en Personalización.	Tema ana ekranı düzenler. Buradaki kartlar, çubuk ve hız göstergesi, Kişiselleştirme'den kaldırınca yeniden kullanılır.
+Tema premium quitado	Premium tema kaldırıldı
+Premium	Premium
+Fondo con un arco de color difuminado y granulado, tarjetas translúcidas, la hora en grande con música, vehículo y clima arriba, el mapa a lo ancho y una barra tipo píldora. El botón «Solo mapa» agranda el mapa.	Yumuşak ve grenli renk yayı olan arka plan, yarı saydam kartlar, üstte müzik, araç ve hava durumuyla büyük saat, tam genişlikte harita ve hap şeklinde çubuk. «Yalnızca harita» düğmesi haritayı büyütür.
+Sigue el modo claro u oscuro de Apariencia.	Görünüm'deki açık veya koyu modu izler.
+Quitar el tema premium	Premium temayı kaldır
+Aplicar	Uygula
+Versión de prueba: se puede aplicar sin código.	Test sürümü: kod olmadan uygulanabilir.
+Disponible pronto con una donación. Todas las funciones siguen siendo gratis.	Yakında bağışla. Tüm özellikler ücretsiz kalır.
+Cobalto	Kobalt
+Azul noche en tres columnas: el mapa se difumina hasta el reproductor de carátula redonda, y tu vehículo muestra el velocímetro arriba, su foto en el medio y el mantenimiento abajo. La temperatura va sobre el mapa.	Üç sütunda gece mavisi: harita yuvarlak kapaklı oynatıcıya doğru solar; aracın üstte hız göstergesini, ortada fotoğrafını ve altta bakımı gösterir. Sıcaklık haritanın üstündedir.
+Gratis	Ücretsiz
+Gratis para todos. Los próximos temas premium se desbloquearán con una donación.	Herkes için ücretsiz. Sonraki premium temaların kilidi bağışla açılacak.
+Brillo de la pantalla	Ekran parlaklığı
+Amanecer y atardecer: se calcula con el GPS, sin internet. Brillo: para pantallas que bajan el brillo al encender las luces	Gün doğumu ve batımı: GPS ile, internetsiz hesaplanır. Parlaklık: farlar açılınca kararan ekranlar için
+Brillo actual	Mevcut parlaklık
+Prende y apaga las luces del carro para ver cuánto cambia	Ne kadar değiştiğini görmek için aracın farlarını açıp kapatın
+Oscuro con brillo menor a	Parlaklık şunun altındaysa koyu
+Elige un nivel entre el brillo de día y el de noche	Gündüz ve gece parlaklığı arasında bir seviye seçin
+Esta pantalla no informa su brillo	Bu ekran parlaklığını bildirmiyor
+Países del Golfo	Körfez ülkeleri
+Irlanda del Norte	Kuzey İrlanda
+Islas Canarias	Kanarya Adaları
+Tiempo en MiniLauncher: {}	MiniLauncher'taki süre: {}
+Último tiempo por Bluetooth: {}	Bluetooth'tan son süre: {}

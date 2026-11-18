@@ -1229,3 +1229,52 @@ incidente	incidente
 incidente en la ruta	incidente no percurso
 incidentes	incidentes
 incidentes en la ruta	incidentes no percurso
+# 2.24: Personalización (temas)
+Personalización	Personalização
+Cambia el aspecto de la pantalla de inicio con un toque. Puedes seguir ajustando cada detalle en las demás secciones.	Muda o aspeto do ecrã inicial com um toque. Podes continuar a ajustar cada detalhe nas outras secções.
+Temas gratis	Temas gratuitos
+Temas premium	Temas premium
+Próximamente	Em breve
+Temas exclusivos para quienes apoyan MiniLauncher con una donación. Todas las funciones siguen siendo gratis.	Temas exclusivos para quem apoia o MiniLauncher com um donativo. Todas as funções continuam gratuitas.
+En uso	Em uso
+Tema aplicado:	Tema aplicado:
+Clásico	Clássico
+Música a la izquierda	Música à esquerda
+Mapa amplio	Mapa amplo
+Minimalista	Minimalista
+Vehículo a la izquierda, mapa en el centro y música a la derecha	Veículo à esquerda, mapa ao centro e música à direita
+Mapa arriba; debajo, vehículo a la izquierda y música a la derecha	Mapa em cima; por baixo, veículo à esquerda e música à direita
+Música a la izquierda, mapa en el centro y vehículo a la derecha	Música à esquerda, mapa ao centro e veículo à direita
+Mapa arriba; debajo, música a la izquierda y vehículo a la derecha	Mapa em cima; por baixo, música à esquerda e veículo à direita
+Sin tarjeta del vehículo: mapa más ancho, velocímetro abajo a la izquierda y música a la derecha	Sem cartão do veículo: mapa mais largo, velocímetro em baixo à esquerda e música à direita
+Sin tarjeta del vehículo: mapa más alto con el velocímetro abajo a la izquierda y la música a lo ancho	Sem cartão do veículo: mapa mais alto com o velocímetro em baixo à esquerda e a música em toda a largura
+Música a la izquierda, velocímetro abajo a la derecha, panel de conexión plegado y barra compacta	Música à esquerda, velocímetro em baixo à direita, painel de ligação recolhido e barra compacta
+Mapa casi completo: velocímetro abajo a la derecha, panel de conexión plegado, música a lo ancho y barra compacta	Mapa quase completo: velocímetro em baixo à direita, painel de ligação recolhido, música em toda a largura e barra compacta
+Cada tema se adapta solo a la orientación de la pantalla.	Cada tema adapta-se sozinho à orientação do ecrã.
+Tema premium	Tema premium
+Aurora en uso	Aurora em uso
+El tema arma la pantalla de inicio. Las tarjetas, la barra y el velocímetro de aquí se usan otra vez al quitarlo en Personalización.	O tema monta o ecrã inicial. Os cartões, a barra e o velocímetro daqui voltam a ser usados quando o removeres em Personalização.
+Tema premium quitado	Tema premium removido
+Premium	Premium
+Fondo con un arco de color difuminado y granulado, tarjetas translúcidas, la hora en grande con música, vehículo y clima arriba, el mapa a lo ancho y una barra tipo píldora. El botón «Solo mapa» agranda el mapa.	Fundo com um arco de cor esbatido e granulado, cartões translúcidos, a hora em grande com a música, o veículo e a meteorologia em cima, o mapa em toda a largura e uma barra em forma de pílula. O botão «Só mapa» amplia o mapa.
+Sigue el modo claro u oscuro de Apariencia.	Segue o modo claro ou escuro do Aspeto.
+Quitar el tema premium	Remover o tema premium
+Aplicar	Aplicar
+Versión de prueba: se puede aplicar sin código.	Versão de teste: pode ser aplicado sem código.
+Disponible pronto con una donación. Todas las funciones siguen siendo gratis.	Disponível em breve com um donativo. Todas as funções continuam gratuitas.
+Cobalto	Cobalto
+Azul noche en tres columnas: el mapa se difumina hasta el reproductor de carátula redonda, y tu vehículo muestra el velocímetro arriba, su foto en el medio y el mantenimiento abajo. La temperatura va sobre el mapa.	Azul-noite em três colunas: o mapa esbate-se até ao leitor de capa redonda, e o teu veículo mostra o velocímetro em cima, a foto ao meio e a manutenção em baixo. A temperatura aparece sobre o mapa.
+Gratis	Gratuito
+Gratis para todos. Los próximos temas premium se desbloquearán con una donación.	Gratuito para todos. Os próximos temas premium serão desbloqueados com um donativo.
+Brillo de la pantalla	Brilho do ecrã
+Amanecer y atardecer: se calcula con el GPS, sin internet. Brillo: para pantallas que bajan el brillo al encender las luces	Nascer e pôr do sol: calculado com o GPS, sem internet. Brilho: para centrais que baixam o brilho ao acender as luzes
+Brillo actual	Brilho atual
+Prende y apaga las luces del carro para ver cuánto cambia	Acende e apaga as luzes do carro para ver quanto muda
+Oscuro con brillo menor a	Escuro com brilho abaixo de
+Elige un nivel entre el brillo de día y el de noche	Escolhe um nível entre o brilho de dia e o de noite
+Esta pantalla no informa su brillo	Esta central não indica o brilho
+Países del Golfo	Países do Golfo
+Irlanda del Norte	Irlanda do Norte
+Islas Canarias	Ilhas Canárias
+Tiempo en MiniLauncher: {}	Tempo no MiniLauncher: {}
+Último tiempo por Bluetooth: {}	Último tempo por Bluetooth: {}

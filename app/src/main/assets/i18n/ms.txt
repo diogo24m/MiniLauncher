@@ -1085,3 +1085,75 @@ En 150 metros	Dalam 150 meter
 En 500 pies	Dalam 500 kaki
 En un cuarto de milla	Dalam suku batu
 Parada intermedia	Perhentian di laluan
+# 2.24: Personalización (temas)
+Personalización	Pemperibadian
+Cambia el aspecto de la pantalla de inicio con un toque. Puedes seguir ajustando cada detalle en las demás secciones.	Tukar rupa skrin utama dengan satu ketikan. Anda masih boleh laraskan setiap butiran di bahagian lain.
+Temas gratis	Tema percuma
+Temas premium	Tema premium
+Próximamente	Akan datang
+Temas exclusivos para quienes apoyan MiniLauncher con una donación. Todas las funciones siguen siendo gratis.	Tema eksklusif untuk mereka yang menyokong MiniLauncher dengan derma. Semua fungsi kekal percuma.
+En uso	Digunakan
+Tema aplicado:	Tema digunakan:
+Clásico	Klasik
+Música a la izquierda	Muzik di kiri
+Mapa amplio	Peta luas
+Minimalista	Minimalis
+Vehículo a la izquierda, mapa en el centro y música a la derecha	Kenderaan di kiri, peta di tengah dan muzik di kanan
+Mapa arriba; debajo, vehículo a la izquierda y música a la derecha	Peta di atas; di bawah, kenderaan di kiri dan muzik di kanan
+Música a la izquierda, mapa en el centro y vehículo a la derecha	Muzik di kiri, peta di tengah dan kenderaan di kanan
+Mapa arriba; debajo, música a la izquierda y vehículo a la derecha	Peta di atas; di bawah, muzik di kiri dan kenderaan di kanan
+Sin tarjeta del vehículo: mapa más ancho, velocímetro abajo a la izquierda y música a la derecha	Tanpa kad kenderaan: peta lebih lebar, meter kelajuan di bawah kiri dan muzik di kanan
+Sin tarjeta del vehículo: mapa más alto con el velocímetro abajo a la izquierda y la música a lo ancho	Tanpa kad kenderaan: peta lebih tinggi dengan meter kelajuan di bawah kiri dan muzik selebar skrin
+Música a la izquierda, velocímetro abajo a la derecha, panel de conexión plegado y barra compacta	Muzik di kiri, meter kelajuan di bawah kanan, panel sambungan dilipat dan bar padat
+Mapa casi completo: velocímetro abajo a la derecha, panel de conexión plegado, música a lo ancho y barra compacta	Peta hampir penuh: meter kelajuan di bawah kanan, panel sambungan dilipat, muzik selebar skrin dan bar padat
+Cada tema se adapta solo a la orientación de la pantalla.	Setiap tema menyesuaikan diri dengan orientasi skrin.
+Tema premium	Tema premium
+Aurora en uso	Aurora digunakan
+El tema arma la pantalla de inicio. Las tarjetas, la barra y el velocímetro de aquí se usan otra vez al quitarlo en Personalización.	Tema ini menyusun skrin utama. Kad, bar dan meter laju di sini digunakan semula apabila anda membuangnya dalam Pemperibadian.
+Tema premium quitado	Tema premium dibuang
+Premium	Premium
+Fondo con un arco de color difuminado y granulado, tarjetas translúcidas, la hora en grande con música, vehículo y clima arriba, el mapa a lo ancho y una barra tipo píldora. El botón «Solo mapa» agranda el mapa.	Latar dengan lengkung warna lembut dan berbutir, kad lut sinar, jam besar dengan muzik, kenderaan dan cuaca di atas, peta selebar skrin dan bar berbentuk pil. Butang «Peta sahaja» membesarkan peta.
+Sigue el modo claro u oscuro de Apariencia.	Mengikut mod cerah atau gelap dalam Penampilan.
+Quitar el tema premium	Buang tema premium
+Aplicar	Guna
+Versión de prueba: se puede aplicar sin código.	Versi ujian: boleh digunakan tanpa kod.
+Disponible pronto con una donación. Todas las funciones siguen siendo gratis.	Akan datang dengan derma. Semua ciri kekal percuma.
+Cobalto	Kobalt
+Azul noche en tres columnas: el mapa se difumina hasta el reproductor de carátula redonda, y tu vehículo muestra el velocímetro arriba, su foto en el medio y el mantenimiento abajo. La temperatura va sobre el mapa.	Biru malam dalam tiga lajur: peta pudar ke pemain dengan kulit bulat, dan kenderaan anda menunjukkan meter laju di atas, fotonya di tengah dan penyelenggaraan di bawah. Suhu di atas peta.
+Gratis	Percuma
+Gratis para todos. Los próximos temas premium se desbloquearán con una donación.	Percuma untuk semua. Tema premium seterusnya akan dibuka dengan derma.
+Radar	Kamera laju
++ Añadir parada intermedia	+ Tambah hentian perantaraan
+incidente	insiden
+incidentes	insiden
+incidente en la ruta	insiden di laluan
+incidentes en la ruta	insiden di laluan
+Incidentes en la ruta	Insiden di laluan
+Consulta cierres o accidentes una sola vez al calcular ruta (TomTom)	Semak penutupan atau kemalangan sekali semasa mengira laluan (TomTom)
+Límite y alerta de velocidad	Had laju dan amaran
+Muestra la señal de límite en el mapa y avisa al excederlo	Tunjukkan papan had laju pada peta dan beri amaran apabila melebihinya
+Tolerancia de exceso	Toleransi melebihi had
+Margen sobre el límite antes de activar alerta	Margin melebihi had sebelum amaran berbunyi
+Sonido al exceder límite	Bunyi apabila melebihi had
+Pitido de alerta cuando superas la tolerancia	Bunyi bip apabila melebihi toleransi
+Alertas de radares sin conexión	Amaran kamera laju luar talian
+Avisa al acercarse a radares del mapa local .map	Beri amaran apabila menghampiri kamera laju dalam peta .map tempatan
+Vía cerrada	Jalan ditutup
+Carril cerrado	Lorong ditutup
+Accidente	Kemalangan
+Obras en la vía	Kerja jalan raya
+Tráfico detenido	Trafik terhenti
+Incidente en la vía	Insiden jalan raya
+Radar de velocidad adelante	Kamera laju di hadapan
+Brillo de la pantalla	Kecerahan skrin
+Amanecer y atardecer: se calcula con el GPS, sin internet. Brillo: para pantallas que bajan el brillo al encender las luces	Matahari terbit dan terbenam: dikira dengan GPS, tanpa internet. Kecerahan: untuk skrin yang malap apabila lampu dihidupkan
+Brillo actual	Kecerahan semasa
+Prende y apaga las luces del carro para ver cuánto cambia	Hidupkan dan matikan lampu kereta untuk melihat berapa banyak ia berubah
+Oscuro con brillo menor a	Gelap apabila kecerahan di bawah
+Elige un nivel entre el brillo de día y el de noche	Pilih tahap antara kecerahan siang dan malam
+Esta pantalla no informa su brillo	Skrin ini tidak melaporkan kecerahannya
+Países del Golfo	Negara Teluk
+Irlanda del Norte	Ireland Utara
+Islas Canarias	Kepulauan Canary
+Tiempo en MiniLauncher: {}	Masa dalam MiniLauncher: {}
+Último tiempo por Bluetooth: {}	Masa terakhir melalui Bluetooth: {}
