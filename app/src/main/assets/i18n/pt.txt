@@ -920,8 +920,6 @@ Recordatorio de líquido de frenos	Lembrete do líquido dos travões
 Recordatorio	Lembrete
 
 # StradaOS 2.21.0-2.21.2: textos integrados no MiniLauncher
-Se guardó en:\n{}\n\nCopia la carpeta StradaDiag a una memoria USB y adjúntala en un «issue» del repositorio de MiniLauncher en GitHub.	Guardado em:\n{}\n\nCopia a pasta StradaDiag para uma pen USB e anexa-a a um «issue» do repositório do MiniLauncher no GitHub.
-Cuenta tu modelo de pantalla y su versión de Android. Puedes adjuntar la carpeta StradaDiag (Sistema → Exportar diagnóstico).	Indica o modelo da tua central e a versão do Android. Podes anexar a pasta StradaDiag (Sistema → Exportar diagnóstico).
 Fuente: {}	Fonte: {}
 Pista: {}	Faixa: {}
 Carátula: {}	Capa: {}
@@ -1018,3 +1016,216 @@ Ocultar la barra del sistema	Ocultar a barra do sistema
 Esconde también la barra de navegación de tu pantalla (abajo o al costado). Desliza desde el borde para verla un momento	Oculta também a barra de navegação da central (em baixo ou de lado). Desliza a partir da margem para a veres por um momento
 Corrección del velocímetro	Correção do velocímetro
 Suma o resta a la velocidad del GPS para que coincida con el tablero de tu carro	Soma ou subtrai à velocidade do GPS para coincidir com o painel do carro
+# 2.22: diseño forzado, tema por amanecer, orden de apps y pantalla en reposo
+Diseño	Disposição
+Diseño de la pantalla	Disposição do ecrã
+Automático: según la forma de la pantalla. Elige Vertical si tu pantalla es vertical y se ve chica en el medio	Automático: conforme o formato do ecrã. Escolhe Vertical se a tua central está na vertical e o início aparece pequeno ao centro
+Horizontal	Horizontal
+Vertical	Vertical
+se puede elegir en Ajustes → Pantalla de inicio → Diseño	pode ser escolhida em Definições → Ecrã inicial → Disposição
+Área útil de la pantalla:	Área útil do ecrã:
+Horario	Horário
+Amanecer y atardecer: se calcula con el GPS, sin internet	Nascer e pôr do sol: calculado com o GPS, sem internet
+Horas fijas	Horas fixas
+Amanecer y atardecer	Nascer e pôr do sol
+Amanecer	Nascer do sol
+Atardecer	Pôr do sol
+oscuro desde el atardecer hasta el amanecer	escuro do pôr ao nascer do sol
+Esperando la ubicación del GPS	À espera da localização do GPS
+Mientras tanto usa las horas fijas	Entretanto, usa as horas fixas
+Orden	Ordem
+Usadas recientemente	Usadas recentemente
+Instaladas recientemente	Instaladas recentemente
+A mano	Manual
+Orden de las apps	Ordem das apps
+Deja presionada una app y elige «Mover» para cambiarla de lugar	Mantém premida uma app e escolhe «Mover» para a mudar de lugar
+Mover	Mover
+Toca el lugar donde quieres poner «{}»	Toca no lugar onde queres colocar «{}»
+Pantalla en reposo	Ecrã em repouso
+Si no tocas la pantalla un rato, se pone negra con la hora, la fecha y la velocidad. Un toque la quita	Se não tocares no ecrã durante algum tempo, fica preto com a hora, a data e a velocidade. Basta um toque para sair
+1 minuto	1 minuto
+{} minutos	{} minutos
+Después de	Depois de
+Tiempo sin tocar la pantalla	Tempo sem tocar no ecrã
+Con el diseño de velocímetro que prefieras	Com o estilo de velocímetro que preferires
+Sin velocidad	Sem velocidade
+Color de la letra	Cor do texto
+Blanco	Branco
+Gris suave	Cinzento suave
+Ámbar	Âmbar
+Ver ahora	Ver agora
+Toca la pantalla para volver	Toca no ecrã para voltar
+# 2.23: navegación en el mapa de StradaOS (código base de nothanks91, PR #31/#35)
+Ir a…	Ir para…
+Recalculando…	A recalcular…
+Llegaste a tu destino	Chegaste ao destino
+Activa el mapa en vivo en Ajustes → Mapa y clima	Ativa o mapa em direto em Definições → Mapa e meteorologia
+Escribe una dirección o lugar	Escreve uma morada ou um local
+RECIENTES	RECENTES
+¿A dónde vamos?	Para onde vamos?
+Buscar	Pesquisar
+Detener	Parar
+Buscando…	A pesquisar…
+No se pudo buscar	Não foi possível pesquisar
+No se encontraron resultados	Não foram encontrados resultados
+Resultados	Resultados
+Esperando señal GPS para calcular la ruta	À espera de sinal de GPS para calcular o percurso
+Calculando ruta…	A calcular o percurso…
+No se pudo calcular la ruta	Não foi possível calcular o percurso
+Cambiar destino	Mudar o destino
+Silenciar voz de guía	Silenciar a voz de orientação
+Activar voz de guía	Ativar a voz de orientação
+Vista Norte arriba	Vista com o norte para cima
+Vista en dirección de marcha	Vista no sentido da marcha
+Abrir en otra app	Abrir noutra app
+Detener navegación	Parar a navegação
+Navegación en el mapa	Navegação no mapa
+Voz activada	Voz ativada
+Voz silenciada	Voz silenciada
+En el mapa de MiniLauncher	No mapa do MiniLauncher
+Se abre con el botón del mapa (Waze, Maps, OsmAnd… o integrada en el mapa)	Abre com o botão do mapa (Waze, Maps, OsmAnd… ou integrada no mapa)
+Voz de navegación	Voz de navegação
+Indicaciones paso a paso habladas durante el recorrido	Indicações faladas passo a passo durante o percurso
+★  En el mapa de MiniLauncher (integrada)	★  No mapa do MiniLauncher (integrada)
+Guardado: Navegación en el mapa	Guardado: Navegação no mapa
+Coordenadas	Coordenadas
+No se encontró ruta	Não foi encontrado nenhum percurso
+Ruta recalculada	Percurso recalculado
+Sal por {}	Sai por {}
+Inicia el recorrido	Inicia o percurso
+En la rotonda, salida {} hacia {}	Na rotunda, saída {} em direção a {}
+En la rotonda, toma la salida {}	Na rotunda, toma a saída {}
+En la rotonda, sigue hacia {}	Na rotunda, segue em direção a {}
+En la rotonda, toma la salida	Na rotunda, toma a saída
+Haz un giro en U en {}	Faz inversão de marcha em {}
+Haz un giro en U	Faz inversão de marcha
+Gira levemente a la derecha en {}	Vira ligeiramente à direita em {}
+Gira levemente a la derecha	Vira ligeiramente à direita
+Gira a la derecha en {}	Vira à direita em {}
+Gira a la derecha	Vira à direita
+Gira fuerte a la derecha en {}	Vira acentuadamente à direita em {}
+Gira fuerte a la derecha	Vira acentuadamente à direita
+Gira levemente a la izquierda en {}	Vira ligeiramente à esquerda em {}
+Gira levemente a la izquierda	Vira ligeiramente à esquerda
+Gira a la izquierda en {}	Vira à esquerda em {}
+Gira a la izquierda	Vira à esquerda
+Gira fuerte a la izquierda en {}	Vira acentuadamente à esquerda em {}
+Gira fuerte a la izquierda	Vira acentuadamente à esquerda
+Incorpórate a {}	Entra em {}
+Toma el desvío	Toma a saída
+Continúa por {}	Continua por {}
+Sigue recto	Segue em frente
+En {}	Dentro de {}
+Sin conexión · vuelve a la ruta	Sem ligação · volta ao percurso
+Casa	Casa
+Trabajo	Trabalho
+Toca para guardar GPS	Toca para guardar a posição GPS
+Ir ahora	Ir agora
+Actualizar con GPS actual	Atualizar com a posição GPS atual
+Eliminado	Eliminado
+Esperando señal GPS para guardar ubicación	À espera de sinal de GPS para guardar a localização
+Guardado en Casa	Guardado como Casa
+Guardado en Trabajo	Guardado como Trabalho
+Gasolina	Combustível
+Salud	Saúde
+Parqueo	Estacionamento
+Comida	Comida
+FAVORITOS	FAVORITOS
+Quitar de favoritos	Remover dos favoritos
+Añadir a favoritos	Adicionar aos favoritos
+Guardar como Casa	Guardar como Casa
+Guardar como Trabajo	Guardar como Trabalho
+Añadido a favoritos	Adicionado aos favoritos
+Quitado de favoritos	Removido dos favoritos
+Ruta aproximada (mapa local sin conexión)	Percurso aproximado (mapa local offline)
+Ruta guardada (sin conexión)	Percurso guardado (offline)
+Recalcular ruta	Recalcular o percurso
+ruta guardada	percurso guardado
+sin conexión · aproximada	offline · aproximado
+aproximada	aproximado
+Para rutas largas o sin mapa local hace falta internet	Percursos longos ou sem mapa local precisam de internet
+Mapa local	Mapa local
+Pueblo	Localidade
+Barrio	Bairro
+Calle	Rua
+Estación de servicio	Posto de abastecimento
+Hospital	Hospital
+Clínica	Clínica
+Farmacia	Farmácia
+Parqueadero	Parque de estacionamento
+Restaurante	Restaurante
+Cafetería	Café
+Supermercado	Supermercado
+Hotel	Hotel
+Aeropuerto	Aeroporto
+Estación	Estação
+Lugar	Local
+con tráfico	com trânsito
+Tráfico en vivo activado	Trânsito em direto ativado
+Tráfico en vivo	Trânsito em direto
+Muestra congestión en el mapa y evita trancones (usa clave gratis de TomTom)	Mostra o congestionamento no mapa e evita filas de trânsito (usa uma chave gratuita da TomTom)
+Clave gratis de TomTom	Chave gratuita da TomTom
+Para capas de tráfico y rutas con tráfico (regístrate gratis en developer.tomtom.com)	Para camadas de trânsito e percursos com trânsito (regista-te gratuitamente em developer.tomtom.com)
+Clave API gratis de TomTom	Chave de API gratuita da TomTom
+Capa de tráfico propia (avanzado)	Camada de trânsito própria (avançado)
+URL transparente de tráfico con {z}/{x}/{y}	URL transparente de trânsito com {z}/{x}/{y}
+URL capa de tráfico {z}/{x}/{y} (vacío = automático)	URL da camada de trânsito {z}/{x}/{y} (vazio = automático)
+Servidor de rutas OSRM (avanzado)	Servidor de percursos OSRM (avançado)
+URL propia compatible con OSRM (vacío = automático)	URL própria compatível com OSRM (vazio = automático)
+URL servidor OSRM (vacío = automático)	URL do servidor OSRM (vazio = automático)
+Compatibilidad TLS en rutas	Compatibilidade TLS nos percursos
+Para radios antiguas donde falle el HTTPS de rutas o búsqueda	Para centrais antigas em que o HTTPS dos percursos ou da pesquisa falha
+Mostrando hora de llegada	A mostrar a hora de chegada
+Mostrando tiempo restante	A mostrar o tempo restante
+Ir a Casa	Ir para Casa
+Ir a Trabajo	Ir para o Trabalho
+Configura «{}» primero en Navegación	Configura primeiro «{}» em Navegação
+PARADAS	PARAGENS
+Limpiar	Limpar
+Modo parada activo: elige una parada	Modo de paragem ativo: escolhe uma paragem
+Buscar parada intermedia	Pesquisar paragem intermédia
+Añadir parada en ruta	Adicionar paragem ao percurso
+Elegir destino final	Escolher o destino final
+Añadir como parada	Adicionar como paragem
+Parada añadida	Paragem adicionada
+Elegir parada	Escolher paragem
+Elegir ruta	Escolher percurso
+Ruta	Percurso
+Más rápida	Mais rápido
+Mostrar tiempo restante	Mostrar o tempo restante
+Mostrar hora de llegada	Mostrar a hora de chegada
+Evitar peajes	Evitar portagens
+Intenta evitar vías de peaje al calcular la ruta	Tenta evitar estradas com portagem ao calcular o percurso
+Evitar autopistas	Evitar autoestradas
+Intenta evitar autopistas o vías rápidas	Tenta evitar autoestradas ou vias rápidas
+Rutas alternativas	Percursos alternativos
+Muestra 2 o 3 opciones de ruta antes de iniciar	Mostra 2 ou 3 opções de percurso antes de iniciar
+Muestra la hora estimada en lugar del tiempo restante	Mostra a hora prevista em vez do tempo restante
+En 500 metros	Dentro de 500 metros
+En 150 metros	Dentro de 150 metros
+En 500 pies	Dentro de 500 pés
+En un cuarto de milla	Dentro de um quarto de milha
+Parada intermedia	Paragem intermédia
++ Añadir parada intermedia	+ Adicionar paragem intermédia
+Accidente	Acidente
+Alertas de radares sin conexión	Alertas de radares offline
+Avisa al acercarse a radares del mapa local .map	Avisa ao aproximar-se de radares do mapa local .map
+Carril cerrado	Faixa fechada
+Consulta cierres o accidentes una sola vez al calcular ruta (TomTom)	Consulta cortes ou acidentes uma única vez ao calcular o percurso (TomTom)
+Incidente en la vía	Incidente na via
+Incidentes en la ruta	Incidentes no percurso
+Límite y alerta de velocidad	Limite e alerta de velocidade
+Margen sobre el límite antes de activar alerta	Margem acima do limite antes de ativar o alerta
+Muestra la señal de límite en el mapa y avisa al excederlo	Mostra o sinal de limite no mapa e avisa ao excedê-lo
+Obras en la vía	Obras na via
+Pitido de alerta cuando superas la tolerancia	Sinal sonoro de alerta quando ultrapassas a tolerância
+Radar	Radar
+Radar de velocidad adelante	Radar de velocidade à frente
+Sonido al exceder límite	Som ao exceder o limite
+Tolerancia de exceso	Tolerância de excesso
+Tráfico detenido	Trânsito parado
+Vía cerrada	Via fechada
+incidente	incidente
+incidente en la ruta	incidente no percurso
+incidentes	incidentes
+incidentes en la ruta	incidentes no percurso

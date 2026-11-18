@@ -109,7 +109,7 @@ public class Main extends Activity {
     // ── diseño del inicio (Bloque 2) ──
     /** Ancho de la barra lateral de botones (modo «Lateral»). */
     static final float RAIL = 96;
-    private boolean sideDock, compactDock, playerLeft, showCar, railLeft, dockLabels, showPlayer, carSpeed, oilHome, noDock;
+    private boolean sideDock, compactDock, playerLeft, showCar, showMap, railLeft, dockLabels, showPlayer, carSpeed, oilHome, noDock;
     /** Botones de la barra: de 4 a 10, «Apps» siempre al final. Con 7, la barra de siempre. */
     private int dockCount = 7;
     /** x donde empieza el área de tarjetas (con la barra lateral a la izquierda), alto de las tarjetas y arriba del dock. */
@@ -135,13 +135,15 @@ public class Main extends Activity {
     /** Escala de 1024x600 para Ajustes, el cajón y sus ventanas: con la barra lateral el inicio se agranda, pero
      *  esas pantallas deben conservar su tamaño (en un S23 con barra lateral Ajustes quedaba cortado arriba). */
     private float uiS = 1f;
-    static final int[] SIM_W = {0, 1024, 1280, 1920, 2000, 1280, 768, 1080};
-    static final int[] SIM_H = {0, 600, 720, 720, 1200, 480, 1024, 1920};
+    static final int[] SIM_W = {0, 1024, 1280, 1920, 2000, 1280, 768, 1080, 768};
+    static final int[] SIM_H = {0, 600, 720, 720, 1200, 480, 1024, 1920, 880};   // 8: tipo Tesla con barra de clima (casi cuadrada)
 
     private TextView weatherTv, weatherCityTv;
     private ImageView weatherIc;
     private LinearLayout weatherBox;
     private double wLat = Double.NaN, wLon = Double.NaN;
+    /** Última ubicación conocida para calcular el amanecer y el atardecer del tema automático (#33). */
+    private double sunLat = Double.NaN, sunLon = Double.NaN;
     private long weatherAt;
     private Weather.Now weatherNow;
     /** Clima en el panel del mapa cuando hay uno o ningún botón de conexión. */
@@ -156,6 +158,11 @@ public class Main extends Activity {
     private NowPlaying nowPlaying;
     private Boolean playingState;
     private TextView sourceTv, timePosTv, mapTagTv, cpSubTv;
+    private View mapTagBox, navSearchBtn, navHud, navLaneBox, topNavPill;
+    private Nav.ManeuverView navTurnIc, topNavIc;
+    private Nav.LaneStripView navLaneView;
+    private TextView navDistTv, navStepTv, navEtaTv, speedSignTv, camBadgeTv, topNavDistTv;
+    private final List<Nav.Place> pendingStops = new ArrayList<Nav.Place>();
     private LiveMapView liveMap;
     private MediaWatcher mediaWatcher;
     private boolean askedPerms;
@@ -283,8 +290,11 @@ public class Main extends Activity {
             if (ll == null) ll = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
             if (ll != null) { wLat = ll.getLatitude(); wLon = ll.getLongitude(); }
         } catch (Throwable ignored) { }
+        if (prefs.contains("sun_lat")) { sunLat = prefs.getFloat("sun_lat", 0); sunLon = prefs.getFloat("sun_lon", 0); }
+        if (!Double.isNaN(wLat)) sunSpot(wLat, wLon);
         loadApps();
         startOdo();
+        if ("internal".equals(prefs.getString("nav_app", null)) && Nav.restore(this)) LiveMapView.headingUp = true;
         // mapa sin conexión: aviso al terminar la descarga y, si quedó a medias (se apagó el carro), continuarla
         MapDownload.onFinish = new Runnable() { public void run() { onMapDownloadFinished(); } };
         if (MapDownload.paused(this) && !prefs.getBoolean("map_dl_user_paused", false)) {
@@ -506,6 +516,7 @@ public class Main extends Activity {
         if (odoPending > 0) prefs.edit().putFloat("odo_gps_m", prefs.getFloat("odo_gps_m", 0) + odoPending).apply();
         h.removeCallbacks(carTick);
         try { car.setListener(null); car.release(); } catch (Throwable ignored) { }
+        Nav.shutdownTts();
         Guard.stopWatchdog();
         super.onDestroy();
     }
@@ -537,6 +548,123 @@ public class Main extends Activity {
         car.start();
         updateCarData();
         refreshDebuggingSettings();
+        hideIdle();
+        idleReset();
+    }
+
+    // ───────────────────────── pantalla en reposo (2.22, #27 / #28) ─────────────────────────
+    // Tras X minutos sin tocar MiniLauncher, la pantalla se pone negra con la hora, la fecha y la velocidad.
+    // Viene apagada (idle_on). Un toque la quita (ese toque no llega a lo de abajo).
+
+    static final int[] IDLE_MIN = {1, 2, 5, 10, 15, 30};
+    static final int[] IDLE_COLORS = {0xFFFFFFFF, 0, 0xFF9AA0A8, 0xFFFFB13B};   // 0 = color de acento
+    private FrameLayout idleView;
+    private TextView idleClock, idleDate, idleSpeedTv;
+    private Gauge idleGauge;
+    private boolean idleSwallow;
+
+    private final Runnable idleRun = new Runnable() { public void run() { showIdle(); } };
+
+    private void idleReset() {
+        h.removeCallbacks(idleRun);
+        if (prefs != null && prefs.getBoolean("idle_on", false))
+            h.postDelayed(idleRun, prefs.getInt("idle_min", 2) * 60000L);
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent e) {
+        if (idleView != null || idleSwallow) {
+            // el toque que despierta la pantalla no hace nada más
+            if (e.getAction() == MotionEvent.ACTION_DOWN) { hideIdle(); idleSwallow = true; }
+            if (e.getAction() == MotionEvent.ACTION_UP || e.getAction() == MotionEvent.ACTION_CANCEL) { idleSwallow = false; idleReset(); }
+            return true;
+        }
+        if (e.getAction() == MotionEvent.ACTION_DOWN) idleReset();
+        return super.dispatchTouchEvent(e);
+    }
+
+    private int idleColor() {
+        int c = IDLE_COLORS[Math.max(0, Math.min(IDLE_COLORS.length - 1, prefs.getInt("idle_color", 0)))];
+        return c == 0 ? RED : c;
+    }
+
+    private void showIdle() {
+        if (root == null || idleView != null) return;
+        float keep = s;
+        s = uiS > 0 ? uiS : s;
+        try { showIdle0(); } catch (Throwable ignored) { } finally { s = keep; }
+    }
+
+    private void showIdle0() {
+        int col = idleColor();
+        float f = new float[]{1f, 1.25f, 1.5f}[Math.max(0, Math.min(2, prefs.getInt("idle_size", 0)))];
+        int sp = prefs.getInt("idle_speed", prefs.getInt("speedo", 0));   // 0 digital, 1 analógico, 2 mixto, 3 sin velocidad
+        boolean speedOn = sp != 3 && prefs.getBoolean("car_speed", true);
+        if (!vertical && speedOn) f = Math.min(f, 1.25f);   // en horizontal, hora + velocímetro lado a lado deben caber en 1024
+        FrameLayout ov = new FrameLayout(this);
+        ov.setBackgroundColor(Color.BLACK);
+        LinearLayout box = new LinearLayout(this);
+        box.setOrientation(vertical ? LinearLayout.VERTICAL : LinearLayout.HORIZONTAL);
+        box.setGravity(Gravity.CENTER);
+        LinearLayout tc = new LinearLayout(this);
+        tc.setOrientation(LinearLayout.VERTICAL);
+        tc.setGravity(Gravity.CENTER);
+        idleClock = tv("", 150 * f, col, false);
+        idleClock.setGravity(Gravity.CENTER);
+        idleDate = tv("", 30 * f, col, false);
+        idleDate.setGravity(Gravity.CENTER);
+        idleDate.setAlpha(0.7f);
+        idleDate.setPadding(0, (int) (10 * s), 0, 0);
+        tc.addView(idleClock, new LinearLayout.LayoutParams(-2, -2));
+        tc.addView(idleDate, new LinearLayout.LayoutParams(-2, -2));
+        box.addView(tc, new LinearLayout.LayoutParams(-2, -2));
+        if (speedOn) {
+            View speed;
+            float gap = 56 * s;
+            if (sp == 0) {
+                LinearLayout sv = new LinearLayout(this);
+                sv.setOrientation(LinearLayout.HORIZONTAL);
+                sv.setGravity(Gravity.BOTTOM);
+                idleSpeedTv = tv("--", 110 * f, col, true);
+                TextView u = tv(useMph() ? "mph" : "km/h", 30 * f, col, false);
+                u.setAlpha(0.7f);
+                u.setPadding((int) (10 * s), 0, 0, (int) (14 * s * f));
+                sv.addView(idleSpeedTv);
+                sv.addView(u);
+                speed = sv;
+            } else {
+                idleGauge = new Gauge(this, s * f);
+                idleGauge.setColors(RED, col, (col & 0x00FFFFFF) | 0xB0000000);
+                idleGauge.setUnit(useMph());
+                idleGauge.setNumber(sp == 2);
+                speed = idleGauge;
+            }
+            int gs = (int) (260 * s * f);
+            LinearLayout.LayoutParams lp = sp == 0 ? new LinearLayout.LayoutParams(-2, -2) : new LinearLayout.LayoutParams(gs, gs);
+            if (vertical) lp.topMargin = (int) gap; else lp.leftMargin = (int) (gap * 1.5f);
+            box.addView(speed, lp);
+        }
+        ov.addView(box, new FrameLayout.LayoutParams(-1, -1));
+        idleView = ov;
+        root.addView(ov, new FrameLayout.LayoutParams(-1, -1));
+        updateIdleClock();
+        refreshSpeed();
+    }
+
+    private void hideIdle() {
+        if (idleView == null) return;
+        try { root.removeView(idleView); } catch (Throwable ignored) { }
+        idleView = null; idleClock = idleDate = idleSpeedTv = null; idleGauge = null;
+    }
+
+    private void updateIdleClock() {
+        if (idleClock == null) return;
+        Date now = new Date();
+        String fmt = prefs.getString("clock", "auto");
+        boolean h24 = "24".equals(fmt) || ("auto".equals(fmt) && android.text.format.DateFormat.is24HourFormat(this));
+        idleClock.setText(I18n.sdf(h24 ? "HH:mm" : "h:mm").format(now));
+        String d = I18n.sdf(I18n.datePattern()).format(now);
+        idleDate.setText(d.substring(0, 1).toUpperCase(I18n.loc) + d.substring(1));
     }
 
     /** Android 6+: respuesta a la solicitud de permisos. */
@@ -568,6 +696,7 @@ public class Main extends Activity {
         carUiActive = false;
         cancelDoorToast();
         lastDoorWarning = null;
+        h.removeCallbacks(idleRun);
         stopGps();
         h.removeCallbacks(ticker);
         h.removeCallbacks(progressTick);
@@ -647,6 +776,28 @@ public class Main extends Activity {
                 }
                 else if ("tema:claro".equals(v) || "tema:oscuro".equals(v) || "tema:sistema".equals(v)) {
                     prefs.edit().putString("theme", "tema:claro".equals(v) ? "light" : "tema:sistema".equals(v) ? "system" : "dark").apply();
+                    applyTheme(); applyAccent(); rebuild();
+                }
+                else if ("nav-buscar".equals(v)) openNavSearch();
+                else if (v.startsWith("nav-ir:")) {
+                    // nav-ir:lat,lon,nombre — solo para capturas de la revisión
+                    String[] a = v.substring(7).split(",");
+                    Nav.Place pl = new Nav.Place();
+                    pl.lat = Double.parseDouble(a[0]); pl.lon = Double.parseDouble(a[1]);
+                    pl.name = a.length > 2 ? a[2] : "Destino";
+                    android.util.Log.w("MiniLauncherNav", "nav-ir desde " + wLat + "," + wLon + " a " + v);
+                    startInternalNav(pl);
+                }
+                else if ("reposo".equals(v)) h.postDelayed(new Runnable() { public void run() { showIdle(); } }, 1500);
+                else if (v.startsWith("pref:") && v.indexOf('=') > 5) {
+                    // pref:clave=valor (true/false, número o texto); «pref:clave=» la borra
+                    String k = v.substring(5, v.indexOf('=')), val = v.substring(v.indexOf('=') + 1);
+                    SharedPreferences.Editor e = prefs.edit();
+                    if (val.length() == 0) e.remove(k);
+                    else if ("true".equals(val) || "false".equals(val)) e.putBoolean(k, Boolean.parseBoolean(val));
+                    else if (val.matches("-?\\d{1,9}")) e.putInt(k, Integer.parseInt(val));
+                    else e.putString(k, val);
+                    e.apply();
                     applyTheme(); applyAccent(); rebuild();
                 }
                 else if (v.startsWith("diseno:")) {
@@ -822,6 +973,24 @@ public class Main extends Activity {
                         .putString("dock_3_name", "Mi app").apply();
                     rebuild();
                 }
+                else if ("nav-demo".equals(v)) {
+                    Nav.Route nr = new Nav.Route();
+                    nr.pts = new double[]{4.6533, -74.0836, 4.6562, -74.0807, 4.6590, -74.0780, 4.6615, -74.0810};
+                    nr.cumDistM = new double[]{0, 455, 895, 1330};
+                    nr.totalDistM = 1330; nr.totalDurS = 180;
+                    nr.destName = "Parque Simón Bolívar"; nr.destLat = 4.6615; nr.destLon = -74.0810;
+                    Nav.Step s0 = new Nav.Step(); s0.lat = 4.6533; s0.lon = -74.0836; s0.icon = 0; s0.distM = 455; s0.street = "Av. Carrera 50"; s0.instruction = "Continúa por Av. Carrera 50";
+                    Nav.Step s1 = new Nav.Step(); s1.lat = 4.6562; s1.lon = -74.0807; s1.icon = 6; s1.distM = 440; s1.street = "Calle 53"; s1.instruction = "Gira a la izquierda en Calle 53";
+                    Nav.Step s2 = new Nav.Step(); s2.lat = 4.6615; s2.lon = -74.0810; s2.icon = 9; s2.distM = 0; s2.street = ""; s2.instruction = "Llegaste a tu destino";
+                    nr.steps.add(s0); nr.steps.add(s1); nr.steps.add(s2);
+                    nr.stepPtIdx = new int[]{0, 2, 3};
+                    Nav.activate(nr);
+                    LiveMapView.headingUp = true;
+                    Location l = new Location(LocationManager.GPS_PROVIDER);
+                    l.setLatitude(4.6540); l.setLongitude(-74.0829); l.setBearing(45); l.setSpeed(11); l.setTime(System.currentTimeMillis());
+                    feedMap(l);
+                    updateNavHud();
+                }
             } catch (Throwable e) {
                 Guard.log("Prueba «" + v + "» falló: " + e);
             }
@@ -981,6 +1150,7 @@ public class Main extends Activity {
 
     private void build(int W, int H) {
         root.removeAllViews();
+        idleView = null; idleClock = idleDate = idleSpeedTv = null; idleGauge = null;
         // versión de prueba: simular otra pantalla (p. ej. una ancha de 1920x720 en una tablet)
         int sim = getPackageName().endsWith(".debug") ? prefs.getInt("sim_screen", 0) : 0;
         if (sim > 0) {
@@ -1006,6 +1176,11 @@ public class Main extends Activity {
         loadFontSize();
         playerLeft = "left".equals(prefs.getString("player_side", "right"));
         showCar = prefs.getBoolean("show_car", true);
+        showMap = true;   // «ocultar el mapa» del PR #35 queda para más adelante
+        if (Nav.active != null && !"internal".equals(prefs.getString("nav_app", null))) {
+            Nav.stop(this);
+            LiveMapView.headingUp = prefs.getBoolean("map_heading", false);
+        }
         // ocultar el reproductor (el mapa gana espacio), la velocidad y el servicio (carros sin GPS) y el aceite
         showPlayer = prefs.getBoolean("show_player", true);
         carSpeed = prefs.getBoolean("car_speed", true);
@@ -1016,8 +1191,26 @@ public class Main extends Activity {
         dockLabels = prefs.getBoolean("dock_labels", true);
         // Lienzo virtual: 1024x600. Con la barra lateral los botones salen de abajo y el lienzo queda más bajo
         // (1128x460): en pantallas bajas y anchas como 1280x480 todo se ve ~30 % más grande.
-        vertical = H >= W * 1.2f;
+        // Diseño (2.22, Jorge Morales): Automático = vertical si la pantalla es al menos 20 % más alta que ancha (como
+        // siempre). Las pantallas tipo Tesla con barra de clima de fábrica quedan casi cuadradas: ahí se puede forzar.
+        boxW = W; boxH = H;
+        // 2.22: Automático pasa a vertical desde 1,05·H (antes 1,2): en pantallas un poco más altas que anchas el diseño
+        // horizontal queda chico en el medio (Jorge Morales). Quien ya tenía MiniLauncher con una pantalla así se queda en
+        // horizontal (se guarda una sola vez); las instalaciones nuevas arrancan en vertical sin tocar Ajustes.
+        if (!prefs.getBoolean("layout_mig_222", false)) {
+            SharedPreferences.Editor me = prefs.edit().putBoolean("layout_mig_222", true);
+            if (prefs.getBoolean("setup_done", false) && !prefs.contains("layout_mode") && H >= W * 1.05f && H < W * 1.2f)
+                me.putString("layout_mode", "horizontal");
+            me.apply();
+        }
+        String lmode = prefs.getString("layout_mode", "auto");
+        vertical = "vertical".equals(lmode) ? canVertical(W, H) : !"horizontal".equals(lmode) && H >= W * 1.05f;
         if (vertical) sideDock = false;   // en vertical la barra va abajo (la lateral le quitaría ancho al mapa)
+        // Vertical bajo (2.22, Jorge Morales: Tesla con barra de clima, ~768×880): menos de 900 de alto en el lienzo de
+        // 720 de ancho. La barra de botones normal se vuelve compacta para que el mapa tenga espacio. Las verticales de
+        // siempre (768×1024 = 960, 1080×1920 = 1280) no cambian.
+        shortVertical = vertical && H / (W / 720f) < 900;
+        if (shortVertical && !noDock) compactDock = true;
         float dw = 1024 + (sideDock ? RAIL + 8 : 0), dh = sideDock ? 460 : 600;
         s = Math.min(W / dw, H / dh);
         if (vertical) buildVerticalMetrics(W, H);
@@ -1061,6 +1254,7 @@ public class Main extends Activity {
         buildAaCard();
         buildAudioCard();
         if (!noDock) buildDock();
+        if (!showMap) updateNavHud();
         // vertical con solo la tarjeta del vehículo: flota encima del mapa
         if (vertical && showCar && !showPlayer && carCard != null) carCard.bringToFront();
 
@@ -1083,6 +1277,11 @@ public class Main extends Activity {
      * pantalla horizontal de 9") y tan alto como la pantalla. Se reparten así, de arriba abajo: barra de arriba (64),
      * mapa (lo que sobra), fila de tarjetas y barra de botones.
      */
+    /** El diseño vertical cabe si la pantalla es casi cuadrada o más alta que ancha. */
+    private static boolean canVertical(int W, int H) { return H >= W * 0.95f; }
+    private int boxW, boxH;
+    private boolean shortVertical;
+
     private void buildVerticalMetrics(int W, int H) {
         s = W / 720f;
         float dh = H / s;
@@ -1095,7 +1294,21 @@ public class Main extends Activity {
         float avail = dockTop - 12 - 64;   // del borde de arriba del mapa al borde de abajo de las tarjetas
         mapY = 64;
         insL = insR = 0;
-        if (showCar && showPlayer) {
+        if (!showMap) {
+            mapH = 0;
+            if (showCar && !showPlayer) {
+                cardH = Math.min(440, avail);
+                rowY = mapY + (avail - cardH) * 0.5f;
+            } else {
+                cardH = avail;
+                rowY = mapY;
+            }
+        } else if (showCar && showPlayer && shortVertical) {
+            // vertical bajo: tarjetas más bajas para que el mapa quede de un tamaño parecido al de ellas
+            cardH = Math.max(330, Math.min(360, avail * 0.5f));
+            mapH = avail - cardH - 12;
+            rowY = mapY + mapH + 12;
+        } else if (showCar && showPlayer) {
             // mapa arriba, y debajo el vehículo y el reproductor lado a lado
             cardH = Math.max(380, Math.min(470, avail * 0.38f));
             if (avail - cardH - 12 < 170) cardH = Math.max(300, avail - 12 - 170);
@@ -1120,6 +1333,38 @@ public class Main extends Activity {
     }
 
     private void layoutColumns() {
+        if (!showMap) {
+            mapX = 16; mapW = 0;
+            if (vertical) {
+                if (showCar && showPlayer) {
+                    audW = 688 - 300 - 12;
+                    carX = playerLeft ? 16 + audW + 12 : 16;
+                    audX = playerLeft ? 16 : 16 + 300 + 12;
+                } else {
+                    audW = 688;
+                    audX = 16;
+                    carX = (720 - 300) * 0.5f;
+                }
+                return;
+            }
+            float content = 1024 + ex;
+            float x0 = ox + 16;
+            if (showCar && showPlayer) {
+                float carW = 300;
+                audW = Math.max(248, content - 32 - 12 - carW);
+                carX = playerLeft ? x0 + audW + 12 : x0;
+                audX = playerLeft ? x0 : x0 + carW + 12;
+            } else if (showPlayer) {
+                audW = content - 32;
+                audX = x0;
+                carX = x0;
+            } else {
+                audW = 248;
+                audX = x0;
+                carX = x0 + Math.max(0, (content - 32 - 300) * 0.5f);
+            }
+            return;
+        }
         if (vertical) {
             mapX = 16;
             mapW = 688;
@@ -1180,7 +1425,26 @@ public class Main extends Activity {
             row.addView(topOilTv, olp);
             topOilTv.setOnClickListener(new View.OnClickListener() { public void onClick(View v) { showMaintenanceDialog(); } });
         }
-        // La fecha cede espacio a la hora, la velocidad y el aceite cuando el texto es grande.
+        LinearLayout pill = new LinearLayout(this);
+        pill.setGravity(Gravity.CENTER_VERTICAL);
+        pill.setBackground(round(CIRCLE, 14));
+        pill.setPadding((int) (8 * s), (int) (4 * s), (int) (11 * s), (int) (4 * s));
+        FrameLayout pIcBox = new FrameLayout(this);
+        pIcBox.setBackground(round(RED, 8));
+        topNavIc = new Nav.ManeuverView(this);
+        pIcBox.addView(topNavIc, new FrameLayout.LayoutParams(-1, -1));
+        pill.addView(pIcBox, new LinearLayout.LayoutParams((int) (22 * s), (int) (22 * s)));
+        topNavDistTv = tv("", 13, TEXT, true);
+        topNavDistTv.setPadding((int) (7 * s), 0, 0, 0);
+        pill.addView(topNavDistTv);
+        LinearLayout.LayoutParams plp = new LinearLayout.LayoutParams(-2, -2);
+        plp.leftMargin = (int) (12 * s);
+        plp.gravity = Gravity.CENTER_VERTICAL;
+        pill.setVisibility(View.GONE);
+        pill.setOnClickListener(new View.OnClickListener() { public void onClick(View v) { openNavMenu(); } });
+        topNavPill = pill;
+        row.addView(pill, plp);
+        // La fecha cede espacio a la hora, la velocidad, el aceite y la guía de navegación cuando el texto es grande.
         top.addView(row, new LinearLayout.LayoutParams(0, -1, showCar ? 0.44f : 0.60f));
 
         LinearLayout right = new LinearLayout(this);
@@ -1782,7 +2046,8 @@ public class Main extends Activity {
     };
 
     private void odoStep(Location l) {
-        if (!odoNeeded() || l == null) return;
+        if (l == null) return;
+        if (!odoNeeded()) return;
         if (l.hasAccuracy() && l.getAccuracy() > 40) return;
         if (odoLast == null) { odoLast = l; return; }
         float d = odoLast.distanceTo(l);
@@ -2809,6 +3074,14 @@ public class Main extends Activity {
     }
 
     private void buildAaCard() {
+        if (!showMap) {
+            liveMap = null; navHud = null; navTurnIc = null; navDistTv = null; navStepTv = null;
+            navEtaTv = null; navLaneBox = null; navLaneView = null; speedSignTv = null; camBadgeTv = null;
+            mapTagBox = null; mapTagTv = null; navSearchBtn = null; aaBtnTv = null; aaSubTv = null;
+            cpSubTv = null; mapGauge = null; mapGaugeBox = null; panelWx = null;
+            seedLastLocation();
+            return;
+        }
         FrameLayout card = new FrameLayout(this);
         place(board, card, mapX, mapY, mapW, mapH);
         // fondo decorativo mientras no hay GPS; encima, el mapa en vivo
@@ -2832,6 +3105,8 @@ public class Main extends Activity {
     }
 
     private void buildAaCardRest(FrameLayout card) {
+        LinearLayout topRow = new LinearLayout(this);
+        topRow.setGravity(Gravity.CENTER_VERTICAL);
         LinearLayout tag = new LinearLayout(this);
         tag.setGravity(Gravity.CENTER_VERTICAL);
         tag.setBackground(round((CARD & 0x00FFFFFF) | 0xE0000000, 12));
@@ -2840,10 +3115,80 @@ public class Main extends Activity {
         mapTagTv = tv("Buscando GPS…", 13, TEXT, true);
         mapTagTv.setPadding((int) (8 * s), 0, 0, 0);
         tag.addView(mapTagTv);
-        placeWrap(card, tag, 16, 16);
+        topRow.addView(tag);
         tag.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) { fixGps(); }
         });
+
+        LinearLayout goBtn = new LinearLayout(this);
+        goBtn.setGravity(Gravity.CENTER_VERTICAL);
+        goBtn.setBackground(round((CARD & 0x00FFFFFF) | 0xE0000000, 12));
+        goBtn.setPadding((int) (10 * s), (int) (7 * s), (int) (12 * s), (int) (7 * s));
+        ImageView goIc = icon("navigation", 16);
+        goIc.setColorFilter(RED);
+        goBtn.addView(goIc, new LinearLayout.LayoutParams((int) (16 * s), (int) (16 * s)));
+        TextView goTv = tv("Ir a…", 13, TEXT, true);
+        goTv.setPadding((int) (6 * s), 0, 0, 0);
+        goBtn.addView(goTv);
+        LinearLayout.LayoutParams glp = new LinearLayout.LayoutParams(-2, -2);
+        glp.leftMargin = (int) (8 * s);
+        topRow.addView(goBtn, glp);
+        goBtn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) { openNavSearch(); }
+        });
+        if (!prefs.getBoolean("map_live", true) || !"internal".equals(prefs.getString("nav_app", null))) goBtn.setVisibility(View.GONE);
+        navSearchBtn = goBtn;
+        mapTagBox = topRow;
+        placeWrap(card, topRow, 16, 16);
+
+        LinearLayout hud = new LinearLayout(this);
+        hud.setOrientation(LinearLayout.HORIZONTAL);
+        hud.setGravity(Gravity.CENTER_VERTICAL);
+        hud.setBackground(round((CARD & 0x00FFFFFF) | 0xEB000000, 16));
+        hud.setPadding((int) (10 * s), (int) (8 * s), (int) (10 * s), (int) (8 * s));
+        FrameLayout turnBox = new FrameLayout(this);
+        turnBox.setBackground(round(RED, 12));
+        navTurnIc = new Nav.ManeuverView(this);
+        turnBox.addView(navTurnIc, new FrameLayout.LayoutParams(-1, -1));
+        hud.addView(turnBox, new LinearLayout.LayoutParams((int) (48 * s), (int) (48 * s)));
+        LinearLayout hudMid = new LinearLayout(this);
+        hudMid.setOrientation(LinearLayout.VERTICAL);
+        hudMid.setPadding((int) (12 * s), 0, (int) (8 * s), 0);
+        LinearLayout hudTop = new LinearLayout(this);
+        hudTop.setGravity(Gravity.CENTER_VERTICAL);
+        navDistTv = tv("", 19, TEXT, true);
+        hudTop.addView(navDistTv, new LinearLayout.LayoutParams(0, -2, 1));
+        navEtaTv = tv("", 12, MUTED, false);
+        navEtaTv.setGravity(Gravity.RIGHT);
+        navEtaTv.setPadding((int) (8 * s), (int) (2 * s), (int) (4 * s), (int) (2 * s));
+        navEtaTv.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                boolean clock = !prefs.getBoolean("nav_eta_clock", false);
+                prefs.edit().putBoolean("nav_eta_clock", clock).apply();
+                updateNavHud();
+                toast(clock ? "Mostrando hora de llegada" : "Mostrando tiempo restante");
+            }
+        });
+        hudTop.addView(navEtaTv);
+        hudMid.addView(hudTop);
+        navStepTv = tv("", 13, SOFT, false);
+        navStepTv.setSingleLine(false);
+        navStepTv.setMaxLines(2);
+        navStepTv.setPadding(0, (int) (2 * s), 0, 0);
+        hudMid.addView(navStepTv);
+        hud.addView(hudMid, new LinearLayout.LayoutParams(0, -2, 1));
+        TextView stopBtn = tv("✕", 14, TEXT, true);
+        stopBtn.setGravity(Gravity.CENTER);
+        stopBtn.setBackground(round(BTN, 17));
+        hud.addView(stopBtn, new LinearLayout.LayoutParams((int) (34 * s), (int) (34 * s)));
+        stopBtn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) { stopInternalNav(); }
+        });
+        hud.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) { openNavMenu(); }
+        });
+        navHud = hud;
+        place(card, hud, 12, 12, mapW - 24, 72);
 
         // qué botones de conexión se ven. Con uno o ninguno, el clima usa el espacio libre del panel.
         String cm = prefs.getString("conn_buttons", "both");
@@ -2868,6 +3213,7 @@ public class Main extends Activity {
         if (nbSize == 3) navBtn.setVisibility(View.GONE);
         // Mini velocímetro sobre el mapa cuando la tarjeta del vehículo está oculta (Daniel).
         mapGauge = null;
+        boolean gaugeTopLeft = false;
         if (!showCar && carSpeed && prefs.getBoolean("map_gauge", false)) {
             FrameLayout gb = new FrameLayout(this);
             gb.setBackground(round((CARD & 0x00FFFFFF) | 0xE0000000, 66));
@@ -2885,6 +3231,7 @@ public class Main extends Activity {
             String corner = prefs.getString("map_gauge_corner", "auto");
             if ("auto".equals(corner)) corner = nbLeft ? "tr" : "tl";
             boolean gLeft = corner.endsWith("l"), gBottom = corner.startsWith("b");
+            gaugeTopLeft = gLeft && !gBottom;
             float gx = gLeft ? 12 : mapW - 12 - gs, gy = 52;
             if (gBottom) gx = gLeft ? 12 + insL : mapW - 12 - gs - insR;
             if (gBottom) {
@@ -2895,6 +3242,31 @@ public class Main extends Activity {
             } else mapGaugeBox = null;
             place(card, gb, gx, gy, gs, gs);
         } else mapGaugeBox = null;
+
+        FrameLayout laneBox = new FrameLayout(this);
+        laneBox.setBackground(round((CARD & 0x00FFFFFF) | 0xEB000000, 10));
+        laneBox.setPadding((int) (6 * s), (int) (4 * s), (int) (6 * s), (int) (4 * s));
+        navLaneView = new Nav.LaneStripView(this);
+        navLaneView.setColors(TEXT, (MUTED & 0x00FFFFFF) | 0x66000000, BTN);
+        laneBox.addView(navLaneView, new FrameLayout.LayoutParams(-1, -1));
+        laneBox.setVisibility(View.GONE);
+        navLaneBox = laneBox;
+        float laneW = Math.min(184, Math.max(110, mapW - 140));
+        place(card, laneBox, (mapW - laneW) * 0.5f, 92, laneW, 30);
+
+        speedSignTv = tv("", 15, 0xFF181A1F, true);
+        speedSignTv.setGravity(Gravity.CENTER);
+        speedSignTv.setVisibility(View.GONE);
+        float sdx = gaugeTopLeft ? mapW - 58 : 12;
+        place(card, speedSignTv, sdx, 92, 46, 46);
+
+        camBadgeTv = tv("", 11, Color.WHITE, true);
+        camBadgeTv.setBackground(round(0xFFD92B2B, 10));
+        camBadgeTv.setPadding((int) (8 * s), (int) (3 * s), (int) (8 * s), (int) (3 * s));
+        camBadgeTv.setVisibility(View.GONE);
+        placeWrap(card, camBadgeTv, gaugeTopLeft ? Math.max(12, mapW - 108) : 12, 144);
+
+        updateNavHud();
         navBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) { openNavApp(); }
         });
@@ -3110,7 +3482,22 @@ public class Main extends Activity {
     }
 
     private void feedMap(Location l) {
-        if (l != null) { wLat = l.getLatitude(); wLon = l.getLongitude(); }
+        if (l != null) {
+            wLat = l.getLatitude(); wLon = l.getLongitude();
+            if (Nav.active != null) {
+                Nav.onLocation(this, l, useMph(), new Runnable() {
+                    public void run() {
+                        if (Nav.active == null) {
+                            LiveMapView.headingUp = prefs.getBoolean("map_heading", false);
+                            toast("Llegaste a tu destino");
+                        }
+                        updateNavHud();
+                        if (liveMap != null) liveMap.invalidate();
+                    }
+                });
+                updateNavHud();
+            }
+        }
         if (liveMap == null || l == null) return;
         float kmh = l.hasSpeed() ? l.getSpeed() * 3.6f : 0;
         liveMap.setPosition(l.getLatitude(), l.getLongitude(), l.hasBearing() && kmh > 4 ? l.getBearing() : Float.NaN, kmh);
@@ -3374,6 +3761,97 @@ public class Main extends Activity {
         return true;
     }
 
+    private void updateNavHud() {
+        Nav.Route r = Nav.active;
+        boolean mph = useMph();
+        Nav.Step st = Nav.currentStep();
+        if (topNavPill != null) {
+            boolean showPill = r != null && (!showMap || !prefs.getBoolean("map_live", true));
+            topNavPill.setVisibility(showPill ? View.VISIBLE : View.GONE);
+            if (showPill) {
+                if (topNavIc != null) topNavIc.setIcon(st != null ? st.icon : 0);
+                if (topNavDistTv != null) {
+                    String td = Nav.rerouting ? I18n.t("Recalculando…")
+                        : Nav.offlineOffRoute ? Nav.fmtStepDist(Nav.offRouteM, mph)
+                        : Nav.fmtStepDist(Nav.distToStepM, mph);
+                    topNavDistTv.setText(td);
+                }
+            }
+        }
+        if (navHud == null || mapTagBox == null) return;
+        if (r == null) {
+            navHud.setVisibility(View.GONE);
+            if (navLaneBox != null) navLaneBox.setVisibility(View.GONE);
+            if (speedSignTv != null) speedSignTv.setVisibility(View.GONE);
+            if (camBadgeTv != null) camBadgeTv.setVisibility(View.GONE);
+            mapTagBox.setVisibility(View.VISIBLE);
+            return;
+        }
+        mapTagBox.setVisibility(View.GONE);
+        navHud.setVisibility(View.VISIBLE);
+        if (navTurnIc != null) navTurnIc.setIcon(st != null ? st.icon : 0);
+        if (navEtaTv != null) {
+            String eta = Nav.fmtEta(this, Nav.remDurS, Nav.remDistM, mph);
+            if ("map".equals(r.source) && r.offline) eta = eta + " · " + I18n.t("aproximada");
+            int dMin = (int) Math.round(Nav.trafficDelayS / 60.0);
+            if (dMin >= 1) {
+                eta = eta + " (+" + dMin + " min)";
+                navEtaTv.setTextColor(dMin >= 8 ? RED : 0xFFF5A623);
+            } else {
+                navEtaTv.setTextColor(MUTED);
+            }
+            navEtaTv.setText(eta);
+        }
+        if (navLaneBox != null && navLaneView != null) {
+            // guía de carriles: para una próxima versión (opcional, sin ajuste todavía)
+            if (prefs.getBoolean("nav_lanes", false) && st != null && st.lanes != null && st.lanes.length > 0 && Nav.distToStepM <= 1200) {
+                navLaneView.setLanes(st.lanes);
+                navLaneBox.setVisibility(View.VISIBLE);
+            } else {
+                navLaneBox.setVisibility(View.GONE);
+            }
+        }
+        if (speedSignTv != null) {
+            if (Nav.curSpeedLimitKmh > 0 && prefs.getBoolean("nav_speed_alert", false)) {
+                int val = mph ? Math.max(5, (int) (Math.round((Nav.curSpeedLimitKmh / 1.60934) / 5.0) * 5)) : Nav.curSpeedLimitKmh;
+                GradientDrawable sg = new GradientDrawable();
+                sg.setShape(GradientDrawable.OVAL);
+                if (Nav.speedingAlert) {
+                    sg.setColor(0xFFD92B2B);
+                    speedSignTv.setTextColor(Color.WHITE);
+                } else {
+                    sg.setColor(0xFFFDFDFE);
+                    sg.setStroke(Math.max(2, (int) (4 * s)), 0xFFD92B2B);
+                    speedSignTv.setTextColor(0xFF181A1F);
+                }
+                speedSignTv.setBackground(sg);
+                speedSignTv.setText(String.valueOf(val));
+                speedSignTv.setVisibility(View.VISIBLE);
+            } else {
+                speedSignTv.setVisibility(View.GONE);
+            }
+        }
+        if (camBadgeTv != null) {
+            if (Nav.nearbyCamera != null && Nav.nearbyCameraDistM >= 0 && prefs.getBoolean("nav_speed_cams", false)) {
+                camBadgeTv.setText(I18n.t("Radar") + " · " + Nav.fmtStepDist(Nav.nearbyCameraDistM, mph));
+                camBadgeTv.setVisibility(View.VISIBLE);
+            } else {
+                camBadgeTv.setVisibility(View.GONE);
+            }
+        }
+        String stepTxt = st != null && st.instruction != null ? I18n.t(st.instruction) : (r.destName != null ? r.destName : "");
+        if (Nav.rerouting) {
+            if (navDistTv != null) navDistTv.setText(I18n.t("Recalculando…"));
+            if (navStepTv != null) navStepTv.setText(stepTxt);
+        } else if (Nav.offlineOffRoute) {
+            if (navDistTv != null) navDistTv.setText(Nav.fmtStepDist(Nav.offRouteM, mph));
+            if (navStepTv != null) navStepTv.setText(I18n.t("Sin conexión · vuelve a la ruta"));
+        } else {
+            if (navDistTv != null) navDistTv.setText(Nav.fmtStepDist(Nav.distToStepM, mph));
+            if (navStepTv != null) navStepTv.setText(stepTxt);
+        }
+    }
+
     private void buildAudioCard() {
         final FrameLayout card = card(audX, rowY, audW, cardH, CARD);
         // contenido centrado: la tarjeta es más ancha sin la del vehículo y más alta con la barra compacta
@@ -3391,7 +3869,7 @@ public class Main extends Activity {
         place(card, head, 12, 5, audW - 26, 28);   // termina en 33: la carátula empieza en 34
         playerArt = new PlayerArt(this, s, asset("ic/music_note.png"));
         // Tarjeta alta (barra lateral): diseño vertical que llena el alto en vez de dejar espacio vacío (Andrés, Picanto)
-        tallPlayer = cardH - 380 >= 60;
+        tallPlayer = cardH - 380 >= 60 || shortVertical;   // vertical bajo: el mismo diseño, calculado con el alto real
         final View prev, play, next;
         if (vertical && cardH < 240) {
             // Franja ancha (vertical sin la tarjeta del vehículo): carátula a la izquierda, canción al centro y
@@ -3415,11 +3893,11 @@ public class Main extends Activity {
             place(card, play, bx + bs + gap, (cardH - ps) / 2, ps, ps);
             place(card, next, bx + bs + gap + ps + gap, (cardH - bs) / 2, bs, bs);
         } else if (tallPlayer) {
-            boolean big = audW >= 290;
-            float bs = big ? 66 : 60, ps = big ? 86 : 76, gap = big ? 12 : 10;
+            boolean big = audW >= 290, low = cardH < 380;
+            float bs = low ? 52 : big ? 66 : 60, ps = low ? 66 : big ? 86 : 76, gap = big ? 12 : 10;
             // altos de canción, artista y tiempo (más con letra grande: la carátula, que llena lo que sobra, se achica)
             float tH = fitH(26, lineH(19)), aH = fitH(20, lineH(14)), mH = fitH(18, lineH(13));
-            float yb = cardH - 22 - ps;                 // botones abajo
+            float yb = cardH - (low ? 16 : 22) - ps;    // botones abajo
             float yt = yb - 18 - mH;                    // tiempo (el avance lo muestra el anillo de la carátula)
             float ya = yt - 6 - aH;                     // artista
             float yti = ya - 2 - tH;                    // canción
@@ -3539,6 +4017,7 @@ public class Main extends Activity {
         {"radio", "Radio", "radio"}, {"bt", "Bluetooth", "bluetooth"}, {"cam", "Cámara", "photo_camera"},
         {"music", "Música", "music_note"}, {"nav", "Navegación", "map"}, {"aa", "Android Auto", "navigation"},
         {"carplay", "CarPlay", "phone_iphone"}, {"web", "Navegador web", "public"}, {"files", "Archivos", "folder"},
+        {"nav_home", "Ir a Casa", "location_on"}, {"nav_work", "Ir a Trabajo", "directions_car"},
         {"settings", "Ajustes", "settings"}, {"apps", "Apps", "apps"},
     };
 
@@ -3608,7 +4087,7 @@ public class Main extends Activity {
             else if ("bt".equals(id)) slot = 1;
             else if ("cam".equals(id)) slot = 2;
             else if ("files".equals(id)) slot = 3;
-            else if ("nav".equals(id)) saved = prefs.getString("nav_app", null);
+            else if ("nav".equals(id)) { saved = prefs.getString("nav_app", null); if ("internal".equals(saved)) saved = null; }
             else if ("music".equals(id)) saved = prefs.getString("music_app", null);
             else return null;
             if (slot >= 0) {
@@ -3735,8 +4214,21 @@ public class Main extends Activity {
         else if ("nav".equals(id)) openNavApp();
         else if ("aa".equals(id)) openAndroidAuto();
         else if ("carplay".equals(id)) openCarPlay();
+        else if ("nav_home".equals(id)) navigateSavedSlot("nav_home", "Casa");
+        else if ("nav_work".equals(id)) navigateSavedSlot("nav_work", "Trabajo");
         else openDrawer();
     }
+
+    private void navigateSavedSlot(String key, String label) {
+        Nav.Place p = Nav.savedPlace(this, key);
+        if (p == null) {
+            toast("Configura «" + label + "» primero en Navegación");
+            if (prefs.getBoolean("map_live", true)) openNavSearch();
+            return;
+        }
+        startInternalNav(p);
+    }
+
 
     /** Menú del botón N: cambiar app o función, cambiar nombre, volver a lo de siempre. */
     private void dockMenu(final int i, final Runnable after) {
@@ -3885,13 +4377,663 @@ public class Main extends Activity {
         pickFor("music_app", "Música", null);
     }
 
-    /** App de navegación elegida; si no hay, la primera conocida que esté instalada (Waze, Maps, OsmAnd…). */
+    /** App de navegación elegida; si se elige integrada en el mapa, abre búsqueda/menú interno. */
     private void openNavApp() {
-        if (launchSaved("nav_app")) return;
+        String navPref = prefs.getString("nav_app", null);
+        if (prefs.getBoolean("map_live", true) && "internal".equals(navPref)) {
+            if (Nav.active != null) openNavMenu();
+            else openNavSearch();
+            return;
+        }
+        openExternalNavApp();
+    }
+
+    private void openExternalNavApp() {
+        String navPref = prefs.getString("nav_app", null);
+        if (navPref != null && !"internal".equals(navPref) && launchSaved("nav_app")) return;
         String p = firstInstalled(NAV_PKGS);
         if (p != null && launchPkg(p)) return;
         toast("Elige tu app de navegación");
         pickFor("nav_app", "Navegación", null);
+    }
+
+    private void openNavSearch() {
+        openNavSearch(false);
+    }
+
+    private void openNavSearch(final boolean insertActive) {
+        if (!prefs.getBoolean("map_live", true)) { toast("Activa el mapa en vivo en Ajustes → Mapa y clima"); return; }
+        final android.app.AlertDialog[] dref = new android.app.AlertDialog[1];
+        final boolean[] addStopMode = {false};
+        LinearLayout wrap = new LinearLayout(this);
+        wrap.setOrientation(LinearLayout.VERTICAL);
+        int pad = (int) (20 * s);
+        wrap.setPadding(pad, pad / 2, pad, 0);
+
+        final android.widget.EditText et = field();
+        et.setSingleLine(true);
+        et.setHint(I18n.t(insertActive ? "Buscar parada intermedia" : "Escribe una dirección o lugar"));
+        et.setImeOptions(android.view.inputmethod.EditorInfo.IME_ACTION_SEARCH);
+        et.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == android.view.inputmethod.EditorInfo.IME_ACTION_SEARCH
+                        || (event != null && event.getKeyCode() == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN)) {
+                    if (dref[0] != null) try { dref[0].dismiss(); } catch (Throwable ignored) { }
+                    searchNav(et.getText().toString(), insertActive, addStopMode[0]);
+                    return true;
+                }
+                return false;
+            }
+        });
+        wrap.addView(et, new LinearLayout.LayoutParams(-1, -2));
+
+        android.widget.ScrollView sc = new android.widget.ScrollView(this);
+        LinearLayout body = new LinearLayout(this);
+        body.setOrientation(LinearLayout.VERTICAL);
+        body.setPadding(0, (int) (10 * s), 0, 0);
+
+        if (!insertActive && !pendingStops.isEmpty()) {
+            LinearLayout hdrRow = new LinearLayout(this);
+            hdrRow.setGravity(Gravity.CENTER_VERTICAL);
+            TextView stHdr = tv(I18n.t("PARADAS") + " (" + pendingStops.size() + ")", 11, RED, true);
+            hdrRow.addView(stHdr, new LinearLayout.LayoutParams(0, -2, 1));
+            TextView clrBtn = tv("Limpiar", 11, MUTED, true);
+            clrBtn.setPadding((int) (8 * s), (int) (4 * s), (int) (4 * s), (int) (4 * s));
+            clrBtn.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    pendingStops.clear();
+                    if (dref[0] != null) try { dref[0].dismiss(); } catch (Throwable ignored) { }
+                    openNavSearch(false);
+                }
+            });
+            hdrRow.addView(clrBtn);
+            body.addView(hdrRow);
+            for (int i = 0; i < pendingStops.size(); i++) {
+                final int stopIdx = i;
+                Nav.Place st = pendingStops.get(i);
+                LinearLayout sRow = new LinearLayout(this);
+                sRow.setGravity(Gravity.CENTER_VERTICAL);
+                sRow.setBackground(round(INNER, 10));
+                sRow.setPadding((int) (12 * s), (int) (8 * s), (int) (12 * s), (int) (8 * s));
+                TextView sTv = tv("", 13, TEXT, true);
+                sTv.setText((i + 1) + ". " + st.name);
+                sRow.addView(sTv, new LinearLayout.LayoutParams(0, -2, 1));
+                TextView del = tv("✕", 13, MUTED, true);
+                del.setPadding((int) (10 * s), (int) (2 * s), (int) (2 * s), (int) (2 * s));
+                del.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        if (stopIdx < pendingStops.size()) pendingStops.remove(stopIdx);
+                        if (dref[0] != null) try { dref[0].dismiss(); } catch (Throwable ignored) { }
+                        openNavSearch(false);
+                    }
+                });
+                sRow.addView(del);
+                LinearLayout.LayoutParams slp = new LinearLayout.LayoutParams(-1, -2);
+                slp.topMargin = (int) (4 * s);
+                slp.bottomMargin = (int) (4 * s);
+                body.addView(sRow, slp);
+            }
+        }
+
+        if (!insertActive) {
+            final TextView addStopPill = tv("+ Añadir parada intermedia", 12, SOFT, true);
+            addStopPill.setGravity(Gravity.CENTER);
+            addStopPill.setBackground(round(INNER, 10));
+            addStopPill.setPadding((int) (12 * s), (int) (7 * s), (int) (12 * s), (int) (7 * s));
+            addStopPill.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    addStopMode[0] = !addStopMode[0];
+                    addStopPill.setBackground(round(addStopMode[0] ? RED : INNER, 10));
+                    addStopPill.setTextColor(addStopMode[0] ? Color.WHITE : SOFT);
+                    addStopPill.setText(I18n.t(addStopMode[0] ? "Modo parada activo: elige una parada" : "+ Añadir parada intermedia"));
+                }
+            });
+            LinearLayout.LayoutParams alp = new LinearLayout.LayoutParams(-1, -2);
+            alp.bottomMargin = (int) (8 * s);
+            body.addView(addStopPill, alp);
+        }
+
+        LinearLayout quickRow = new LinearLayout(this);
+        quickRow.setOrientation(LinearLayout.HORIZONTAL);
+        addQuickSlot(quickRow, "nav_home", "Casa", true, dref, insertActive, addStopMode);
+        addQuickSlot(quickRow, "nav_work", "Trabajo", false, dref, insertActive, addStopMode);
+        LinearLayout.LayoutParams qlp = new LinearLayout.LayoutParams(-1, -2);
+        qlp.bottomMargin = (int) (8 * s);
+        body.addView(quickRow, qlp);
+
+
+        if (LiveMapView.fileMap != null) {
+            LinearLayout catRow = new LinearLayout(this);
+            catRow.setOrientation(LinearLayout.HORIZONTAL);
+            String[][] cats = {
+                {"fuel", "Gasolina"},
+                {"health", "Salud"},
+                {"parking", "Parqueo"},
+                {"food", "Comida"}
+            };
+            for (int i = 0; i < cats.length; i++) {
+                final String cKey = cats[i][0];
+                final String cLbl = cats[i][1];
+                TextView pill = tv(cLbl, 12, TEXT, true);
+                pill.setGravity(Gravity.CENTER);
+                pill.setBackground(round(INNER, 10));
+                pill.setPadding((int) (6 * s), (int) (8 * s), (int) (6 * s), (int) (8 * s));
+                LinearLayout.LayoutParams plp = new LinearLayout.LayoutParams(0, -2, 1);
+                if (i + 1 < cats.length) plp.rightMargin = (int) (6 * s);
+                catRow.addView(pill, plp);
+                pill.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        if (dref[0] != null) try { dref[0].dismiss(); } catch (Throwable ignored) { }
+                        searchNavCategory(cKey, cLbl, insertActive, addStopMode[0]);
+                    }
+                });
+            }
+            LinearLayout.LayoutParams clp = new LinearLayout.LayoutParams(-1, -2);
+            clp.bottomMargin = (int) (6 * s);
+            body.addView(catRow, clp);
+        }
+
+        addPlaceSection(body, "FAVORITOS", Nav.favorites(this), dref, insertActive, addStopMode);
+        addPlaceSection(body, "RECIENTES", Nav.recents(this), dref, insertActive, addStopMode);
+
+        sc.addView(body, new LinearLayout.LayoutParams(-1, -2));
+        wrap.addView(sc, new LinearLayout.LayoutParams(-1, -2));
+
+        TB b = new TB(this, dlg()).wide()
+            .setTitle(insertActive ? "Añadir parada en ruta" : (!pendingStops.isEmpty() ? "Elegir destino final" : "¿A dónde vamos?"))
+            .setView(wrap)
+            .setPositiveButton("Buscar", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface d, int w) { searchNav(et.getText().toString(), insertActive, addStopMode[0]); }
+            })
+            .setNegativeButton("Cancelar", null);
+        if (!insertActive && Nav.active != null) {
+            b.setNeutralButton("Detener", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface d, int w) { stopInternalNav(); }
+            });
+        }
+        dref[0] = b.show();
+    }
+
+    private void addQuickSlot(LinearLayout parent, final String key, final String label, boolean leftMarginRight,
+                              final android.app.AlertDialog[] dref, final boolean insertActive, final boolean[] addStopMode) {
+        final Nav.Place saved = Nav.savedPlace(this, key);
+        LinearLayout slot = new LinearLayout(this);
+        slot.setOrientation(LinearLayout.VERTICAL);
+        slot.setBackground(round(INNER, 12));
+        slot.setPadding((int) (12 * s), (int) (9 * s), (int) (12 * s), (int) (9 * s));
+        slot.addView(tv(label, 14, TEXT, true));
+        TextView sub = tv("", 11, saved != null ? SOFT : MUTED, false);
+        sub.setText(saved != null ? saved.name : I18n.t("Toca para guardar GPS"));
+        sub.setPadding(0, (int) (2 * s), 0, 0);
+        slot.addView(sub);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(0, -2, 1);
+        if (leftMarginRight) lp.rightMargin = (int) (8 * s);
+        parent.addView(slot, lp);
+        slot.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                if (dref[0] != null) try { dref[0].dismiss(); } catch (Throwable ignored) { }
+                if (saved != null) {
+                    handlePickedPlace(saved, insertActive, addStopMode != null && addStopMode[0]);
+                } else if (saveCurrentGpsAs(key, label)) {
+                    openNavSearch(insertActive);
+                }
+            }
+        });
+        if (saved != null) {
+            slot.setOnLongClickListener(new View.OnLongClickListener() {
+                public boolean onLongClick(View v) {
+                    if (dref[0] != null) try { dref[0].dismiss(); } catch (Throwable ignored) { }
+                    String[] items = {
+                        I18n.t("Ir ahora"),
+                        I18n.t("Añadir como parada"),
+                        I18n.t("Actualizar con GPS actual"),
+                        I18n.t("Borrar")
+                    };
+                    new TB(Main.this, dlg()).raw()
+                        .setTitle(I18n.t(label))
+                        .setItems(items, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface d, int w) {
+                                if (w == 0) startInternalNav(saved);
+                                else if (w == 1) handlePickedPlace(saved, insertActive, true);
+                                else if (w == 2) { if (saveCurrentGpsAs(key, label)) openNavSearch(insertActive); }
+                                else {
+                                    Nav.setSavedPlace(Main.this, key, null);
+                                    toast("Eliminado");
+                                    openNavSearch(insertActive);
+                                }
+                            }
+                        })
+                        .setNegativeButton("Cancelar", null)
+                        .show();
+                    return true;
+                }
+            });
+        }
+    }
+
+    private boolean saveCurrentGpsAs(String key, String label) {
+        if (Double.isNaN(wLat) || Double.isNaN(wLon)) seedLastLocation();
+        if (Double.isNaN(wLat) || Double.isNaN(wLon)) {
+            toast("Esperando señal GPS para guardar ubicación");
+            return false;
+        }
+        Nav.Place p = new Nav.Place();
+        p.name = I18n.t(label);
+        p.sub = String.format(java.util.Locale.US, "%.5f, %.5f", wLat, wLon);
+        p.lat = wLat;
+        p.lon = wLon;
+        Nav.setSavedPlace(this, key, p);
+        toast("nav_home".equals(key) ? "Guardado en Casa" : "Guardado en Trabajo");
+        return true;
+    }
+
+    private void addPlaceSection(LinearLayout body, String title, List<Nav.Place> items,
+                                 final android.app.AlertDialog[] dref, final boolean insertActive, final boolean[] addStopMode) {
+        if (items == null || items.isEmpty()) return;
+        TextView hdr = tv(title, 11, MUTED, true);
+        hdr.setPadding(0, (int) (8 * s), 0, (int) (6 * s));
+        body.addView(hdr);
+        for (int i = 0; i < items.size(); i++) {
+            final Nav.Place p = items.get(i);
+            LinearLayout row = new LinearLayout(this);
+            row.setOrientation(LinearLayout.VERTICAL);
+            row.setBackground(round(INNER, 12));
+            row.setPadding((int) (14 * s), (int) (10 * s), (int) (14 * s), (int) (10 * s));
+            TextView nt = tv("", 15, TEXT, true);
+            nt.setText(p.name);
+            row.addView(nt);
+            if (p.sub != null && p.sub.length() > 0) {
+                TextView st = tv("", 12, MUTED, false);
+                st.setText(p.sub);
+                st.setPadding(0, (int) (2 * s), 0, 0);
+                row.addView(st);
+            }
+            LinearLayout.LayoutParams rlp = new LinearLayout.LayoutParams(-1, -2);
+            rlp.bottomMargin = (int) (6 * s);
+            body.addView(row, rlp);
+            row.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    if (dref[0] != null) try { dref[0].dismiss(); } catch (Throwable ignored) { }
+                    handlePickedPlace(p, insertActive, addStopMode != null && addStopMode[0]);
+                }
+            });
+            row.setOnLongClickListener(new View.OnLongClickListener() {
+                public boolean onLongClick(View v) {
+                    if (dref[0] != null) try { dref[0].dismiss(); } catch (Throwable ignored) { }
+                    openPlaceOptions(p);
+                    return true;
+                }
+            });
+        }
+    }
+
+    private void openPlaceOptions(final Nav.Place p) {
+        final boolean fav = Nav.isFavorite(this, p);
+        String[] items = {
+            I18n.t("Ir ahora"),
+            I18n.t("Añadir como parada"),
+            I18n.t(fav ? "Quitar de favoritos" : "Añadir a favoritos"),
+            I18n.t("Guardar como Casa"),
+            I18n.t("Guardar como Trabajo")
+        };
+        new TB(this, dlg()).raw()
+            .setTitle(p.name)
+            .setItems(items, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface d, int w) {
+                    if (w == 0) startInternalNav(p);
+                    else if (w == 1) handlePickedPlace(p, false, true);
+                    else if (w == 2) {
+                        boolean added = Nav.toggleFavorite(Main.this, p);
+                        toast(added ? "Añadido a favoritos" : "Quitado de favoritos");
+                    } else if (w == 3) {
+                        Nav.setSavedPlace(Main.this, "nav_home", p);
+                        toast("Guardado en Casa");
+                    } else {
+                        Nav.setSavedPlace(Main.this, "nav_work", p);
+                        toast("Guardado en Trabajo");
+                    }
+                }
+            })
+            .setNegativeButton("Cerrar", null)
+            .show();
+    }
+
+    private void handlePickedPlace(Nav.Place p, boolean insertActive, boolean asStop) {
+        if (p == null) return;
+        if (insertActive) {
+            insertStopIntoActive(p);
+            return;
+        }
+        if (asStop) {
+            pendingStops.add(p);
+            toast(I18n.t("Parada añadida") + ": " + p.name);
+            openNavSearch(false);
+            return;
+        }
+        startInternalNav(p);
+    }
+
+    private void insertStopIntoActive(Nav.Place stop) {
+        Nav.Route cur = Nav.active;
+        if (cur == null) { startInternalNav(stop); return; }
+        List<Nav.Place> stops = new ArrayList<Nav.Place>();
+        if (cur.waypoints != null) stops.addAll(cur.waypoints);
+        stops.add(stop);
+        Nav.Place dest = new Nav.Place();
+        dest.name = cur.destName != null && cur.destName.length() > 0
+                ? cur.destName : String.format(java.util.Locale.US, "%.5f, %.5f", cur.destLat, cur.destLon);
+        dest.lat = cur.destLat;
+        dest.lon = cur.destLon;
+        stops.add(dest);
+        startRouteWithStops(stops, dest, false);
+    }
+
+    private void searchNav(String query, final boolean insertActive, final boolean asStop) {
+        final String q = query == null ? "" : query.trim();
+        if (q.length() == 0) { toast("Escribe una dirección o lugar"); return; }
+        toast("Buscando…");
+        Nav.search(this, q, wLat, wLon, useMph(), new Nav.SearchCb() {
+            public void onResult(List<Nav.Place> places, String error) {
+                if (isFinishing()) return;
+                if (places == null) { toast(error != null ? error : "No se pudo buscar"); return; }
+                if (places.isEmpty()) { toast("No se encontraron resultados"); return; }
+                String pfx = I18n.t(insertActive || asStop ? "Elegir parada" : "Resultados");
+                showSearchResults(pfx + ": " + q, places, insertActive, asStop);
+            }
+        });
+    }
+
+    private void searchNavCategory(String cat, final String label, final boolean insertActive, final boolean asStop) {
+        if (Double.isNaN(wLat) || Double.isNaN(wLon)) seedLastLocation();
+        toast("Buscando…");
+        Nav.searchCategory(cat, wLat, wLon, useMph(), new Nav.SearchCb() {
+            public void onResult(List<Nav.Place> places, String error) {
+                if (isFinishing()) return;
+                if (places == null || places.isEmpty()) {
+                    toast(error != null ? error : "No se encontraron resultados");
+                    return;
+                }
+                String tit = insertActive || asStop ? I18n.t("Elegir parada") + " · " + I18n.t(label) : I18n.t(label);
+                showSearchResults(tit, places, insertActive, asStop);
+            }
+        });
+    }
+
+    private void showSearchResults(String title, final List<Nav.Place> places, final boolean insertActive, final boolean asStop) {
+        BaseAdapter ad = new BaseAdapter() {
+            public int getCount() { return places.size(); }
+            public Object getItem(int pos) { return places.get(pos); }
+            public long getItemId(int pos) { return pos; }
+            public View getView(int pos, View cv, ViewGroup parent) {
+                Nav.Place p = places.get(pos);
+                LinearLayout row = new LinearLayout(Main.this);
+                row.setOrientation(LinearLayout.VERTICAL);
+                row.setPadding((int) (22 * s), (int) (12 * s), (int) (22 * s), (int) (12 * s));
+                TextView t = tv("", 16, TEXT, true);
+                t.setText(p.name);
+                row.addView(t);
+                if (p.sub != null && p.sub.length() > 0) {
+                    TextView sub = tv("", 13, MUTED, false);
+                    sub.setText(p.sub);
+                    sub.setPadding(0, (int) (2 * s), 0, 0);
+                    row.addView(sub);
+                }
+                return row;
+            }
+        };
+        new TB(Main.this, dlg()).raw()
+            .setTitle(title)
+            .setAdapter(ad, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface d, int w) { handlePickedPlace(places.get(w), insertActive, asStop); }
+            })
+            .setNegativeButton("Cancelar", null)
+            .show();
+    }
+
+    private void startInternalNav(final Nav.Place dest) {
+        List<Nav.Place> stops = new ArrayList<Nav.Place>(pendingStops.size() + 1);
+        stops.addAll(pendingStops);
+        stops.add(dest);
+        boolean wantAlt = stops.size() == 1 && prefs.getBoolean("nav_alternatives", true);
+        startRouteWithStops(stops, dest, wantAlt);
+    }
+
+    private void startRouteWithStops(final List<Nav.Place> stops, final Nav.Place dest, boolean wantAlt) {
+        if (Double.isNaN(wLat) || Double.isNaN(wLon)) seedLastLocation();
+        if (Double.isNaN(wLat) || Double.isNaN(wLon)) {
+            toast("Esperando señal GPS para calcular la ruta");
+            return;
+        }
+        Nav.saveRecent(this, dest);
+        if (Nav.active == null) Nav.savedHeadingUp = prefs.getBoolean("map_heading", false);
+        toast("Calculando ruta…");
+        Nav.fetchRoutes(this, wLat, wLon, stops, wantAlt && stops.size() == 1, new Nav.RoutesCb() {
+            public void onRoutes(List<Nav.Route> routes, String error) {
+                if (isFinishing()) return;
+                if (routes == null || routes.isEmpty()) {
+                    android.util.Log.w("MiniLauncherNav", "sin ruta: " + error);
+                    toast(error != null ? error : "No se pudo calcular la ruta");
+                    return;
+                }
+                pendingStops.clear();
+                if (routes.size() == 1) activateChosenRoute(routes.get(0));
+                else showRouteChooser(routes);
+            }
+        });
+    }
+
+    private void activateChosenRoute(Nav.Route r) {
+        Nav.activate(this, r);
+        Nav.announceStart(this, r);
+        LiveMapView.headingUp = true;
+        updateNavHud();
+        if (liveMap != null) liveMap.invalidate();
+        if (!r.incidents.isEmpty()) {
+            toast(r.incidents.size() + " " + I18n.t(r.incidents.size() == 1 ? "incidente en la ruta" : "incidentes en la ruta"));
+        } else if ("cache".equals(r.source)) {
+            toast("Ruta guardada (sin conexión)");
+        } else if (r.offline) {
+            toast("Ruta aproximada (mapa local sin conexión)");
+        }
+    }
+
+    private void showRouteChooser(final List<Nav.Route> routes) {
+        final Nav.Route prevActive = Nav.active;
+        Nav.active = routes.get(0);
+        Nav.altRoutes = new ArrayList<Nav.Route>(routes.subList(1, routes.size()));
+        if (liveMap != null) liveMap.invalidate();
+
+        final boolean mph = useMph();
+        BaseAdapter ad = new BaseAdapter() {
+            public int getCount() { return routes.size(); }
+            public Object getItem(int pos) { return routes.get(pos); }
+            public long getItemId(int pos) { return pos; }
+            public View getView(int pos, View cv, ViewGroup parent) {
+                Nav.Route rt = routes.get(pos);
+                LinearLayout row = new LinearLayout(Main.this);
+                row.setOrientation(LinearLayout.VERTICAL);
+                row.setPadding((int) (22 * s), (int) (12 * s), (int) (22 * s), (int) (12 * s));
+                TextView t = tv("", 16, pos == 0 ? RED : TEXT, true);
+                t.setText(I18n.t("Ruta") + " " + (pos + 1) + (pos == 0 ? " · " + I18n.t("Más rápida") : ""));
+                row.addView(t);
+                String detail = Nav.fmtEta(Main.this, rt.totalDurS, rt.totalDistM, mph);
+                int dMin = (int) Math.round(rt.trafficDelayS / 60.0);
+                if (dMin >= 1) detail += " (+" + dMin + " min)";
+                if (!rt.incidents.isEmpty()) {
+                    detail += " · " + rt.incidents.size() + " " + I18n.t(rt.incidents.size() == 1 ? "incidente" : "incidentes");
+                }
+                TextView sub = tv("", 13, MUTED, false);
+                sub.setText(detail);
+                sub.setPadding(0, (int) (2 * s), 0, 0);
+                row.addView(sub);
+                return row;
+            }
+        };
+        final boolean[] chosen = {false};
+        new TB(Main.this, dlg()).raw()
+            .setTitle(I18n.t("Elegir ruta"))
+            .setAdapter(ad, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface d, int w) {
+                    chosen[0] = true;
+                    activateChosenRoute(routes.get(w));
+                }
+            })
+            .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface d, int w) {
+                    if (!chosen[0]) {
+                        Nav.active = prevActive;
+                        Nav.altRoutes = null;
+                        updateNavHud();
+                        if (liveMap != null) liveMap.invalidate();
+                    }
+                }
+            })
+            .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                public void onCancel(DialogInterface d) {
+                    if (!chosen[0]) {
+                        Nav.active = prevActive;
+                        Nav.altRoutes = null;
+                        updateNavHud();
+                        if (liveMap != null) liveMap.invalidate();
+                    }
+                }
+            })
+            .show();
+    }
+
+    private void showIncidentsDialog(Nav.Route r) {
+        if (r == null || r.incidents.isEmpty()) return;
+        LinearLayout lay = new LinearLayout(this);
+        lay.setOrientation(LinearLayout.VERTICAL);
+        lay.setPadding((int) (20 * s), (int) (8 * s), (int) (20 * s), (int) (8 * s));
+        for (int i = 0; i < r.incidents.size(); i++) {
+            Nav.Incident inc = r.incidents.get(i);
+            LinearLayout row = new LinearLayout(this);
+            row.setOrientation(LinearLayout.VERTICAL);
+            row.setBackground(round(INNER, 10));
+            row.setPadding((int) (12 * s), (int) (9 * s), (int) (12 * s), (int) (9 * s));
+            TextView t = tv("", 14, TEXT, true);
+            t.setSingleLine(false);
+            t.setText(inc.desc != null && inc.desc.length() > 0 ? inc.desc : Nav.incidentLabel(inc.category));
+            row.addView(t);
+            if (inc.delayS >= 60) {
+                TextView sub = tv("", 12, 0xFFF5A623, false);
+                sub.setText("+" + Math.round(inc.delayS / 60.0) + " min");
+                sub.setPadding(0, (int) (2 * s), 0, 0);
+                row.addView(sub);
+            }
+            LinearLayout.LayoutParams rlp = new LinearLayout.LayoutParams(-1, -2);
+            rlp.bottomMargin = (int) (6 * s);
+            lay.addView(row, rlp);
+        }
+        android.widget.ScrollView sc = new android.widget.ScrollView(this);
+        sc.addView(lay);
+        new TB(this, dlg()).wide()
+            .setTitle("Incidentes en la ruta")
+            .setView(sc)
+            .setPositiveButton("Cerrar", null)
+            .show();
+    }
+
+    private void stopInternalNav() {
+        Nav.stop(this);
+        LiveMapView.headingUp = prefs.getBoolean("map_heading", false);
+        updateNavHud();
+        if (liveMap != null) liveMap.invalidate();
+    }
+
+    private void openNavMenu() {
+        final Nav.Route r = Nav.active;
+        if (r == null) { openNavSearch(); return; }
+        final boolean voice = prefs.getBoolean("nav_voice", true);
+        final boolean clockEta = prefs.getBoolean("nav_eta_clock", false);
+        final boolean heading = LiveMapView.headingUp;
+        final Nav.Place curDest = new Nav.Place();
+        curDest.name = r.destName != null && r.destName.length() > 0
+                ? r.destName : String.format(java.util.Locale.US, "%.5f, %.5f", r.destLat, r.destLon);
+        curDest.lat = r.destLat;
+        curDest.lon = r.destLon;
+        final boolean favNow = Nav.isFavorite(this, curDest);
+
+        final java.util.List<String> labels = new java.util.ArrayList<String>();
+        final java.util.List<Runnable> actions = new java.util.ArrayList<Runnable>();
+        if (!r.incidents.isEmpty()) {
+            labels.add(I18n.t("Incidentes en la ruta") + " (" + r.incidents.size() + ")");
+            actions.add(new Runnable() { public void run() { showIncidentsDialog(r); } });
+        }
+        labels.add(I18n.t("Cambiar destino"));
+        actions.add(new Runnable() { public void run() { openNavSearch(false); } });
+        labels.add(I18n.t("Añadir parada en ruta"));
+        actions.add(new Runnable() { public void run() { openNavSearch(true); } });
+        labels.add(I18n.t(clockEta ? "Mostrar tiempo restante" : "Mostrar hora de llegada"));
+        actions.add(new Runnable() {
+            public void run() {
+                prefs.edit().putBoolean("nav_eta_clock", !clockEta).apply();
+                updateNavHud();
+            }
+        });
+        labels.add(I18n.t(voice ? "Silenciar voz de guía" : "Activar voz de guía"));
+        actions.add(new Runnable() {
+            public void run() {
+                prefs.edit().putBoolean("nav_voice", !voice).apply();
+                toast(!voice ? "Voz activada" : "Voz silenciada");
+            }
+        });
+        labels.add(I18n.t(heading ? "Vista Norte arriba" : "Vista en dirección de marcha"));
+        actions.add(new Runnable() {
+            public void run() {
+                LiveMapView.headingUp = !heading;
+                if (liveMap != null) liveMap.invalidate();
+            }
+        });
+        labels.add(I18n.t("Recalcular ruta"));
+        actions.add(new Runnable() {
+            public void run() {
+                List<Nav.Place> stops = new ArrayList<Nav.Place>();
+                if (r.waypoints != null) stops.addAll(r.waypoints);
+                stops.add(curDest);
+                startRouteWithStops(stops, curDest, false);
+            }
+        });
+        labels.add(I18n.t(favNow ? "Quitar de favoritos" : "Añadir a favoritos"));
+        actions.add(new Runnable() {
+            public void run() {
+                boolean added = Nav.toggleFavorite(Main.this, curDest);
+                toast(added ? "Añadido a favoritos" : "Quitado de favoritos");
+            }
+        });
+        labels.add(I18n.t("Guardar como Casa"));
+        actions.add(new Runnable() {
+            public void run() {
+                Nav.setSavedPlace(Main.this, "nav_home", curDest);
+                toast("Guardado en Casa");
+            }
+        });
+        labels.add(I18n.t("Guardar como Trabajo"));
+        actions.add(new Runnable() {
+            public void run() {
+                Nav.setSavedPlace(Main.this, "nav_work", curDest);
+                toast("Guardado en Trabajo");
+            }
+        });
+        labels.add(I18n.t("Abrir en otra app"));
+        actions.add(new Runnable() { public void run() { openExternalNavApp(); } });
+        labels.add(I18n.t("Detener navegación"));
+        actions.add(new Runnable() { public void run() { stopInternalNav(); } });
+
+        String title = r.destName != null && r.destName.length() > 0 ? r.destName : I18n.t("Navegación en el mapa");
+        if ("cache".equals(r.source)) title = title + " (" + I18n.t("ruta guardada") + ")";
+        else if (r.offline) title = title + " (" + I18n.t("sin conexión · aproximada") + ")";
+        else if ("tomtom".equals(r.source)) title = title + " (" + I18n.t("con tráfico") + ")";
+        new TB(this, dlg()).raw()
+            .setTitle(title)
+            .setItems(labels.toArray(new String[0]), new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface d, int w) {
+                    if (w >= 0 && w < actions.size()) actions.get(w).run();
+                }
+            })
+            .setNegativeButton("Cerrar", null)
+            .show();
     }
 
     private boolean launchComponent(ComponentName cn) {
@@ -3907,6 +5049,9 @@ public class Main extends Activity {
 
     private String autoLabel(String key, String[] pkgs, String none) {
         String c = prefs.getString(key, null);
+        if ("nav_app".equals(key) && "internal".equals(c)) {
+            return I18n.t("En el mapa de MiniLauncher");
+        }
         if (c != null) return labelOf(c);
         String p = firstInstalled(pkgs);
         return p != null ? "Automático · " + labelOf(p) : none;
@@ -4081,6 +5226,7 @@ public class Main extends Activity {
     // ───────────────────────── reloj, GPS, audio ─────────────────────────
 
     private void updateClock() {
+        updateIdleClock();
         if (timeTv == null) return;
         Date now = new Date();
         String fmt = prefs.getString("clock", "auto");
@@ -4100,6 +5246,7 @@ public class Main extends Activity {
             lastFixAny = lastFix;
             setGps(true, l.hasSpeed() ? l.getSpeed() * 3.6f : Float.NaN);
             feedMap(l);
+            sunSpot(l.getLatitude(), l.getLongitude());
         }
         public void onStatusChanged(String p, int st, Bundle e) { }
         public void onProviderEnabled(String p) { }
@@ -4138,7 +5285,6 @@ public class Main extends Activity {
 
     /** SPD primero; GPS reciente de reserva. La demo no alimenta el velocímetro. */
     private void refreshSpeed() {
-        if (speedTv == null) return;
         long now = SystemClock.elapsedRealtime();
         Float speed = car != null && car.state() == CarInfo.CONNECTED ? car.vehicle().currentSpeedKmh(now) : null;
         boolean spd = speed != null;
@@ -4147,6 +5293,11 @@ public class Main extends Activity {
         boolean ok = speed != null;
         float v = ok ? (useMph() ? speed * 0.621371f : speed) : 0;
         if (!spd) v = speedFix(v); // la corrección es para el GPS; SPD conserva el dato del carro
+        if (idleView != null) {   // pantalla en reposo: la misma velocidad que el velocímetro (SPD o GPS)
+            if (idleSpeedTv != null) idleSpeedTv.setText(ok ? String.valueOf(Math.round(v)) : "--");
+            if (idleGauge != null) idleGauge.setSpeed(v, ok);
+        }
+        if (speedTv == null) return;
         speedTv.setText(ok ? String.valueOf(Math.round(v)) : "--");
         if (carGauge != null) carGauge.setSpeed(v, ok);
         if (mapGauge != null) mapGauge.setSpeed(v, ok);
@@ -4261,6 +5412,11 @@ public class Main extends Activity {
         // y a veces sin título (solo tiempo o estado). Mientras Android Auto sea la fuente, Bluetooth solo aporta
         // tiempo y estado: nunca cambia la etiqueta ni borra la pista. Antes esos avisos sin título ponían
         // «Bluetooth» y la notificación de Open Headunit volvía a poner «Android Auto»: la etiqueta titilaba.
+        // Al quitar el cable, la canción de Bluetooth (cada 2 s) puede llegar antes que checkAaGone: antes cambiaba la
+        // etiqueta a «Bluetooth» y la carátula de Android Auto se quedaba (Andrés, 16 nov.). Primero se hace la
+        // desconexión completa (carátula fuera, registro, app Bluetooth) y después sigue lo de Bluetooth.
+        if ("bt".equals(t.origin) && "Android Auto".equals(curSource) && !"rcc".equals(curOrigin) && !aaRunning())
+            checkAaGone(false);
         boolean aaOwns = "rcc".equals(curOrigin) || ("Android Auto".equals(curSource) && aaRunning());
         // La canción vino de la notificación de Open Headunit (celular solo por cable, sin Bluetooth): lo que mande
         // Bluetooth con otro título es de otro celular o lo que la app Bluetooth recordaba. No lo reemplaza.
@@ -4307,7 +5463,7 @@ public class Main extends Activity {
             durMs = -1;
             if (!t.artSet) curArt = null;
             // ¿La notificación de Open Headunit ya trae la carátula de esta canción?
-            if (!t.artSet && NotifArt.lastArt != null && textsMatch(NotifArt.lastTexts, t.title)) {
+            if (!t.artSet && NotifArt.lastArt != null && textsMatch(NotifArt.lastTexts, t.title) && aaRunning()) {
                 curArt = NotifArt.lastArt;
                 t.source = "Android Auto";
                 aaWaitTitle = null;
@@ -4463,6 +5619,8 @@ public class Main extends Activity {
         }
         boolean own = "aa".equals(curOrigin);
         if (art == null && !own) return;
+        // Al quitar el cable Open Headunit manda una última notificación: sin Android Auto no se pone su carátula.
+        if (!aaRunning()) return;
         if (aaWaitTitle != null && sameTitle(aaWaitTitle, curTitle)) { aaWaitTitle = null; h.removeCallbacks(aaWait); }
         if (art != null) curArt = art;
         curSource = "Android Auto";
@@ -4674,6 +5832,14 @@ public class Main extends Activity {
                     prefs.edit().putString(key, et.getText().toString().trim()).apply();
                     if ("city_manual".equals(key)) refreshWeatherNow();
                     if ("map_url".equals(key)) toast("Se aplicará al reiniciar MiniLauncher");
+                    if ("tomtom_key".equals(key) || "traffic_url".equals(key)) {
+                        if ("tomtom_key".equals(key) && et.getText().toString().trim().length() > 0) {
+                            prefs.edit().putBoolean("map_traffic", true).apply();
+                            toast("Tráfico en vivo activado");
+                        }
+                        LiveMapView.clearTrafficCache();
+                        if (liveMap != null) liveMap.invalidate();
+                    }
                     if ("extra_actions".equals(key)) {
                         try { nowPlaying.stop(); nowPlaying.start(); } catch (Throwable ignored) { }
                     }
@@ -5164,7 +6330,9 @@ public class Main extends Activity {
 
     private void applyTheme() {
         String mode = prefs.getString("theme", "dark");
-        LIGHT = "light".equals(mode) || ("auto".equals(mode) && !darkHours()) || ("system".equals(mode) && !systemNight());
+        LIGHT = "light".equals(mode)
+                || ("auto".equals(mode) && !darkHours())
+                || ("system".equals(mode) && !systemNight());
         if (LIGHT) {
             BG = 0xFFE9ECF1; CARD = 0xFFFFFFFF; INNER = 0xFFF1F3F7; BTN = 0xFFE2E6EC; DOCK = 0xFFDDE1E8;
             TEXT = 0xFF14161B; MUTED = 0xFF6B7280; SOFT = 0xFF3A404C; CIRCLE = 0xFFFFFFFF; ICON = 0xFF2B303A;
@@ -5174,11 +6342,44 @@ public class Main extends Activity {
         }
     }
 
-    /** Sigue el modo oscuro de la pantalla, incluso si cambia al encender las luces del carro. */
+    /** Guarda la ubicación para el amanecer/atardecer solo si cambió bastante (~25 km): no escribe a cada lectura. */
+    private void sunSpot(double la, double lo) {
+        if (!Double.isNaN(sunLat) && Math.abs(la - sunLat) < 0.25 && Math.abs(lo - sunLon) < 0.25) return;
+        sunLat = la; sunLon = lo;
+        prefs.edit().putFloat("sun_lat", (float) la).putFloat("sun_lon", (float) lo).apply();
+    }
+
+    /**
+     * Minutos del día (hora local) de la salida [0] y la puesta [1] del sol, sin internet (fórmulas de NOAA,
+     * error de 1–2 min). null si ese día no sale o no se pone (zonas polares).
+     */
+    static int[] sunTimes(double lat, double lon, Calendar c) {
+        double g = 2 * Math.PI / 365.0 * (c.get(Calendar.DAY_OF_YEAR) - 1);
+        double eqt = 229.18 * (0.000075 + 0.001868 * Math.cos(g) - 0.032077 * Math.sin(g) - 0.014615 * Math.cos(2 * g) - 0.040849 * Math.sin(2 * g));
+        double decl = 0.006918 - 0.399912 * Math.cos(g) + 0.070257 * Math.sin(g) - 0.006758 * Math.cos(2 * g)
+                + 0.000907 * Math.sin(2 * g) - 0.002697 * Math.cos(3 * g) + 0.00148 * Math.sin(3 * g);
+        double la = Math.toRadians(lat);
+        double cosH = Math.cos(Math.toRadians(90.833)) / (Math.cos(la) * Math.cos(decl)) - Math.tan(la) * Math.tan(decl);
+        if (cosH > 1 || cosH < -1) return null;
+        double ha = Math.toDegrees(Math.acos(cosH));
+        double tz = (c.get(Calendar.ZONE_OFFSET) + c.get(Calendar.DST_OFFSET)) / 60000.0;
+        int rise = (int) Math.round(720 - 4 * (lon + ha) - eqt + tz), set = (int) Math.round(720 - 4 * (lon - ha) - eqt + tz);
+        return new int[]{((rise % 1440) + 1440) % 1440, ((set % 1440) + 1440) % 1440};
+    }
+
+    /** Amanecer y atardecer de hoy si el modo automático los usa y ya hay ubicación; si no, null (horas fijas). */
+    private int[] sunToday() {
+        if (!prefs.getBoolean("auto_sun", false) || Double.isNaN(sunLat)) return null;
+        return sunTimes(sunLat, sunLon, Calendar.getInstance());
+    }
+
+    /** Modo automático: ¿estamos en el horario oscuro? (por defecto de 6 p. m. a 6 a. m., como siempre). */
     private boolean darkHours() {
         Calendar c = Calendar.getInstance();
         int m = c.get(Calendar.HOUR_OF_DAY) * 60 + c.get(Calendar.MINUTE);
         int a = prefs.getInt("dark_start", 18 * 60), b = prefs.getInt("dark_end", 6 * 60);
+        int[] sun = sunToday();
+        if (sun != null) { a = sun[1]; b = sun[0]; }
         if (a == b) return false;
         return a < b ? (m >= a && m < b) : (m >= a || m < b);
     }
@@ -6239,12 +7440,25 @@ public class Main extends Activity {
                 applyTheme(); applyAccent(); rebuild(); showSettings(settingsCat);
             }});
         if ("auto".equals(t)) {
-            row(c, "Oscuro desde", null, fmtMinutes(prefs.getInt("dark_start", 18 * 60)), new Runnable() { public void run() {
-                askDarkTime("dark_start", 18 * 60, "Oscuro desde");
-            }});
-            row(c, "Claro desde", null, fmtMinutes(prefs.getInt("dark_end", 6 * 60)), new Runnable() { public void run() {
-                askDarkTime("dark_end", 6 * 60, "Claro desde");
-            }});
+            final boolean sunOn = prefs.getBoolean("auto_sun", false);
+            segmented(c, "Horario", "Amanecer y atardecer: se calcula con el GPS, sin internet", new String[]{"Horas fijas", "Amanecer y atardecer"},
+                sunOn ? 1 : 0, new IntCb() { public void on(int i) {
+                    prefs.edit().putBoolean("auto_sun", i == 1).apply();
+                    applyTheme(); applyAccent(); rebuild(); showSettings(settingsCat);
+                }});
+            int[] sun = sunToday();
+            if (sunOn && sun != null) {
+                row(c, "Hoy", I18n.t("Amanecer") + " " + fmtMinutes(sun[0]) + " · " + I18n.t("Atardecer") + " " + fmtMinutes(sun[1])
+                    + " · " + I18n.t("oscuro desde el atardecer hasta el amanecer"), null, null);
+            } else {
+                if (sunOn) row(c, "Esperando la ubicación del GPS", "Mientras tanto usa las horas fijas", "", null);
+                row(c, "Oscuro desde", null, fmtMinutes(prefs.getInt("dark_start", 18 * 60)), new Runnable() { public void run() {
+                    askDarkTime("dark_start", 18 * 60, "Oscuro desde");
+                }});
+                row(c, "Claro desde", null, fmtMinutes(prefs.getInt("dark_end", 6 * 60)), new Runnable() { public void run() {
+                    askDarkTime("dark_end", 6 * 60, "Claro desde");
+                }});
+            }
         }
         LinearLayout a = section(body, "Color de acento");
         LinearLayout r = rowBase(a, "Color", "Botones, anillo del reproductor, ruta y etiquetas");
@@ -6307,6 +7521,16 @@ public class Main extends Activity {
 
     /** Pantalla de inicio: qué tarjetas se ven, el mapa y la barra de arriba. */
     private void catHome(LinearLayout body) {
+        if (boxW > 0 && canVertical(boxW, boxH)) {
+            // Solo en pantallas casi cuadradas o verticales (en las horizontales no tiene sentido).
+            final String[] lk = {"auto", "horizontal", "vertical"};
+            LinearLayout ds = section(body, "Diseño");
+            segmented(ds, "Diseño de la pantalla", "Automático: según la forma de la pantalla. Elige Vertical si tu pantalla es vertical y se ve chica en el medio",
+                new String[]{"Automático", "Horizontal", "Vertical"},
+                Math.max(0, java.util.Arrays.asList(lk).indexOf(prefs.getString("layout_mode", "auto"))), new IntCb() { public void on(int i) {
+                    prefs.edit().putString("layout_mode", lk[i]).apply(); rebuild();
+                }});
+        }
         LinearLayout lay = section(body, "Tarjetas");
         segmented(lay, "Reproductor de música", "Ponlo del lado del conductor para tenerlo a la mano", new String[]{"Derecha", "Izquierda"},
             playerLeft ? 1 : 0, new IntCb() { public void on(int i) {
@@ -6377,6 +7601,36 @@ public class Main extends Activity {
             new IntCb() { public void on(int i) {
                 prefs.edit().putString("clock", i == 1 ? "12" : i == 2 ? "24" : "auto").apply(); updateClock(); showSettings(settingsCat);
             }});
+        // 2.22: pantalla en reposo (#27, #28), apagada por defecto
+        LinearLayout idl = section(body, "Pantalla en reposo");
+        final boolean idleOn = prefs.getBoolean("idle_on", false);
+        toggle(idl, "Pantalla en reposo", "Si no tocas la pantalla un rato, se pone negra con la hora, la fecha y la velocidad. Un toque la quita",
+            idleOn, new IntCb() { public void on(int i) {
+                prefs.edit().putBoolean("idle_on", i == 1).apply(); idleReset(); showSettings(settingsCat);
+            }});
+        if (idleOn) {
+            String[] mins = new String[IDLE_MIN.length];
+            int mSel = 1;
+            for (int i = 0; i < IDLE_MIN.length; i++) {
+                mins[i] = I18n.t(IDLE_MIN[i] == 1 ? "1 minuto" : IDLE_MIN[i] + " minutos");
+                if (IDLE_MIN[i] == prefs.getInt("idle_min", 2)) mSel = i;
+            }
+            choice(idl, "Después de", "Tiempo sin tocar la pantalla", mins, mSel, new IntCb() { public void on(int i) {
+                prefs.edit().putInt("idle_min", IDLE_MIN[i]).apply(); idleReset(); showSettings(settingsCat);
+            }});
+            choice(idl, "Velocidad", "Con el diseño de velocímetro que prefieras", new String[]{"Digital", "Analógico", "Mixto", "Sin velocidad"},
+                prefs.getInt("idle_speed", prefs.getInt("speedo", 0)), new IntCb() { public void on(int i) {
+                    prefs.edit().putInt("idle_speed", i).apply(); showSettings(settingsCat);
+                }});
+            segmented(idl, "Tamaño", null, new String[]{"Normal", "Grande", "Muy grande"}, prefs.getInt("idle_size", 0), new IntCb() { public void on(int i) {
+                prefs.edit().putInt("idle_size", i).apply(); showSettings(settingsCat);
+            }});
+            choice(idl, "Color de la letra", null, new String[]{"Blanco", "Color de acento", "Gris suave", "Ámbar"},
+                prefs.getInt("idle_color", 0), new IntCb() { public void on(int i) {
+                    prefs.edit().putInt("idle_color", i).apply(); showSettings(settingsCat);
+                }});
+            row(idl, "Ver ahora", "Toca la pantalla para volver", null, new Runnable() { public void run() { showIdle(); } });
+        }
         if (SDK >= 19) {
             LinearLayout scr = section(body, "Pantalla completa");
             toggle(scr, "Ocultar la barra del sistema", "Esconde también la barra de navegación de tu pantalla (abajo o al costado). Desliza desde el borde para verla un momento",
@@ -6510,12 +7764,43 @@ public class Main extends Activity {
         toggle(ml, "Mapa en vivo", "Apágalo si la pantalla va lenta: queda un mapa de adorno y el velocímetro sigue funcionando", prefs.getBoolean("map_live", true), new IntCb() { public void on(int i) {
             prefs.edit().putBoolean("map_live", i == 1).apply(); rebuild(); showSettings(settingsCat);
         }});
-        row(nv, "App de navegación preferida", "Se abre con el botón del mapa (Waze, Maps, OsmAnd…)", autoLabel("nav_app", NAV_PKGS, "Toca para elegir"),
+        row(nv, "App de navegación preferida", "Se abre con el botón del mapa (Waze, Maps, OsmAnd… o integrada en el mapa)", autoLabel("nav_app", NAV_PKGS, "Toca para elegir"),
             new Runnable() { public void run() { pickFor("nav_app", "Navegación"); } });
+        final boolean navIn = "internal".equals(prefs.getString("nav_app", null));
+        if (navIn) {
+            toggle(nv, "Voz de navegación", "Indicaciones paso a paso habladas durante el recorrido", prefs.getBoolean("nav_voice", true), new IntCb() { public void on(int i) {
+                prefs.edit().putBoolean("nav_voice", i == 1).apply(); showSettings(settingsCat);
+            }});
+            toggle(nv, "Tráfico en vivo", "Muestra congestión en el mapa y evita trancones (usa clave gratis de TomTom)", prefs.getBoolean("map_traffic", false), new IntCb() { public void on(int i) {
+                prefs.edit().putBoolean("map_traffic", i == 1).apply();
+                LiveMapView.clearTrafficCache();
+                if (liveMap != null) liveMap.invalidate();
+                showSettings(settingsCat);
+            }});
+            String ttKey = prefs.getString("tomtom_key", "").trim();
+            row(nv, "Clave gratis de TomTom", "Para capas de tráfico y rutas con tráfico (regístrate gratis en developer.tomtom.com)",
+                ttKey.length() > 0 ? "Configurada" : "Ninguna",
+                edit("tomtom_key", "Clave API gratis de TomTom", ""));
+        }
         LinearLayout m = mo;
         segmented(m, "Brillo del mapa", "Solo en modo oscuro", new String[]{"Bajo", "Medio", "Alto"}, prefs.getInt("map_bright", 1), new IntCb() { public void on(int i) {
             prefs.edit().putInt("map_bright", i).apply(); rebuild();
         }});
+        if (navIn) {
+            LinearLayout nvp = section(body, "Navegación");
+            toggle(nvp, "Evitar peajes", "Intenta evitar vías de peaje al calcular la ruta", prefs.getBoolean("nav_avoid_tolls", false), new IntCb() { public void on(int i) {
+                prefs.edit().putBoolean("nav_avoid_tolls", i == 1).apply(); showSettings(settingsCat);
+            }});
+            toggle(nvp, "Evitar autopistas", "Intenta evitar autopistas o vías rápidas", prefs.getBoolean("nav_avoid_motorways", false), new IntCb() { public void on(int i) {
+                prefs.edit().putBoolean("nav_avoid_motorways", i == 1).apply(); showSettings(settingsCat);
+            }});
+            toggle(nvp, "Rutas alternativas", "Muestra 2 o 3 opciones de ruta antes de iniciar", prefs.getBoolean("nav_alternatives", true), new IntCb() { public void on(int i) {
+                prefs.edit().putBoolean("nav_alternatives", i == 1).apply(); showSettings(settingsCat);
+            }});
+            toggle(nvp, "Mostrar hora de llegada", "Muestra la hora estimada en lugar del tiempo restante", prefs.getBoolean("nav_eta_clock", false), new IntCb() { public void on(int i) {
+                prefs.edit().putBoolean("nav_eta_clock", i == 1).apply(); updateNavHud(); showSettings(settingsCat);
+            }});
+        }
         LinearLayout off = section(body, "Mapa sin conexión");
         LiveMapView.loadFile(this);
         String mf = prefs.getString("map_file", "");
@@ -6542,6 +7827,17 @@ public class Main extends Activity {
         }});
         row(m, "Fuente del mapa (avanzado)", "URL propia con {z}/{x}/{y}", prefs.getString("map_url", "").length() > 0 ? "Personalizada" : "Automática",
             edit("map_url", "URL de teselas {z}/{x}/{y} (vacío = automático)", ""));
+        if (navIn) {
+            row(m, "Capa de tráfico propia (avanzado)", "URL transparente de tráfico con {z}/{x}/{y}", prefs.getString("traffic_url", "").trim().length() > 0 ? "Personalizada" : "Automática",
+                edit("traffic_url", "URL capa de tráfico {z}/{x}/{y} (vacío = automático)", ""));
+            row(m, "Servidor de rutas OSRM (avanzado)", "URL propia compatible con OSRM (vacío = automático)",
+                prefs.getString("nav_route_url", "").trim().length() > 0 ? "Personalizada" : "Automática",
+                edit("nav_route_url", "URL servidor OSRM (vacío = automático)", ""));
+            toggle(m, "Compatibilidad TLS en rutas", "Para radios antiguas donde falle el HTTPS de rutas o búsqueda",
+                prefs.getBoolean("nav_tls_compat", false), new IntCb() { public void on(int i) {
+                    prefs.edit().putBoolean("nav_tls_compat", i == 1).apply(); showSettings(settingsCat);
+                }});
+        }
     }
 
     private TextView dlStatusTv;
@@ -7286,7 +8582,8 @@ public class Main extends Activity {
         StringBuilder b = new StringBuilder();
         b.append(I18n.t("Esta pantalla:")).append(" Android ").append(android.os.Build.VERSION.RELEASE).append(" (API ").append(SDK).append(")")
          .append(" · ").append(android.os.Build.MANUFACTURER).append(" ").append(android.os.Build.MODEL).append("\n");
-        if (!android.os.Build.VERSION.RELEASE.startsWith(androidName(SDK).split(" ")[0]))
+        // «Android 8.1» → «8.1» (antes se comparaba con la palabra «Android» y el aviso salía en todas las pantallas)
+        if (!android.os.Build.VERSION.RELEASE.startsWith(androidName(SDK).replace("Android ", "").replace("W", "").replace("L", "")))
             b.append(I18n.t("Ojo: la pantalla dice Android " + android.os.Build.VERSION.RELEASE + ", pero por dentro es " + androidName(SDK) + ".")).append("\n");
         b.append("\n");
         compatLine(b, "Inicio, mapa, clima, velocímetro", "Android 4.1+", true, null);
@@ -7304,7 +8601,9 @@ public class Main extends Activity {
         compatLine(b, "Tema según el modo oscuro del sistema", "Pantallas que lo cambian (p. ej. con las luces)", true,
             systemNight() ? "el sistema está en modo oscuro" : "el sistema está en modo claro");
         compatLine(b, "Copia de seguridad en un archivo (pantalla o USB)", "Android 4.1+", true, SDK >= 29 ? "en Android 10+ la carpeta se elige con el selector de archivos" : null);
-        compatLine(b, "Diseño vertical", "Pantallas en vertical (tipo Tesla)", true, vertical ? "en uso" : "esta pantalla es horizontal");
+        compatLine(b, "Diseño vertical", "Pantallas en vertical (tipo Tesla)", true, vertical ? "en uso"
+            : canVertical(boxW, boxH) ? "se puede elegir en Ajustes → Pantalla de inicio → Diseño" : "esta pantalla es horizontal");
+        b.append(I18n.t("Área útil de la pantalla:")).append(" ").append(boxW).append(" × ").append(boxH).append(" px\n");
         new TB(this, dlg()).diag().setTitle("Compatibilidad").setMessage(b.toString().trim()).setPositiveButton("OK", null).show();
     }
 
@@ -7649,6 +8948,10 @@ public class Main extends Activity {
     }
 
     private void refreshStates() {
+        if (navSearchBtn != null) {
+            boolean showGo = prefs.getBoolean("map_live", true) && "internal".equals(prefs.getString("nav_app", null));
+            navSearchBtn.setVisibility(showGo ? View.VISIBLE : View.GONE);
+        }
         if (aaBtnTv != null) {   // con «Solo CarPlay» o «Ninguno» no hay botón de Android Auto
             String nat = nativeProjectionApp();
             String aaSaved = prefs.getString("aa", null);
@@ -7691,6 +8994,8 @@ public class Main extends Activity {
         String c = prefs.getString(key, null);
         if (c == null) return false;
         try {
+            ComponentName cn0 = ComponentName.unflattenFromString(c);
+            if (cn0 != null) markUsed(cn0.getPackageName());
             Intent i = new Intent(Intent.ACTION_MAIN);
             i.addCategory(Intent.CATEGORY_LAUNCHER);
             i.setComponent(ComponentName.unflattenFromString(c));
@@ -7710,9 +9015,82 @@ public class Main extends Activity {
         i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
         try {
             startActivity(i);
+            markUsed(r.activityInfo.packageName);
         } catch (Exception e) {
             toast("No se pudo abrir la app");
         }
+    }
+
+    // ── orden del cajón (2.22, #27): A-Z (como siempre), Z-A, usadas o instaladas recientemente, o a mano ──
+
+    static final String[] APP_ORDERS = {"az", "za", "used", "installed", "manual"};
+    static final String[] APP_ORDER_NAMES = {"A-Z", "Z-A", "Usadas recientemente", "Instaladas recientemente", "A mano"};
+
+    /** Anota cuándo se abrió una app desde MiniLauncher (para «Usadas recientemente»; se guardan las últimas 60). */
+    private void markUsed(String pkg) {
+        if (pkg == null) return;
+        java.util.LinkedHashMap<String, Long> m = usedApps();
+        m.remove(pkg);
+        m.put(pkg, System.currentTimeMillis());
+        StringBuilder b = new StringBuilder();
+        int skip = Math.max(0, m.size() - 60), n = 0;
+        for (java.util.Map.Entry<String, Long> e : m.entrySet()) {
+            if (n++ < skip) continue;
+            if (b.length() > 0) b.append('\n');
+            b.append(e.getKey()).append('\t').append(e.getValue());
+        }
+        prefs.edit().putString("app_used", b.toString()).apply();
+    }
+
+    private java.util.LinkedHashMap<String, Long> usedApps() {
+        java.util.LinkedHashMap<String, Long> m = new java.util.LinkedHashMap<String, Long>();
+        for (String l : prefs.getString("app_used", "").split("\n")) {
+            int t = l.indexOf('\t');
+            if (t <= 0) continue;
+            try { m.put(l.substring(0, t), Long.parseLong(l.substring(t + 1))); } catch (Throwable ignored) { }
+        }
+        return m;
+    }
+
+    private java.util.List<String> manualOrder() {
+        java.util.List<String> out = new ArrayList<String>();
+        for (String k : prefs.getString("apps_manual", "").split("\n")) if (k.length() > 0) out.add(k);
+        return out;
+    }
+
+    private void saveManual(java.util.List<ResolveInfo> list) {
+        StringBuilder b = new StringBuilder();
+        for (ResolveInfo r : list) { if (b.length() > 0) b.append('\n'); b.append(compKey(r)); }
+        prefs.edit().putString("apps_manual", b.toString()).putString("apps_order", "manual").apply();
+    }
+
+    /** Ordena la lista del cajón (llega en A-Z). Lo que no tenga dato (nunca abierta, fuera del orden a mano) va al final en A-Z. */
+    private void sortApps(java.util.List<ResolveInfo> list) {
+        String o = prefs.getString("apps_order", "az");
+        if ("za".equals(o)) { Collections.reverse(list); return; }
+        final HashMap<ResolveInfo, Long> key = new HashMap<ResolveInfo, Long>();
+        if ("used".equals(o)) {
+            java.util.LinkedHashMap<String, Long> u = usedApps();
+            for (ResolveInfo r : list) { Long t = u.get(r.activityInfo.packageName); key.put(r, t != null ? -t : 0L); }
+        } else if ("installed".equals(o)) {
+            PackageManager pm = getPackageManager();
+            for (ResolveInfo r : list) {
+                long t = 0;
+                try { t = pm.getPackageInfo(r.activityInfo.packageName, 0).firstInstallTime; } catch (Throwable ignored) { }
+                key.put(r, -t);
+            }
+        } else if ("manual".equals(o)) {
+            java.util.List<String> m = manualOrder();
+            for (ResolveInfo r : list) { int ix = m.indexOf(compKey(r)); key.put(r, ix >= 0 ? (long) ix - 100000 : 0L); }
+        } else return;
+        final HashMap<ResolveInfo, Integer> az = new HashMap<ResolveInfo, Integer>();
+        for (int i = 0; i < list.size(); i++) az.put(list.get(i), i);
+        Collections.sort(list, new Comparator<ResolveInfo>() {
+            public int compare(ResolveInfo a, ResolveInfo b) {
+                int c = key.get(a).compareTo(key.get(b));
+                return c != 0 ? c : az.get(a).compareTo(az.get(b));
+            }
+        });
     }
 
     private boolean launchPkg(String pkg) {
@@ -7930,15 +9308,27 @@ public class Main extends Activity {
     private void pickFor(final String key, String name, final Runnable after) {
         List<String[]> extra = new ArrayList<String[]>();
         extra.add(new String[]{"auto", "↺  Automático (por defecto)", "restart_alt"});
+        if ("nav_app".equals(key)) extra.add(new String[]{"internal", "★  En el mapa de MiniLauncher (integrada)", "navigation"});
         String[] pin = "nav_app".equals(key) ? NAV_PKGS : "music_app".equals(key) ? MUSIC_PKGS : null;
         pickApp("¿Qué app abre «" + name + "»?", extra, pin, true, new TargetCb() { public void on(String target) {
             if ("auto".equals(target)) {
                 prefs.edit().remove(key).apply();
                 toast("Restablecido");
+            } else if ("internal".equals(target)) {
+                prefs.edit().putString(key, "internal").apply();
+                toast("Guardado: Navegación en el mapa");
             } else {
                 String c = target.substring(4);
                 prefs.edit().putString(key, c).apply();
                 toast("Guardado: " + labelOf(c));
+            }
+            // si deja la navegación integrada, la ruta en curso se detiene (si no, el recuadro de guía quedaba en el mapa)
+            if ("nav_app".equals(key) && !"internal".equals(prefs.getString("nav_app", null)) && Nav.active != null) {
+                Nav.stop(Main.this);
+                // sin esto el recuadro de guía seguía en el mapa hasta tocarlo (Andrés, Picanto 16 nov.)
+                LiveMapView.headingUp = prefs.getBoolean("map_heading", false);
+                updateNavHud();
+                if (liveMap != null) liveMap.invalidate();
             }
             refreshStates();
             if (after != null) after.run();
@@ -8202,10 +9592,37 @@ public class Main extends Activity {
         final List<ResolveInfo> shown = new ArrayList<ResolveInfo>();
         for (ResolveInfo r : apps) if (!hidden.contains(compKey(r))) shown.add(r);
         int nHidden = apps.size() - shown.size();
+        sortApps(shown);
 
         LinearLayout bar = new LinearLayout(this);
         bar.setOrientation(LinearLayout.HORIZONTAL);
         bar.setGravity(Gravity.CENTER_VERTICAL);
+        final int oi = Math.max(0, java.util.Arrays.asList(APP_ORDERS).indexOf(prefs.getString("apps_order", "az")));
+        TextView ord = tv(I18n.t("Orden") + ": " + I18n.t(APP_ORDER_NAMES[oi]), 15, SOFT, false);
+        ord.setGravity(Gravity.CENTER);
+        ord.setBackground(round(BTN, 18));
+        ord.setPadding((int) (16 * s), (int) (8 * s), (int) (16 * s), (int) (8 * s));
+        LinearLayout.LayoutParams olp = new LinearLayout.LayoutParams(-2, -2);
+        olp.rightMargin = (int) (10 * s);
+        bar.addView(ord, olp);
+        ord.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                String[] tr = new String[APP_ORDER_NAMES.length];
+                for (int i = 0; i < tr.length; i++) tr[i] = I18n.t(APP_ORDER_NAMES[i]);
+                new TB(Main.this, dlg()).raw()
+                    .setTitle(I18n.t("Orden de las apps"))
+                    .setSingleChoiceItems(tr, oi, new DialogInterface.OnClickListener() { public void onClick(DialogInterface d, int w) {
+                        d.dismiss();
+                        if (w == 4 && manualOrder().isEmpty()) {
+                            saveManual(shown);   // arranca del orden que se ve
+                            toast("Deja presionada una app y elige «Mover» para cambiarla de lugar");
+                        }
+                        prefs.edit().putString("apps_order", APP_ORDERS[w]).apply();
+                        closeDrawer(); openDrawer();
+                    }})
+                    .show();
+            }
+        });
         if (nHidden > 0) {
             TextView hid = tv(I18n.t("Ocultas: " + nHidden), 15, SOFT, false);
             hid.setGravity(Gravity.CENTER);
@@ -8271,8 +9688,20 @@ public class Main extends Activity {
                 return cell;
             }
         });
+        final ResolveInfo[] moving = new ResolveInfo[1];
+        final TextView titleTv = title;
         grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> a, View v, int p, long id) {
+                if (moving[0] != null) {
+                    // modo «Mover»: la app elegida pasa al lugar tocado
+                    ResolveInfo m = moving[0];
+                    moving[0] = null;
+                    shown.remove(m);
+                    shown.add(Math.min(p, shown.size()), m);
+                    saveManual(shown);
+                    closeDrawer(); openDrawer();
+                    return;
+                }
                 launch(shown.get(p));
             }
         });
@@ -8282,8 +9711,14 @@ public class Main extends Activity {
                 final ResolveInfo r = shown.get(p);
                 new TB(Main.this, dlg())
                     .setTitle(String.valueOf(r.loadLabel(pm)))
-                    .setItems(new String[]{"Ocultar del cajón", "Desinstalar", "Información de la app"}, new DialogInterface.OnClickListener() {
+                    .setItems(new String[]{"Ocultar del cajón", "Desinstalar", "Información de la app", "Mover"}, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface d, int w) {
+                            if (w == 3) {
+                                moving[0] = r;
+                                titleTv.setText(I18n.t("Toca el lugar donde quieres poner «" + r.loadLabel(pm) + "»"));
+                                titleTv.setTextColor(RED);
+                                return;
+                            }
                             if (w == 0) {
                                 java.util.HashSet<String> h = hiddenApps();
                                 h.add(compKey(r));

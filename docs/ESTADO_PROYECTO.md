@@ -8,6 +8,8 @@ Os builds debug/release compilam e os 35 testes instrumentados passaram num emul
 
 O lint executa com os diagnósticos de compatibilidade e permissões documentados em [MINILAUNCHER.md](MINILAUNCHER.md). Nesta máquina, o lint do AGP 8.7.3 não reconhece a plataforma adicional `android-37.0`; foi executado com uma vista local do SDK limitada à plataforma 35, sem alterar o SDK global.
 
+Depois da 0.1.0 foram integradas as melhorias do StradaOS 2.22.0 e 2.23.0, ainda por publicar numa versão do MiniLauncher: ecrã em repouso, ordem das apps na gaveta, tema pelo nascer e pôr do sol, chinês, disposição horizontal/vertical forçada e navegação no mapa (desligada por defeito). O ecrã em repouso mostra a mesma velocidade do velocímetro, com prioridade SPD.
+
 O histórico de versões do MiniLauncher começa em [0.1.0](../changelogs/0.1.0.md). O StradaOS 2.20.1 é a base de origem; as alterações relativamente a essa base pertencem à primeira versão do fork.
 
 - [Funcionalidades e arquitetura](MINILAUNCHER.md).
